@@ -1,0 +1,42 @@
+# ── Visual Studio 缓存 / 用户设置 ─────────────────────────────
+.vs/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+*.VC.db
+*.VC.VC.opendb
+*.ipch
+
+# ── 构建输出目录 ──────────────────────────────────────────────
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+[Ll]ogs/
+bld/
+
+# ── 编译中间目录（<项目名>.<GUID 前 8 位>，VS 2026 默认）──────
+Project1.e7d0550b/
+
+# ── 可执行 / 符号 / 临时文件 ──────────────────────────────────
+*.exe
+*.pdb
+*.ilk
+*.obj
+*.idb
+*.tlog
+*.lastbuildstate
+*.recipe
+
+# ── 其他 ──────────────────────────────────────────────────────
+*.aps
+*.ncb
+*.opendb
+Thumbs.db
+desktop.ini
