@@ -8,6 +8,6 @@ int main()
 	int y{ };
 	std::cin >> x >> y;
 
-	std::cout << "You entered " << x << "and" << y;
+	std::cout << "You entered " << x << " and " << y;
   
 }
