@@ -59,4 +59,7 @@ int main()
 	tryChange(x);
 	std::cout << x << "\n";
 	doubled(5);
+	return 0;
+
+
 }
