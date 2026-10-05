@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--
+  D:\cpp_practise\Directory.Build.props
+  ────────────────────────────────────────────────────────────────
+  MSBuild 会自动把本文件导入「本目录及其所有子目录」下的每一个 .vcxproj，
+  所以在这里设一次，全仓库（含以后新建的工程）都生效，不用每个工程再设。
+
+  作用：让 MSVC 按 UTF-8 读源码 —— 无 BOM 也行，中文不再触发 C4819 / C2001。
+
+  ⚠️ 为什么只用 /source-charset:utf-8，而不用 /utf-8：
+     /utf-8 = /source-charset:utf-8 + /execution-charset:utf-8
+     后者会把窄字符串的「执行字符集」也改成 UTF-8 → 默认 936(GBK) 的控制台里中文会乱码。
+     只设 source-charset，执行字符集仍是系统 ANSI(GBK)，控制台显示正常。
+
+  ⚠️ 不生效的三种场合（仍要靠「存 UTF-8 with BOM」兜底）：
+     1) 裸命令行 cl …（绕过 MSBuild，根本不读本文件）
+     2) 本目录之外的工程（如 D:\cpp learning、将来的 D:\cpp_snake）
+     3) CMake / gcc / clang 等其他构建链
+
+  ⚠️ /we4828：把「源文件里有非法 UTF-8 字节」从警告升级为**错误**。
+     有些从老教程/别人仓库拷来的文件其实是 GBK 编码，在"假定 UTF-8"下会被读乱；
+     与其悄悄乱码，不如当场编译失败。带 BOM 的文件不受影响（BOM 优先于本选项）。
+-->
+<Project>
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <AdditionalOptions>/source-charset:utf-8 /we4828 %(AdditionalOptions)</AdditionalOptions>
+    </ClCompile>
+  </ItemDefinitionGroup>
+</Project>
