@@ -18,5 +18,8 @@
     <ClCompile Include="2.4~2.6_practise.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="add_test.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

@@ -25,8 +25,9 @@ void showSum(int p, int q)
 
 }
 
-int add(int , int );
+int add(int x , int y );
 int test(int);
+int Add_Test(int x , int y );
 
 int main()
 {
@@ -55,9 +56,11 @@ int main()
 								  //只有声明、没有定义
 								  //1>2.4~2.6_practise.obj : error LNK2019: 无法解析的外部符号 "int __cdecl test(int)" (?test@@YAHH@Z)，函数 main 中引用了该符号
 								  //D:\cpp_practise\2.4~2.6练习\x64\Debug\2.4~2.6练习.exe : fatal error LNK1120 : 1 个无法解析的外部命令
+
+	std::cout << "Add_Test(10,20) = " << Add_Test( 10 , 20 ) << "\n";
 }
 
 int add(int x, int y)
 {
-	return x * y ;
+	return x + y ;
 }
