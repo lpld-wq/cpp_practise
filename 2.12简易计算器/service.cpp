@@ -20,7 +20,7 @@ char getSymbol()
 int getSecondNumber()
 {
 	int x{ 0 };
-	std::cout << "请输入第二个数字:";
+	std::cout << "\n请输入第二个数字:";
 	std::cin >> x;
 	return x;
 }

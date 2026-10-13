@@ -1,0 +1,7 @@
+<Solution>
+  <Configurations>
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Project Path="无符号整数及溢出测试.vcxproj" Id="b735f019-c183-4b4c-b899-69ad419e270c" />
+</Solution>
