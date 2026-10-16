@@ -63,11 +63,16 @@ cpp_practise/
 ├── 4.12练习2/                                站内 **4.12 章末练习二**（10/14）：塔顶落球，0~5 秒每秒的高度
 │   ├── 4.12练习2.slnx / .vcxproj             **单开新工程**（只有一个源文件，没有再拆头文件）
 │   └── 4.12_practise_2.cpp                   `getTowerHeight` / `calculateBallHeight` / `printBallHeight` / `calculateAndPrintBallHeight` ＋ `main` 里**手写 6 次调用**（不许用循环）
-└── 5.0~5.1练习/                              站内 **5.0~5.1**（10/15）：圆面积 —— 命名常量 ＋ `const`
+├── 5.0~5.1练习/                              站内 **5.0~5.1**（10/15）：圆面积 —— 命名常量 ＋ `const`
     ├── 5.0~5.1练习.slnx / .vcxproj            **单开新工程**（Debug / x64，没在 4.12 上续写）
     ├── service.h                              `#pragma once` + 两条函数声明 + **`const double kPi{ 3.14 };`**
     ├── service.cpp                            `kGetRadius()`（`std::cin` 读半径）/ `kGetResult(radius)`（`radius * radius * kPi`）；⚠️ **原名 `servise.cpp`，10/15 改名并已同步 `.vcxproj` / `.filters`**
     └── 5.0~5.1_practise.cpp                   `main`：取半径 → 算面积 → 打印
+└── 5.2~5.7练习/                              站内 **5.2~5.7**（10/16）：伤害计算器 —— `constexpr` ＋ `inline` 变量 ＋ 条件运算符
+    ├── 5.2~5.7练习.slnx / .vcxproj            **单开新工程**（Debug / x64）
+    ├── service.h                              `#pragma once` ＋ `inline constexpr double kCritMul{ 2.0 }` / `kNormalMul{ 1.0 }` ＋ `constexpr kCritMultiplier(bool)`（5.5 条件运算符）＋ `constexpr kDamegeCulculate(akt, defence, mult)`
+    ├── service.cpp                            三个取数函数 `kGetAktDate` / `kGetDefendDate` / `kGetCritDate` —— 每个只 `std::cin` 一个值、`return` 一个值
+    └── damage_calculator.cpp                  `main`：三次取数 → `kDamegeCulculate(akt, defence, kCritMultiplier(crit))` → **负伤害夹 0** → 打印
 ```
 
 > `.vs/`、`x64/`，以及 VS 2026 为**每个工程**生成的同名中间目录（`Project1.e7d0550b/`、`2.4~2.6练习/2.4~2.6练习/` 这类）都是本机构建产物，已被 `.gitignore` 排除，不会进仓库。
@@ -123,9 +128,10 @@ cl /nologo /EHsc /std:c++20 FileName.cpp
 | 2026-10-14 | 小练 11 | `4.7~4.12练习/4.7~4.12_practise_1.cpp` ＋ `service.h` ＋ `service.cpp` | 站内 **4.12 章末练习一**：把 2.12 的**整数**计算器改成**浮点**版（`int` → `double` 全链路）；⚠️ 源文件是**复制**进新工程的，**2.12 的 int 版原样保留** —— 两个工程互不影响 | 验收 4 组：`7/2`→**3.5**（2.12 的 int 版同输入是 `3`）、`5.5+2.25`→**7.75**、`7/0`→提示＋`0`、`5%2`→提示＋`0`；MSBuild `Rebuild` **exit=0、0 warning**。**`7/2` 在 `double` 下是 3.5、在 `int` 下是 3**（整数除法）；**声明与定义要逐字一致**（这次只同步了返回类型、漏了参数类型 → **链接期才炸**，见错误表第 2 条 `LNK2019`）；浮点 `y == 0` 属「判断输入是否恰好为 0」的例外场景 |
 | 2026-10-14 | 小练 12 | `4.12练习2/4.12_practise_2.cpp` | 站内 **4.12 章末练习二**：输入塔高 → 打印 **0~5 秒**每秒的球高（下落距离 `9.8 × t² ÷ 2`，落地后显示 `on the ground`）；**6 次调用手写**（循环 10/21 才解锁） | 验收（输入 **100**）：`100 / 95.1 / 80.4 / 55.9 / 21.6 / on the ground` **逐行一致**，MSBuild `Rebuild` **exit=0、0 warning**。函数按「**取数 / 计算 / 打印 / 两者合一**」四层拆；`ballHeight < 0.0` 时**返回 0** 而不是负数；`gravity * (seconds * seconds) / 2.0` 里 `seconds * seconds` 是 **int**，靠先乘 `gravity`（`double`）把整个表达式抬成浮点 —— **若写成 `(seconds * seconds / 2)` 就会踩整数除法** |
 | 2026-10-15 | 小练 13 | `5.0~5.1练习/5.0~5.1_practise.cpp` ＋ `service.h` ＋ `service.cpp` | 站内 **5.0~5.1 综合小练**：**圆面积**（**单开新工程** `5.0~5.1练习\`）；`const double kPi{ 3.14 };` 替掉魔法数字 ＋ `k` 前缀命名；验收：半径 `2` → `12.56`、`3` → `28.26` **逐行一致**，MSBuild `Rebuild` **exit=0、0 warning** | **命名常量**（给值起名，改一处全局改）；`const` ＝ **不可改**（声明处就得初始化，之后任何赋值 → `C3892`）；⚠️ 题面另有「**两种常量各一次**」＋「**≥3 个命名常量**」两项，**2026-10-15 经用户决定豁免** —— 5.1 的要点当天已用别处实验覆盖（跨文件 `const` 的链接行为 / `const double` 算不算常量表达式 / 运行期初始化的 `const` → `C2131`） |
+| 2026-10-16 | 小练 14 | `5.2~5.7练习/damage_calculator.cpp` ＋ `service.h` ＋ `service.cpp` | 站内 **5.2~5.7**：**自己设计**的伤害计算器（**单开新工程** `5.2~5.7练习\`）——基础攻击力 / 对手防御力 / 是否暴击 → 输出最终伤害；**暴击倍率链路**（`bool` → `kCritMultiplier` → `inline constexpr` 倍率）＋ **负伤害夹 0**；验收 6 组逐行一致：`100/50/0`→`50`、`100/50/1`→`150`、`20/50/1`→`0`、`20/50/0`→`0`、`0/50/1`→`0`、`7/2/1`→`12`，MSBuild `Rebuild` **exit=0、0 warning** | `inline constexpr` **变量**（`kCritMul` / `kNormalMul`：命名空间作用域的 `const` / `constexpr` **默认内部链接**，写 `inline` 才是全程序一份）；`constexpr` **函数**（标不标看**函数体纯不纯**，能不能编译期求值看**实参**）；5.5 **条件运算符** `crit ? kCritMul : kNormalMul`；⚠️ **踩坑**：`akt * crit - defence` 把 `bool`（0/1）当倍率用 → 暴击无效、不暴击出负伤害（`kCritMultiplier` 一度是**无调用点的死函数**，编译器不提醒）；`#include <iostream>;` 多一个分号 → `C4067` |
 
 > 日期列 = **提交日期**（可与 `git log` 对上）；只有小练 01 那一行沿用了当时记录的练习日（实际提交在 10/04）。
-> 计划中的后续安排见 `D:\career_plan\docs\实习规划\游戏主线_十月逐日计划.md`。**当前位置：第 3 章调试收尾完成（3.6~3.10，三件套笔记已落 Obsidian `语法基础\调试器三件套（3.6~3.8）.md`）；第 5 章开章 —— 5.0~5.1 已读、产出 `5.0~5.1练习` 已交付**（`day11`，2026-10-15）；**下一步**：5.2~5.7（`constexpr`）→ 第 6 / 7 / 8 章 → 第 12 章（引用与指针，10/26 起）→ 第 14 章（class，10/30 起）。
+> 计划中的后续安排见 `D:\career_plan\docs\实习规划\游戏主线_十月逐日计划.md`。**当前位置：第 5 章进行中 —— 5.2~5.7 已读、产出 `5.2~5.7练习` 已交付**（`day12`，2026-10-16；含 `constexpr` 函数 / `inline` 变量 / 条件运算符）；**下一步**：5.8~5.11（`std::string` / `string_view`）→ 6.0~6.4 → 第 12 章（引用与指针，10/26 起）→ 第 14 章（class，10/30 起）。
 
 ---
 
@@ -149,6 +155,7 @@ cl /nologo /EHsc /std:c++20 FileName.cpp
 | `C4309` | 同上那一行的**常量值**截断（与 `C4305` 成对报出，两行指同一个位置） | `warning C4309: “=”: 截断常量值` | **编译期警告** |
 | `C4018` | `if (s < u)`：`s` 是 `int`、`u` 是 `unsigned int` → **有符号/无符号不匹配**（正是 4.4 要讲的那个陷阱） | `warning C4018: “<”: 有符号/无符号不匹配` | **编译期警告**（**它就是在替你标出「这里发生了隐式转换」**） |
 | `C3892` | 给 `const` 常量赋值 —— 做 5.0 小练时写 `kPi = 3.15;`（原文也抄在 `5.0~5.1练习/service.h` 第 3 行行尾） | `error C3892: “kPi”: 赋值给类型为 'const double' 的常量限定 变量` | **编译期**（`const` 是**只读**：必须在声明处初始化，之后任何赋值都是错误） |
+| `C4067` | `<iostream>` 那行写成 `#include <iostream>;` —— **`#include` 后面多写了一个分号**（10/16 做 5.2~5.7 伤害计算器时踩的） | `warning C4067: 预处理器指令后有意外标记 - 应输入换行符` | **编译期警告**（预处理指令到行尾就结束，后面的 `;` 是多余标记；C++11 起单独一个 `;` 是合法空声明，所以只是警告不是错误） |
 
 > ⚠️ **「exit=0、零 warning」验收口径的例外（2026-10-13 立）**：`无符号整数及溢出测试` 这类**溢出/混用实验天生带 warning** —— `C4305` / `C4309` / `C4018` 就是**实验现象本身**。所以这条线上只要求 **exit=0**，**不许为了让 warning 消失去改掉 `x = 65536;` 或把 `s < u` 改成强转**（那等于把实验改没）。要留证据就把原文抄进本表。
 
