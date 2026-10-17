@@ -68,11 +68,17 @@ cpp_practise/
     ├── service.h                              `#pragma once` + 两条函数声明 + **`const double kPi{ 3.14 };`**
     ├── service.cpp                            `kGetRadius()`（`std::cin` 读半径）/ `kGetResult(radius)`（`radius * radius * kPi`）；⚠️ **原名 `servise.cpp`，10/15 改名并已同步 `.vcxproj` / `.filters`**
     └── 5.0~5.1_practise.cpp                   `main`：取半径 → 算面积 → 打印
-└── 5.2~5.7练习/                              站内 **5.2~5.7**（10/16）：伤害计算器 —— `constexpr` ＋ `inline` 变量 ＋ 条件运算符
+├── 5.2~5.7练习/                              站内 **5.2~5.7**（10/16）：伤害计算器 —— `constexpr` ＋ `inline` 变量 ＋ 条件运算符
     ├── 5.2~5.7练习.slnx / .vcxproj            **单开新工程**（Debug / x64）
     ├── service.h                              `#pragma once` ＋ `inline constexpr double kCritMul{ 2.0 }` / `kNormalMul{ 1.0 }` ＋ `constexpr kCritMultiplier(bool)`（5.5 条件运算符）＋ `constexpr kDamegeCulculate(akt, defence, mult)`
     ├── service.cpp                            三个取数函数 `kGetAktDate` / `kGetDefendDate` / `kGetCritDate` —— 每个只 `std::cin` 一个值、`return` 一个值
     └── damage_calculator.cpp                  `main`：三次取数 → `kDamegeCulculate(akt, defence, kCritMultiplier(crit))` → **负伤害夹 0** → 打印
+├── 5.8习题/                                  站内 **5.8 习题**（10/17）：姓名长度 + 年龄求和
+│   ├── 5.8习题.slnx / .vcxproj               **单开新工程**（Debug / x64）
+│   └── 源.cpp                                `std::getline` 读整行 + `std::ssize(name)` 取有符号长度 + `age + len_name`
+└── 5.11练习/                                站内 **5.11 习题**（10/17）：两个人比年龄
+    ├── 5.11练习.slnx / .vcxproj              **单开新工程**（Debug / x64）
+    └── 5.11_practise.cpp                    `kGetName` / `kGetAge` / `kCompare` + `main` 两轮输入 → 打印更年长者
 ```
 
 > `.vs/`、`x64/`，以及 VS 2026 为**每个工程**生成的同名中间目录（`Project1.e7d0550b/`、`2.4~2.6练习/2.4~2.6练习/` 这类）都是本机构建产物，已被 `.gitignore` 排除，不会进仓库。
@@ -129,9 +135,10 @@ cl /nologo /EHsc /std:c++20 FileName.cpp
 | 2026-10-14 | 小练 12 | `4.12练习2/4.12_practise_2.cpp` | 站内 **4.12 章末练习二**：输入塔高 → 打印 **0~5 秒**每秒的球高（下落距离 `9.8 × t² ÷ 2`，落地后显示 `on the ground`）；**6 次调用手写**（循环 10/21 才解锁） | 验收（输入 **100**）：`100 / 95.1 / 80.4 / 55.9 / 21.6 / on the ground` **逐行一致**，MSBuild `Rebuild` **exit=0、0 warning**。函数按「**取数 / 计算 / 打印 / 两者合一**」四层拆；`ballHeight < 0.0` 时**返回 0** 而不是负数；`gravity * (seconds * seconds) / 2.0` 里 `seconds * seconds` 是 **int**，靠先乘 `gravity`（`double`）把整个表达式抬成浮点 —— **若写成 `(seconds * seconds / 2)` 就会踩整数除法** |
 | 2026-10-15 | 小练 13 | `5.0~5.1练习/5.0~5.1_practise.cpp` ＋ `service.h` ＋ `service.cpp` | 站内 **5.0~5.1 综合小练**：**圆面积**（**单开新工程** `5.0~5.1练习\`）；`const double kPi{ 3.14 };` 替掉魔法数字 ＋ `k` 前缀命名；验收：半径 `2` → `12.56`、`3` → `28.26` **逐行一致**，MSBuild `Rebuild` **exit=0、0 warning** | **命名常量**（给值起名，改一处全局改）；`const` ＝ **不可改**（声明处就得初始化，之后任何赋值 → `C3892`）；⚠️ 题面另有「**两种常量各一次**」＋「**≥3 个命名常量**」两项，**2026-10-15 经用户决定豁免** —— 5.1 的要点当天已用别处实验覆盖（跨文件 `const` 的链接行为 / `const double` 算不算常量表达式 / 运行期初始化的 `const` → `C2131`） |
 | 2026-10-16 | 小练 14 | `5.2~5.7练习/damage_calculator.cpp` ＋ `service.h` ＋ `service.cpp` | 站内 **5.2~5.7**：**自己设计**的伤害计算器（**单开新工程** `5.2~5.7练习\`）——基础攻击力 / 对手防御力 / 是否暴击 → 输出最终伤害；**暴击倍率链路**（`bool` → `kCritMultiplier` → `inline constexpr` 倍率）＋ **负伤害夹 0**；验收 6 组逐行一致：`100/50/0`→`50`、`100/50/1`→`150`、`20/50/1`→`0`、`20/50/0`→`0`、`0/50/1`→`0`、`7/2/1`→`12`，MSBuild `Rebuild` **exit=0、0 warning** | `inline constexpr` **变量**（`kCritMul` / `kNormalMul`：命名空间作用域的 `const` / `constexpr` **默认内部链接**，写 `inline` 才是全程序一份）；`constexpr` **函数**（标不标看**函数体纯不纯**，能不能编译期求值看**实参**）；5.5 **条件运算符** `crit ? kCritMul : kNormalMul`；⚠️ **踩坑**：`akt * crit - defence` 把 `bool`（0/1）当倍率用 → 暴击无效、不暴击出负伤害（`kCritMultiplier` 一度是**无调用点的死函数**，编译器不提醒）；`#include <iostream>;` 多一个分号 → `C4067` |
+| 2026-10-17 | 小练 15 | `5.8习题/源.cpp` ＋ `5.11练习/5.11_practise.cpp` | 站内 **5.8 / 5.11 两道习题**（各自**单开新工程**）：5.8 姓名长度 + 年龄求和；5.11 输入两人姓名/年龄 → 打印更年长者；验收 `John Doe/32` → 40、`John Bacon/37 + David Jenkins/44` → `David Jenkins (age 44) is older than John Bacon (age 37).`，两个工程 MSBuild `Rebuild` **exit=0、0 warning** | `std::string` **可变**、`std::getline(std::cin >> std::ws, name)` 读整行、`std::ssize` 返回 `std::ptrdiff_t`（x64 = `__int64`）；⚠️ `int len{ std::ssize(name) }` → **C2397**（列表初始化禁止隐式窄化，改用 `auto`）；`string_view` 只是指针 + 长度、不拥有内存 |
 
 > 日期列 = **提交日期**（可与 `git log` 对上）；只有小练 01 那一行沿用了当时记录的练习日（实际提交在 10/04）。
-> 计划中的后续安排见 `D:\career_plan\docs\实习规划\游戏主线_十月逐日计划.md`。**当前位置：第 5 章进行中 —— 5.2~5.7 已读、产出 `5.2~5.7练习` 已交付**（`day12`，2026-10-16；含 `constexpr` 函数 / `inline` 变量 / 条件运算符）；**下一步**：5.8~5.11（`std::string` / `string_view`）→ 6.0~6.4 → 第 12 章（引用与指针，10/26 起）→ 第 14 章（class，10/30 起）。
+> 计划中的后续安排见 `D:\career_plan\docs\实习规划\游戏主线_十月逐日计划.md`。**当前位置：第 5 章收尾 —— 5.8~5.11 已读、产出 `5.8习题` / `5.11练习` 已交付**（`day13`，2026-10-17；含 `std::string` / `std::string_view` / 两道章末习题）；**6.0~6.1 已过（6.0 习题未落盘）**；**下一步**：6.2~6.4 → 第 12 章（引用与指针，10/26 起）→ 第 14 章（class，10/30 起）。
 
 ---
 
@@ -148,6 +155,7 @@ cl /nologo /EHsc /std:c++20 FileName.cpp
 | `LNK2019` + `LNK1120`（**同编号第 2 次**） | **声明改了、定义没改**：`service.h` 声明 `double getResult(double, char, double)`，`service.cpp` 的定义还是 `int getResult(int, char, int)`（10/14 做 4.12 练习一、把计算器改成浮点版时踩的） | `error LNK2019: 无法解析的外部符号 "double __cdecl getResult(double,char,double)" (?getResult@@YANNDN@Z)，函数 main 中引用了该符号`<br>`已定义且可能匹配的符号上的提示: "int __cdecl getResult(int,char,int)" (?getResult@@YAHHDH@Z)`<br>`fatal error LNK1120: 1 个无法解析的外部命令` | **链接期**（⚠️ **这次编译器一句都没说** —— 参数类型也不一样，那是**另一个重载**，两边各自都合法，只有链接器能发现） |
 | `LNK1169`（多重定义） | 把 `add` 的**定义**放进 `add.h`，两个 `.cpp` 又都 include 它 → 每个 `.obj` 各带一份定义，链接器撞车（10/10 做 2.11 对照实验时踩的；原文记在 `2.9~2.11练习/add.cpp` 第 1 行注释） | `fatal error LNK1169: 找到一个或多个多重定义的符号` | **链接期**（**头文件里不该放定义**） |
 | `C2397` | **声明与定义返回类型不一致**：`service.h` 里声明 `int getSymbol();`、`service.cpp` 里定义 `char getSymbol()` → 调用处 `char op{ getSymbol() };` 就等于把 `int` 塞进 `char`（10/11 做 2.12 时踩的） | `error C2397: 从 "int" 转换到 "char" 需要收缩转换` | **编译期**（**列表初始化禁止窄化** —— 这条检查在这里救了命，见下面的连锁说明） |
+| `C2397`（**同编号第 2 次**） | `int len_name{ std::ssize(name) };` —— `std::ssize` 返回 `std::ptrdiff_t`（x64 = `__int64`），`{}` 列表初始化**禁止隐式窄化**（10/17 做 5.8 习题时踩的） | `error C2397: 从“__int64”转换到“int”需要收缩转换` | **编译期**（`std::ssize` 本身已经是**有符号** 64 位；要接 `int` 得显式 `static_cast<int>`，或直接用 `auto` 保持 `ptrdiff_t`） |
 | `C2568` ⚠️ | 同一次实验里的另一条（报在 `std::cout << add(10, 20)` 那行）—— **触发状态待复核**：当时 `add.h` 里到底放了什么没留下完整现场，原文记在 `2.9~2.11_practise.cpp` 第 3 行注释 | `error C2568: '<<': 无法解析函数重载` | 编译期（⚠️ 与站点 2.11 预期的 `C2084` 不一致，**要重做一次确认**） |
 | `C2070` | `std::cout << sizeof(void)` —— `void` **不是完整类型**，`sizeof` 对它无意义（10/12 做 4.2 实验时踩的；原文留在 `4.2sizeof表/4.2_sizeof_form.cpp` 第 16 行注释里） | `error C2070: 'void': 格式错误的 sizeof 操作数` | **编译期**（`void` 只表示「无返回值 / 无参数」，不存在 `void` 变量） |
 | `C2129` | `static int add(int, int);` **只声明不定义**，**而且在 `main` 里调用了它**（10/12 的「声明 vs 定义」实验） | `error C2129: 静态函数“int add(int,int)”已声明但未定义`<br>`note: 参见“add”的声明` | **编译期**（⚠️ 触发条件是**被调用**；只声明不调用时 MSVC **一条诊断都不给**） |
