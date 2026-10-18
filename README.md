@@ -5,6 +5,22 @@ C++ 练习仓库 —— 记录从零开始学 C++ 的每一次课后小练。
 - 教材：[C++学习网 studycpp.cn](https://www.studycpp.cn/)（[learncpp.com](https://www.learncpp.com/) 中文译站，28 章，每节带练习）
 - 用法：**每节示例都必须手敲并改动一处**，只看不敲不算学完
 - 长期目标：为 2027 年游戏客户端实习（C++ / UE5）打底；规划文档在 `D:\career_plan\docs\实习规划\`
+- 最近更新：**2026-10-18**（6.7 第 6 章总结题 ＋ 7.2 局部变量）
+
+---
+
+## 当前进度
+
+> 只写“现在在哪”；完整历史见 [练习记录](#练习记录)。
+
+| 项 | 状态 |
+| --- | --- |
+| 教材进度 | **第 7 章 7.2 局部变量**（以已交付产出为准；6.7 第 6 章总结题、7.2 习题已交付） |
+| 最近产出 | `六张总结练习/`（6.7 总结题）、`7.2练习/`（7.2 局部变量） |
+| 下一步 | **7.3~7.6**：全局变量 / 名称遮挡 / 内部链接 / 外部链接 ＋ 两文件链接性实验 |
+| 算法线 | Python 先行；C++ 重做 **10/21** 起（`while` / `for` 正课解锁） |
+| 验收口径 | MSBuild `Rebuild`（Debug / x64）**exit=0、0 warning**；程序输出逐行比对 |
+| 规划真源 | `D:\career_plan\docs\实习规划\游戏主线_十月逐日计划.md` |
 
 ---
 
@@ -21,7 +37,89 @@ C++ 练习仓库 —— 记录从零开始学 C++ 的每一次课后小练。
 
 ---
 
+## 快速导航
+
+- [当前进度](#当前进度)
+- [环境](#环境)
+- [怎么构建和运行](#怎么构建和运行)
+- [练习记录](#练习记录)
+- [目录结构](#目录结构)
+- [编译 / 链接错误速查](#编译--链接错误速查)
+- [源文件编码](#源文件编码)
+- [已知待改](#已知待改)
+- [提交约定](#提交约定)
+
+---
+
+## 怎么构建和运行
+
+> 最短路径：打开对应 `.slnx` → **F5**；或在工程目录执行 `msbuild 工程.vcxproj /p:Configuration=Debug /p:Platform=x64`。
+
+### 在 Visual Studio 里
+
+1. 双击 `Project1_stdcout_sin_endl\Project1_stdcout_sin_endl.slnx`
+2. 按 **F5**（调试运行）或 **Ctrl+F5**（不调试直接运行）
+3. 控制台出现 `Enter two numbers separated by a space:`，输入形如 `3 5` 后回车
+
+### 命令行（Developer PowerShell for VS 2026）
+
+```powershell
+cd "D:\cpp_practise\Project1_stdcout_sin_endl"
+msbuild Project1_stdcout_sin_endl.vcxproj /p:Configuration=Debug /p:Platform=x64
+.\x64\Debug\Project1_stdcout_sin_endl.exe
+```
+
+只编译单个文件也可以（不进 VS）：
+
+```powershell
+cl /nologo /EHsc /std:c++20 FileName.cpp
+.\FileName.exe
+```
+
+> ⚠️ **这条绕过 MSBuild，所以 `Directory.Build.props` 里的 `/source-charset:utf-8` 不会生效。**
+> 手打 `cl` 时要么源码**带 BOM**，要么自己补上选项：`cl /nologo /EHsc /std:c++20 /source-charset:utf-8 FileName.cpp`
+
+---
+
+## 练习记录
+
+> 按日期**倒序**，最近的在最上面；日期列 = 提交日期，可与 `git log` 对上（只有小练 01 沿用练习日，实际提交在 10/04）。
+
+| 日期 | 编号 | 文件 | 内容 | 知识点 |
+| --- | --- | --- | --- | --- |
+| 2026-10-18 | 小练 16 | `六张总结练习/section_six _practise.cpp` | 站内 **6.7 第 6 章总结题**：`getQuantityPhrase`（negative / no / a single / a couple of / a few / many）＋ `getApplesPluralized`（1 → `apple`，其余 `apples`）；验收 `3` → `Mary has a few apples.` / `You have a few apples.`，`1` → `a single apple`，`0` → `no apples`，`4/10` → `many apples`，`-1` → `negative apples`；MSBuild `Rebuild` **exit=0、0 warning** | `std::string_view` 返回字符串字面量、`if` 链分派、条件运算符 `num == 1 ? "apple" : "apples"`；⚠️ 只 include 了 `<iostream>`，`std::string_view` 靠间接包含编过，**应补 `#include <string_view>`** |
+| 2026-10-18 | 小练 17 | `7.2练习/7.2_practise.cpp` | 站内 **7.2 局部变量**：读两个整数 `smaller` / `larger`，若 `smaller > larger` 用临时变量交换；验收 `5/3` → `3/5`、`3/5` → `3/5`、`4/4` → `4/4`、`-5/3` → `-5/3`，MSBuild `Rebuild` **exit=0、0 warning** | 局部变量 = 块作用域 ＋ 自动存储期；`int temp{ smaller };` 只在 `if` 块内存活；外层多包一层 `{}` 不影响结果（可用来演示块作用域） |
+| 2026-10-17 | 小练 15 | `5.8习题/源.cpp` ＋ `5.11练习/5.11_practise.cpp` | 站内 **5.8 / 5.11 两道习题**（各自**单开新工程**）：5.8 姓名长度 + 年龄求和；5.11 输入两人姓名/年龄 → 打印更年长者；验收 `John Doe/32` → 40、`John Bacon/37 + David Jenkins/44` → `David Jenkins (age 44) is older than John Bacon (age 37).`，两个工程 MSBuild `Rebuild` **exit=0、0 warning** | `std::string` **可变**、`std::getline(std::cin >> std::ws, name)` 读整行、`std::ssize` 返回 `std::ptrdiff_t`（x64 = `__int64`）；⚠️ `int len{ std::ssize(name) }` → **C2397**（列表初始化禁止隐式窄化，改用 `auto`）；`string_view` 只是指针 + 长度、不拥有内存 |
+| 2026-10-16 | 小练 14 | `5.2~5.7练习/damage_calculator.cpp` ＋ `service.h` ＋ `service.cpp` | 站内 **5.2~5.7**：**自己设计**的伤害计算器（**单开新工程** `5.2~5.7练习\`）——基础攻击力 / 对手防御力 / 是否暴击 → 输出最终伤害；**暴击倍率链路**（`bool` → `kCritMultiplier` → `inline constexpr` 倍率）＋ **负伤害夹 0**；验收 6 组逐行一致：`100/50/0`→`50`、`100/50/1`→`150`、`20/50/1`→`0`、`20/50/0`→`0`、`0/50/1`→`0`、`7/2/1`→`12`，MSBuild `Rebuild` **exit=0、0 warning** | `inline constexpr` **变量**（`kCritMul` / `kNormalMul`：命名空间作用域的 `const` / `constexpr` **默认内部链接**，写 `inline` 才是全程序一份）；`constexpr` **函数**（标不标看**函数体纯不纯**，能不能编译期求值看**实参**）；5.5 **条件运算符** `crit ? kCritMul : kNormalMul`；⚠️ **踩坑**：`akt * crit - defence` 把 `bool`（0/1）当倍率用 → 暴击无效、不暴击出负伤害（`kCritMultiplier` 一度是**无调用点的死函数**，编译器不提醒）；`#include <iostream>;` 多一个分号 → `C4067` |
+| 2026-10-15 | 小练 13 | `5.0~5.1练习/5.0~5.1_practise.cpp` ＋ `service.h` ＋ `service.cpp` | 站内 **5.0~5.1 综合小练**：**圆面积**（**单开新工程** `5.0~5.1练习\`）；`const double kPi{ 3.14 };` 替掉魔法数字 ＋ `k` 前缀命名；验收：半径 `2` → `12.56`、`3` → `28.26` **逐行一致**，MSBuild `Rebuild` **exit=0、0 warning** | **命名常量**（给值起名，改一处全局改）；`const` ＝ **不可改**（声明处就得初始化，之后任何赋值 → `C3892`）；⚠️ 题面另有「**两种常量各一次**」＋「**≥3 个命名常量**」两项，**2026-10-15 经用户决定豁免** —— 5.1 的要点当天已用别处实验覆盖（跨文件 `const` 的链接行为 / `const double` 算不算常量表达式 / 运行期初始化的 `const` → `C2131`） |
+| 2026-10-14 | 小练 12 | `4.12练习2/4.12_practise_2.cpp` | 站内 **4.12 章末练习二**：输入塔高 → 打印 **0~5 秒**每秒的球高（下落距离 `9.8 × t² ÷ 2`，落地后显示 `on the ground`）；**6 次调用手写**（循环 10/21 才解锁） | 验收（输入 **100**）：`100 / 95.1 / 80.4 / 55.9 / 21.6 / on the ground` **逐行一致**，MSBuild `Rebuild` **exit=0、0 warning**。函数按「**取数 / 计算 / 打印 / 两者合一**」四层拆；`ballHeight < 0.0` 时**返回 0** 而不是负数；`gravity * (seconds * seconds) / 2.0` 里 `seconds * seconds` 是 **int**，靠先乘 `gravity`（`double`）把整个表达式抬成浮点 —— **若写成 `(seconds * seconds / 2)` 就会踩整数除法** |
+| 2026-10-14 | 小练 11 | `4.7~4.12练习/4.7~4.12_practise_1.cpp` ＋ `service.h` ＋ `service.cpp` | 站内 **4.12 章末练习一**：把 2.12 的**整数**计算器改成**浮点**版（`int` → `double` 全链路）；⚠️ 源文件是**复制**进新工程的，**2.12 的 int 版原样保留** —— 两个工程互不影响 | 验收 4 组：`7/2`→**3.5**（2.12 的 int 版同输入是 `3`）、`5.5+2.25`→**7.75**、`7/0`→提示＋`0`、`5%2`→提示＋`0`；MSBuild `Rebuild` **exit=0、0 warning**。**`7/2` 在 `double` 下是 3.5、在 `int` 下是 3**（整数除法）；**声明与定义要逐字一致**（这次只同步了返回类型、漏了参数类型 → **链接期才炸**，见错误表第 2 条 `LNK2019`）；浮点 `y == 0` 属「判断输入是否恰好为 0」的例外场景 |
+| 2026-10-13 | 小练 10 | `无符号整数及溢出测试/源.cpp` | 站内 **4.3~4.6** 实验（**单开新工程**）：`unsigned short` 溢出 —— `65536` 环绕成 `0`、`-1` 环绕成 `65535`；**有符号与无符号混用** —— `s < u` 里 `-1` 被转成 `4294967295` → 走 `else` | 取值范围（`n` 位无符号 = `0 ~ 2ⁿ−1`）与**环绕 wrap-around**；**无符号溢出是定义好的环绕、有符号溢出是 UB**；**混用时按无符号比较**（`C4018` 就是编译器在替你标出这件事）；⚠️ 本工程**刻意保留** `C4305` / `C4309` / `C4018` 三条 warning（见错误表下方的例外说明） |
+| 2026-10-12 | 小练 09 | `4.2sizeof表/4.2_sizeof_form.cpp` | 站内 **4.0~4.2**：打印本机 9 种基本类型的字节数（`bool / char / short / int / long / long long / float / double / long double`）＋ `int x{}; sizeof(x)`；MSBuild `Rebuild` **exit=0、0 warning**，输出 `1/1/2/4/4/8/4/8/8` 与 `x = 4`（**单开新工程**，没在 2.12 上续写） | **大小由类型决定、标准只规定「最小尺寸」（实际由实现决定 → 要跑出来看）**、`sizeof` 是**一元运算符**（`sizeof(类型)` / `sizeof(变量)` 都行）、**`void` 不是完整类型**（`sizeof(void)` → `C2070`）、`<iomanip>` 的 `std::left` / `std::setw` 属**库外壳**（可照抄） |
+| 2026-10-11 | 小练 08 | `2.12简易计算器/simple_calculate.cpp` ＋ `service.h` ＋ `service.cpp` | 站内 **2.12 产出**：按**五步设计法自己设计**的简易计算器（`main` + 声明 + 定义三文件）；验收 6 组用例逐行核对通过：`8+3`→11、`8-3`→5、`8*3`→24、`7/2`→3、`5/0`→提示＋0、`5%2`→提示＋0（MSBuild `Rebuild` exit=0、0 warning） | 五步设计法（目标→需求→工具与备份→**拆函数**→事件顺序）、`if / else if` 链分派＋`else` 兜底、整数除零判断、**声明与定义必须严格一致**（`int`/`char` 不一致 → `C2397`） |
+| 2026-10-10 | 小练 07 | `2.9~2.11练习/2.9~2.11_practise.cpp` ＋ `add.h` ＋ `add.cpp` | 站内 2.9~2.11 自测：**头文件 + 实现**分离（**单开新工程**，没在 2.4~2.6 上续写）；编译运行输出 `add(10,20) = 30` | 头文件放声明 / `.cpp` 放定义、**include guard**、重复包含 vs 重复定义、`#include "…"` 与 `<…>` 的搜索路径差别 |
+| 2026-10-10 | 小练 06 | `2.9示例测试/2.9test.cpp` | 站内 2.9 示例照敲：条件编译 `#define PRINT_JOE` + `#ifdef PRINT_BOB` → 只输出 `Joe` | 预处理器 ≠ 编译器、`#define`、`#ifdef` / `#endif`、条件编译 |
+| 2026-10-08 | 小练 05 | `2.4~2.6练习/add_test.cpp` | 站内 2.7 多代码文件：把 `add_test.cpp` 加进**已有工程**，主文件调用**跨文件**的 `Add_Test`（A 卷输出 19 行逐行核对通过） | 多代码文件、声明与定义分离、跨文件调用、`LNK2019` / `LNK1120` 实验 |
+| 2026-10-07 | 小练 04 | `2.4~2.6练习/2.4~2.6_practise.cpp` | 2.4~2.6 自测（T1~T4 + T7/T8）：局部变量生命周期 / 函数动机 / 前向声明；输出 18 行逐行核对通过 | 生命周期 vs 作用域、裸块、函数动机、**声明 vs 定义**、前向声明、链接期错误 |
+| 2026-10-05 | 小练 03 | `2.0~2.3练习/2.1~2.3_practise.cpp` | 函数实验台：返回值 / `void` / 按值传递 / 函数复用（配 Obsidian 自测问答 Q1~Q8） | 函数头三件套、`return` 与「返回值被忽略」、形参也是局部变量、**按值传递** |
+| 2026-10-05 | 自测 1.8 | `1.8自测/1.8practise.cpp` | 字面值与操作符：T1~T11 共 11 行输出自测（11/11 全对） | 字面值 vs 变量、一元/二元操作符、优先级、`<<` 的链接与返回值、副作用 |
+| 2026-10-05 | 交付 01 | `10.4交付任务/main.cpp` | **BMI 计算**（第一版自己设计的程序：输入 → 计算 → 输出） | `double`、表达式求值、`cin` 连读 |
+| 2026-10-04 | 小练 02 | `Project2_2倍输出输入值/1.10.cpp` | 站内 1.10 练习：输入一个整数 → 输出它的 2 倍 | `std::cin` 连续读取、算术表达式、`/` 与整数除法 |
+| 2026-10-03 | 小练 01 | `Project1_stdcout_sin_endl/FileName.cpp` | `std::cout` 打印提示 → `std::cin` 读入两个 `int` → 回显 | `#include <iostream>`、`std::cout` / `std::cin`、`int x{ }` 值初始化 |
+
+---
+
 ## 目录结构
+
+### 最近新增（10/18）
+
+| 目录 | 内容 | 验收 |
+| --- | --- | --- |
+| `六张总结练习/` | 6.7 第 6 章总结题：数量短语 ＋ 苹果复数 | exit=0、0 warning；3 / 1 / 0 / 4 / 10 / -1 六组输出核对 |
+| `7.2练习/` | 7.2 局部变量：两整数排序 / 交换 | exit=0、0 warning；5/3、3/5、4/4、-5/3 四组核对 |
+
+<details>
+<summary>展开完整目录树</summary>
 
 ```
 cpp_practise/
@@ -64,85 +162,45 @@ cpp_practise/
 │   ├── 4.12练习2.slnx / .vcxproj             **单开新工程**（只有一个源文件，没有再拆头文件）
 │   └── 4.12_practise_2.cpp                   `getTowerHeight` / `calculateBallHeight` / `printBallHeight` / `calculateAndPrintBallHeight` ＋ `main` 里**手写 6 次调用**（不许用循环）
 ├── 5.0~5.1练习/                              站内 **5.0~5.1**（10/15）：圆面积 —— 命名常量 ＋ `const`
-    ├── 5.0~5.1练习.slnx / .vcxproj            **单开新工程**（Debug / x64，没在 4.12 上续写）
-    ├── service.h                              `#pragma once` + 两条函数声明 + **`const double kPi{ 3.14 };`**
-    ├── service.cpp                            `kGetRadius()`（`std::cin` 读半径）/ `kGetResult(radius)`（`radius * radius * kPi`）；⚠️ **原名 `servise.cpp`，10/15 改名并已同步 `.vcxproj` / `.filters`**
-    └── 5.0~5.1_practise.cpp                   `main`：取半径 → 算面积 → 打印
+│   ├── 5.0~5.1练习.slnx / .vcxproj            **单开新工程**（Debug / x64，没在 4.12 上续写）
+│   ├── service.h                              `#pragma once` + 两条函数声明 + **`const double kPi{ 3.14 };`**
+│   ├── service.cpp                            `kGetRadius()`（`std::cin` 读半径）/ `kGetResult(radius)`（`radius * radius * kPi`）；⚠️ **原名 `servise.cpp`，10/15 改名并已同步 `.vcxproj` / `.filters`**
+│   └── 5.0~5.1_practise.cpp                   `main`：取半径 → 算面积 → 打印
 ├── 5.2~5.7练习/                              站内 **5.2~5.7**（10/16）：伤害计算器 —— `constexpr` ＋ `inline` 变量 ＋ 条件运算符
-    ├── 5.2~5.7练习.slnx / .vcxproj            **单开新工程**（Debug / x64）
-    ├── service.h                              `#pragma once` ＋ `inline constexpr double kCritMul{ 2.0 }` / `kNormalMul{ 1.0 }` ＋ `constexpr kCritMultiplier(bool)`（5.5 条件运算符）＋ `constexpr kDamegeCulculate(akt, defence, mult)`
-    ├── service.cpp                            三个取数函数 `kGetAktDate` / `kGetDefendDate` / `kGetCritDate` —— 每个只 `std::cin` 一个值、`return` 一个值
-    └── damage_calculator.cpp                  `main`：三次取数 → `kDamegeCulculate(akt, defence, kCritMultiplier(crit))` → **负伤害夹 0** → 打印
+│   ├── 5.2~5.7练习.slnx / .vcxproj            **单开新工程**（Debug / x64）
+│   ├── service.h                              `#pragma once` ＋ `inline constexpr double kCritMul{ 2.0 }` / `kNormalMul{ 1.0 }` ＋ `constexpr kCritMultiplier(bool)`（5.5 条件运算符）＋ `constexpr kDamegeCulculate(akt, defence, mult)`
+│   ├── service.cpp                            三个取数函数 `kGetAktDate` / `kGetDefendDate` / `kGetCritDate` —— 每个只 `std::cin` 一个值、`return` 一个值
+│   └── damage_calculator.cpp                  `main`：三次取数 → `kDamegeCulculate(akt, defence, kCritMultiplier(crit))` → **负伤害夹 0** → 打印
 ├── 5.8习题/                                  站内 **5.8 习题**（10/17）：姓名长度 + 年龄求和
 │   ├── 5.8习题.slnx / .vcxproj               **单开新工程**（Debug / x64）
 │   └── 源.cpp                                `std::getline` 读整行 + `std::ssize(name)` 取有符号长度 + `age + len_name`
-└── 5.11练习/                                站内 **5.11 习题**（10/17）：两个人比年龄
-    ├── 5.11练习.slnx / .vcxproj              **单开新工程**（Debug / x64）
-    └── 5.11_practise.cpp                    `kGetName` / `kGetAge` / `kCompare` + `main` 两轮输入 → 打印更年长者
+├── 5.11练习/                                站内 **5.11 习题**（10/17）：两个人比年龄
+│   ├── 5.11练习.slnx / .vcxproj              **单开新工程**（Debug / x64）
+│   └── 5.11_practise.cpp                    `kGetName` / `kGetAge` / `kCompare` + `main` 两轮输入 → 打印更年长者
+├── 六张总结练习/                             站内 **6.7 第 6 章总结题**（10/18）：数量短语 ＋ 苹果复数
+│   ├── 六张总结练习.slnx / .vcxproj          **单开新工程**（Debug / x64）
+│   └── section_six _practise.cpp            `getQuantityPhrase` / `getApplesPluralized`
+└── 7.2练习/                                  站内 **7.2 局部变量**（10/18）：两整数排序 / 交换
+    ├── 7.2练习.slnx / .vcxproj               **单开新工程**（Debug / x64）
+    └── 7.2_practise.cpp                      `smaller` / `larger` ＋ 临时变量交换
 ```
+
+</details>
 
 > `.vs/`、`x64/`，以及 VS 2026 为**每个工程**生成的同名中间目录（`Project1.e7d0550b/`、`2.4~2.6练习/2.4~2.6练习/` 这类）都是本机构建产物，已被 `.gitignore` 排除，不会进仓库。
 > 如果以后 VS 又生成了新的中间目录，把它加进 `.gitignore` 即可。
 
 ---
 
-## 怎么构建和运行
+## 编译 / 链接错误速查
 
-### 在 Visual Studio 里
+**先看这 5 条（最高频）**
 
-1. 双击 `Project1_stdcout_sin_endl\Project1_stdcout_sin_endl.slnx`
-2. 按 **F5**（调试运行）或 **Ctrl+F5**（不调试直接运行）
-3. 控制台出现 `Enter two numbers separated by a space:`，输入形如 `3 5` 后回车
-
-### 命令行（Developer PowerShell for VS 2026）
-
-```powershell
-cd "D:\cpp_practise\Project1_stdcout_sin_endl"
-msbuild Project1_stdcout_sin_endl.vcxproj /p:Configuration=Debug /p:Platform=x64
-.\x64\Debug\Project1_stdcout_sin_endl.exe
-```
-
-只编译单个文件也可以（不进 VS）：
-
-```powershell
-cl /nologo /EHsc /std:c++20 FileName.cpp
-.\FileName.exe
-```
-
-> ⚠️ **这条绕过 MSBuild，所以 `Directory.Build.props` 里的 `/source-charset:utf-8` 不会生效。**
-> 手打 `cl` 时要么源码**带 BOM**，要么自己补上选项：`cl /nologo /EHsc /std:c++20 /source-charset:utf-8 FileName.cpp`
-
----
-
-## 练习记录
-
-| 日期 | 编号 | 文件 | 内容 | 知识点 |
-| --- | --- | --- | --- | --- |
-| 2026-10-03 | 小练 01 | `Project1_stdcout_sin_endl/FileName.cpp` | `std::cout` 打印提示 → `std::cin` 读入两个 `int` → 回显 | `#include <iostream>`、`std::cout` / `std::cin`、`int x{ }` 值初始化 |
-| 2026-10-04 | 小练 02 | `Project2_2倍输出输入值/1.10.cpp` | 站内 1.10 练习：输入一个整数 → 输出它的 2 倍 | `std::cin` 连续读取、算术表达式、`/` 与整数除法 |
-| 2026-10-05 | 交付 01 | `10.4交付任务/main.cpp` | **BMI 计算**（第一版自己设计的程序：输入 → 计算 → 输出） | `double`、表达式求值、`cin` 连读 |
-| 2026-10-05 | 自测 1.8 | `1.8自测/1.8practise.cpp` | 字面值与操作符：T1~T11 共 11 行输出自测（11/11 全对） | 字面值 vs 变量、一元/二元操作符、优先级、`<<` 的链接与返回值、副作用 |
-| 2026-10-05 | 小练 03 | `2.0~2.3练习/2.1~2.3_practise.cpp` | 函数实验台：返回值 / `void` / 按值传递 / 函数复用（配 Obsidian 自测问答 Q1~Q8） | 函数头三件套、`return` 与「返回值被忽略」、形参也是局部变量、**按值传递** |
-| 2026-10-07 | 小练 04 | `2.4~2.6练习/2.4~2.6_practise.cpp` | 2.4~2.6 自测（T1~T4 + T7/T8）：局部变量生命周期 / 函数动机 / 前向声明；输出 18 行逐行核对通过 | 生命周期 vs 作用域、裸块、函数动机、**声明 vs 定义**、前向声明、链接期错误 |
-| 2026-10-08 | 小练 05 | `2.4~2.6练习/add_test.cpp` | 站内 2.7 多代码文件：把 `add_test.cpp` 加进**已有工程**，主文件调用**跨文件**的 `Add_Test`（A 卷输出 19 行逐行核对通过） | 多代码文件、声明与定义分离、跨文件调用、`LNK2019` / `LNK1120` 实验 |
-| 2026-10-10 | 小练 06 | `2.9示例测试/2.9test.cpp` | 站内 2.9 示例照敲：条件编译 `#define PRINT_JOE` + `#ifdef PRINT_BOB` → 只输出 `Joe` | 预处理器 ≠ 编译器、`#define`、`#ifdef` / `#endif`、条件编译 |
-| 2026-10-10 | 小练 07 | `2.9~2.11练习/2.9~2.11_practise.cpp` ＋ `add.h` ＋ `add.cpp` | 站内 2.9~2.11 自测：**头文件 + 实现**分离（**单开新工程**，没在 2.4~2.6 上续写）；编译运行输出 `add(10,20) = 30` | 头文件放声明 / `.cpp` 放定义、**include guard**、重复包含 vs 重复定义、`#include "…"` 与 `<…>` 的搜索路径差别 |
-| 2026-10-11 | 小练 08 | `2.12简易计算器/simple_calculate.cpp` ＋ `service.h` ＋ `service.cpp` | 站内 **2.12 产出**：按**五步设计法自己设计**的简易计算器（`main` + 声明 + 定义三文件）；验收 6 组用例逐行核对通过：`8+3`→11、`8-3`→5、`8*3`→24、`7/2`→3、`5/0`→提示＋0、`5%2`→提示＋0（MSBuild `Rebuild` exit=0、0 warning） | 五步设计法（目标→需求→工具与备份→**拆函数**→事件顺序）、`if / else if` 链分派＋`else` 兜底、整数除零判断、**声明与定义必须严格一致**（`int`/`char` 不一致 → `C2397`） |
-
-| 2026-10-12 | 小练 09 | `4.2sizeof表/4.2_sizeof_form.cpp` | 站内 **4.0~4.2**：打印本机 9 种基本类型的字节数（`bool / char / short / int / long / long long / float / double / long double`）＋ `int x{}; sizeof(x)`；MSBuild `Rebuild` **exit=0、0 warning**，输出 `1/1/2/4/4/8/4/8/8` 与 `x = 4`（**单开新工程**，没在 2.12 上续写） | **大小由类型决定、标准只规定「最小尺寸」（实际由实现决定 → 要跑出来看）**、`sizeof` 是**一元运算符**（`sizeof(类型)` / `sizeof(变量)` 都行）、**`void` 不是完整类型**（`sizeof(void)` → `C2070`）、`<iomanip>` 的 `std::left` / `std::setw` 属**库外壳**（可照抄） |
-| 2026-10-13 | 小练 10 | `无符号整数及溢出测试/源.cpp` | 站内 **4.3~4.6** 实验（**单开新工程**）：`unsigned short` 溢出 —— `65536` 环绕成 `0`、`-1` 环绕成 `65535`；**有符号与无符号混用** —— `s < u` 里 `-1` 被转成 `4294967295` → 走 `else` | 取值范围（`n` 位无符号 = `0 ~ 2ⁿ−1`）与**环绕 wrap-around**；**无符号溢出是定义好的环绕、有符号溢出是 UB**；**混用时按无符号比较**（`C4018` 就是编译器在替你标出这件事）；⚠️ 本工程**刻意保留** `C4305` / `C4309` / `C4018` 三条 warning（见错误表下方的例外说明） |
-| 2026-10-14 | 小练 11 | `4.7~4.12练习/4.7~4.12_practise_1.cpp` ＋ `service.h` ＋ `service.cpp` | 站内 **4.12 章末练习一**：把 2.12 的**整数**计算器改成**浮点**版（`int` → `double` 全链路）；⚠️ 源文件是**复制**进新工程的，**2.12 的 int 版原样保留** —— 两个工程互不影响 | 验收 4 组：`7/2`→**3.5**（2.12 的 int 版同输入是 `3`）、`5.5+2.25`→**7.75**、`7/0`→提示＋`0`、`5%2`→提示＋`0`；MSBuild `Rebuild` **exit=0、0 warning**。**`7/2` 在 `double` 下是 3.5、在 `int` 下是 3**（整数除法）；**声明与定义要逐字一致**（这次只同步了返回类型、漏了参数类型 → **链接期才炸**，见错误表第 2 条 `LNK2019`）；浮点 `y == 0` 属「判断输入是否恰好为 0」的例外场景 |
-| 2026-10-14 | 小练 12 | `4.12练习2/4.12_practise_2.cpp` | 站内 **4.12 章末练习二**：输入塔高 → 打印 **0~5 秒**每秒的球高（下落距离 `9.8 × t² ÷ 2`，落地后显示 `on the ground`）；**6 次调用手写**（循环 10/21 才解锁） | 验收（输入 **100**）：`100 / 95.1 / 80.4 / 55.9 / 21.6 / on the ground` **逐行一致**，MSBuild `Rebuild` **exit=0、0 warning**。函数按「**取数 / 计算 / 打印 / 两者合一**」四层拆；`ballHeight < 0.0` 时**返回 0** 而不是负数；`gravity * (seconds * seconds) / 2.0` 里 `seconds * seconds` 是 **int**，靠先乘 `gravity`（`double`）把整个表达式抬成浮点 —— **若写成 `(seconds * seconds / 2)` 就会踩整数除法** |
-| 2026-10-15 | 小练 13 | `5.0~5.1练习/5.0~5.1_practise.cpp` ＋ `service.h` ＋ `service.cpp` | 站内 **5.0~5.1 综合小练**：**圆面积**（**单开新工程** `5.0~5.1练习\`）；`const double kPi{ 3.14 };` 替掉魔法数字 ＋ `k` 前缀命名；验收：半径 `2` → `12.56`、`3` → `28.26` **逐行一致**，MSBuild `Rebuild` **exit=0、0 warning** | **命名常量**（给值起名，改一处全局改）；`const` ＝ **不可改**（声明处就得初始化，之后任何赋值 → `C3892`）；⚠️ 题面另有「**两种常量各一次**」＋「**≥3 个命名常量**」两项，**2026-10-15 经用户决定豁免** —— 5.1 的要点当天已用别处实验覆盖（跨文件 `const` 的链接行为 / `const double` 算不算常量表达式 / 运行期初始化的 `const` → `C2131`） |
-| 2026-10-16 | 小练 14 | `5.2~5.7练习/damage_calculator.cpp` ＋ `service.h` ＋ `service.cpp` | 站内 **5.2~5.7**：**自己设计**的伤害计算器（**单开新工程** `5.2~5.7练习\`）——基础攻击力 / 对手防御力 / 是否暴击 → 输出最终伤害；**暴击倍率链路**（`bool` → `kCritMultiplier` → `inline constexpr` 倍率）＋ **负伤害夹 0**；验收 6 组逐行一致：`100/50/0`→`50`、`100/50/1`→`150`、`20/50/1`→`0`、`20/50/0`→`0`、`0/50/1`→`0`、`7/2/1`→`12`，MSBuild `Rebuild` **exit=0、0 warning** | `inline constexpr` **变量**（`kCritMul` / `kNormalMul`：命名空间作用域的 `const` / `constexpr` **默认内部链接**，写 `inline` 才是全程序一份）；`constexpr` **函数**（标不标看**函数体纯不纯**，能不能编译期求值看**实参**）；5.5 **条件运算符** `crit ? kCritMul : kNormalMul`；⚠️ **踩坑**：`akt * crit - defence` 把 `bool`（0/1）当倍率用 → 暴击无效、不暴击出负伤害（`kCritMultiplier` 一度是**无调用点的死函数**，编译器不提醒）；`#include <iostream>;` 多一个分号 → `C4067` |
-| 2026-10-17 | 小练 15 | `5.8习题/源.cpp` ＋ `5.11练习/5.11_practise.cpp` | 站内 **5.8 / 5.11 两道习题**（各自**单开新工程**）：5.8 姓名长度 + 年龄求和；5.11 输入两人姓名/年龄 → 打印更年长者；验收 `John Doe/32` → 40、`John Bacon/37 + David Jenkins/44` → `David Jenkins (age 44) is older than John Bacon (age 37).`，两个工程 MSBuild `Rebuild` **exit=0、0 warning** | `std::string` **可变**、`std::getline(std::cin >> std::ws, name)` 读整行、`std::ssize` 返回 `std::ptrdiff_t`（x64 = `__int64`）；⚠️ `int len{ std::ssize(name) }` → **C2397**（列表初始化禁止隐式窄化，改用 `auto`）；`string_view` 只是指针 + 长度、不拥有内存 |
-
-> 日期列 = **提交日期**（可与 `git log` 对上）；只有小练 01 那一行沿用了当时记录的练习日（实际提交在 10/04）。
-> 计划中的后续安排见 `D:\career_plan\docs\实习规划\游戏主线_十月逐日计划.md`。**当前位置：第 5 章收尾 —— 5.8~5.11 已读、产出 `5.8习题` / `5.11练习` 已交付**（`day13`，2026-10-17；含 `std::string` / `std::string_view` / 两道章末习题）；**6.0~6.1 已过（6.0 习题未落盘）**；**下一步**：6.2~6.4 → 第 12 章（引用与指针，10/26 起）→ 第 14 章（class，10/30 起）。
-
----
-
-## 亲手复现过的编译 / 链接错误（实验记录）
+- `C2065`：变量不在作用域 → 检查 `{}` 的范围。
+- `C3861`：函数没声明 → 补前向声明 / 检查拼写。
+- `LNK2019` + `LNK1120`：声明了但没定义 → 补定义 / 检查签名是否一致。
+- `LNK1169`：多重定义 → 头文件里别放定义。
+- `C2397`：列表初始化窄化 → 换 `auto` 或显式 `static_cast`。
 
 > 全部是**故意写错**换来的原文，**不是从教材抄的**。教材（studycpp 2.6）贴的是 `LNK2001`，本机 MSVC 14.51 给的是 **`LNK2019`** —— 编译器版本不同编号会变，**一律以自己屏幕上的原文为准**。
 > ⚠️ 下面的行号属于**当时那一版**代码，改动之后就对不上了。
@@ -184,20 +242,9 @@ cl /nologo /EHsc /std:c++20 FileName.cpp
 
 ---
 
-## 已知待改（自己动手改，别直接复制）
+## 源文件编码
 
-- `FileName.cpp` 回显那一行少了空格：`<< "and" <<` 会输出 `You entered 3and5`，应补成 `" and "`
-- 该文件没有写 `return 0;`：`main` 会隐式返回 0、编译器不报错，但显式写出来更清楚
-- `int x{ };` 是**值初始化**（结果为 0），不是「未初始化」；想复现未定义行为要写 `int x;`
-- 变量名 `x` / `y` 可读性差：等学完命名规则（studycpp 1.6）后改成 `first_number` / `second_number`
-- `2.9~2.11练习/add.cpp` 第 1 行的 `#include "add.h"` 目前是**注释掉**的（当时为了让「头里放定义」那个实验能过）：**建议恢复** —— 自己的 `.cpp` 应该 include 自己的头，编译器才能替你核对「声明与定义是否一致」（可拿「把返回类型写成 `double`」验证，预期报 `C2556`）
-- `2.9~2.11练习/add.h` 的 `#endif` 前留了两处空行，收掉更整齐（不影响编译）
-- `2.12简易计算器/simple_calculate.cpp` 第 6 行 `int x{ getFirstNumber()};` 少一个空格（纯样式，1.7 的代码样式）
-- `2.12简易计算器` 的**已知限制（先留着）**：出错（除零 / 非法运算符）时 `main` 仍会打印「计算结果为: 0」—— v1 没有「成功 / 失败」通道（`bool` 输出参数要到 **12.12**）。按 2.12「不要沉迷于完善早期代码」，**第 12 章再回填**
-
----
-
-## 源文件编码（踩过坑，别再踩）
+> 踩过坑，别再踩。
 
 **两道防线，各管一段：**
 ① **仓库根的 `Directory.Build.props`**（2026-10-05 已装）让 MSVC **按 UTF-8 读源码** —— 无 BOM 也行，本目录及其子目录下**所有工程（含以后新建的）自动生效**，用 VS 或 `msbuild` 构建都算。
@@ -210,7 +257,7 @@ cl /nologo /EHsc /std:c++20 FileName.cpp
   - **只用 `source-charset`，不用 `/utf-8`**：`/utf-8` 会把**执行字符集**也设成 UTF-8，默认 936 的 cmd 窗口里中文会变乱码；只设 source-charset，窄字符串按 GBK 落地，控制台直接正常显示。
   - **`/we4828` 是报警器**：源文件里有"非法 UTF-8 字节"（多半是从别处拷来的 GBK 文件）时**直接编译失败**，而不是悄悄乱码。
   - **⚠️ 它管不到的三种场合（靠防线②兜）**：裸命令行 `cl …`（绕过 MSBuild）／**本仓库之外**的工程（如 `D:\cpp learning`、将来的 `D:\cpp_snake`）／CMake、gcc、clang 等其他构建链。
-  - **2026-10-11 实测（反向印证这条设计）**：`2.12简易计算器` 三个文件**都是无 BOM 的 UTF-8**，MSVC 14.51 靠 `Directory.Build.props` 的 `/source-charset:utf-8` **零警告**编过；中文提示语的**输出字节是 GBK**（`C7 EB CA E4 …` = 「请输入」），在 936 控制台下显示正常 —— 正是第 144 行「只设 source-charset、窄字符串按 GBK 落地」想要的效果。**但防线②（存 BOM）仍建议照办**：换 clang / Linux / GitHub CI 时没有 `Directory.Build.props` 兜底。
+  - **2026-10-11 实测（反向印证这条设计）**：`2.12简易计算器` 三个文件**都是无 BOM 的 UTF-8**，MSVC 14.51 靠 `Directory.Build.props` 的 `/source-charset:utf-8` **零警告**编过；中文提示语的**输出字节是 GBK**（`C7 EB CA E4 …` = 「请输入」），在 936 控制台下显示正常 —— 正是「只设 source-charset、窄字符串按 GBK 落地」想要的效果。**但防线②（存 BOM）仍建议照办**：换 clang / Linux / GitHub CI 时没有 `Directory.Build.props` 兜底。
 - **反向规则**：`.md` / `.json` / `.py` / `.mjs` 这类跨平台文件**不要带 BOM**（Node / Python / `JSON.parse` 会把 BOM 当正文字符，容易报错）。
 ### 遇到这些编号 = 编码问题
 
@@ -226,6 +273,25 @@ cl /nologo /EHsc /std:c++20 FileName.cpp
   $b = [IO.File]::ReadAllBytes('10.4交付任务\main.cpp')
   ($b[0..2] | ForEach-Object { $_.ToString('x2') }) -join ' '   # ef bb bf = 有 BOM
   ```
+- **2026-10-18 实测**：`六张总结练习` 与 `7.2练习` 的源文件都是无 BOM 的 UTF-8，靠 `Directory.Build.props` 零警告编过（其中 `六张总结练习` 含中文注释）。
+
+---
+
+## 已知待改
+
+> 自己动手改，别直接复制。
+
+- `FileName.cpp` 回显那一行少了空格：`<< "and" <<` 会输出 `You entered 3and5`，应补成 `" and "`
+- 该文件没有写 `return 0;`：`main` 会隐式返回 0、编译器不报错，但显式写出来更清楚
+- `int x{ };` 是**值初始化**（结果为 0），不是「未初始化」；想复现未定义行为要写 `int x;`
+- 变量名 `x` / `y` 可读性差：等学完命名规则（studycpp 1.6）后改成 `first_number` / `second_number`
+- `2.9~2.11练习/add.cpp` 第 1 行的 `#include "add.h"` 目前是**注释掉**的（当时为了让「头里放定义」那个实验能过）：**建议恢复** —— 自己的 `.cpp` 应该 include 自己的头，编译器才能替你核对「声明与定义是否一致」（可拿「把返回类型写成 `double`」验证，预期报 `C2556`）
+- `2.9~2.11练习/add.h` 的 `#endif` 前留了两处空行，收掉更整齐（不影响编译）
+- `2.12简易计算器/simple_calculate.cpp` 第 6 行 `int x{ getFirstNumber()};` 少一个空格（纯样式，1.7 的代码样式）
+- `2.12简易计算器` 的**已知限制（先留着）**：出错（除零 / 非法运算符）时 `main` 仍会打印「计算结果为: 0」—— v1 没有「成功 / 失败」通道（`bool` 输出参数要到 **12.12**）。按 2.12「不要沉迷于完善早期代码」，**第 12 章再回填**
+- `六张总结练习/section_six _practise.cpp` 只 include 了 `<iostream>`，但用了 `std::string_view`；**补 `#include <string_view>`**（本次靠间接包含编过，不保证换编译器还能过）。
+- 目录名 `六张总结练习` 与工程名 / exe 名 `六章总结练习` 不一致；**建议统一成“六章总结练习”**，并同步 `.slnx` 与 README。
+- `section_six _practise.cpp` 文件名中间多一个空格；**建议改成 `section_six_practise.cpp`**，并同步 `.vcxproj` / `.filters`。
 
 ---
 
@@ -236,3 +302,4 @@ cl /nologo /EHsc /std:c++20 FileName.cpp
 - 源码进仓库，构建产物（`.vs/` `x64/` 等）一律不进
 - README 的「练习记录」表**在每次提交之后**补上当天那一行（2026-10-10 起由 DSH 代笔）
 - 报错原文一律写**自己屏幕上抄下来的**；教材版本（studycpp 2.6 写的是 `LNK2001`）可能与本机编号不同，**以实测为准**
+- 提交前先更新「当前进度」与「练习记录」；`git add` 具体文件，不要 `git add -A`（根目录 `AGENTS.md` 不提交）。
