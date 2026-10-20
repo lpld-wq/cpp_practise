@@ -5,7 +5,7 @@ C++ 练习仓库 —— 记录从零开始学 C++ 的每一次课后小练。
 - 教材：[C++学习网 studycpp.cn](https://www.studycpp.cn/)（[learncpp.com](https://www.learncpp.com/) 中文译站，28 章，每节带练习）
 - 用法：**每节示例都必须手敲并改动一处**，只看不敲不算学完
 - 长期目标：为 2027 年游戏客户端实习（C++ / UE5）打底；规划文档在 `D:\career_plan\docs\实习规划\`
-- 最近更新：**2026-10-18**（6.7 第 6 章总结题 ＋ 7.2 局部变量）
+- 最近更新：**2026-10-20**（7.13 Q2 `constants.h` ＋ Q3 静态局部变量累加器）
 
 ---
 
@@ -15,9 +15,9 @@ C++ 练习仓库 —— 记录从零开始学 C++ 的每一次课后小练。
 
 | 项 | 状态 |
 | --- | --- |
-| 教材进度 | **第 7 章 7.2 局部变量**（以已交付产出为准；6.7 第 6 章总结题、7.2 习题已交付） |
-| 最近产出 | `六章总结练习/`（6.7 总结题）、`7.2练习/`（7.2 局部变量） |
-| 下一步 | **7.3~7.6**：全局变量 / 名称遮挡 / 内部链接 / 外部链接 ＋ 两文件链接性实验 |
+| 教材进度 | **第 7 章 7.13 总结练习**（Q2 `constants.h` ＋ Q3 `accumulate` 已交付） |
+| 最近产出 | `7.13第七章总结练习/`（7.13 Q2）、`7.13问题3/`（7.13 Q3） |
+| 下一步 | **第 8 章 8.0~8.6**：控制流 / `if` / `switch` / `goto` |
 | 算法线 | Python 先行；C++ 重做 **10/21** 起（`while` / `for` 正课解锁） |
 | 验收口径 | MSBuild `Rebuild`（Debug / x64）**exit=0、0 warning**；程序输出逐行比对 |
 | 规划真源 | `D:\career_plan\docs\实习规划\游戏主线_十月逐日计划.md` |
@@ -87,6 +87,8 @@ cl /nologo /EHsc /std:c++20 FileName.cpp
 
 | 日期 | 编号 | 文件 | 内容 | 知识点 |
 | --- | --- | --- | --- | --- |
+| 2026-10-20 | 小练 18 | `7.13第七章总结练习/7.13_practise.cpp` ＋ `constants.h` | 站内 **7.13 问题 2**：新建 `constants.h`，在 `Constants` 命名空间里定义 `inline constexpr int maxClassSize{ 35 };`；主程序读取班级人数并比较；验收 `36` → too many、`35` / `20` → not too large，MSBuild `Rebuild` **exit=0、0 warning** | 命名空间 + 头文件共享常量、`inline constexpr` 变量、`#pragma once`、条件分支比较 |
+| 2026-10-20 | 小练 19 | `7.13问题3/7.13_practise.cpp` | 站内 **7.13 问题 3**：`accumulate(int)` 用静态局部变量累加；验收 `4 / 3 / 2 / 1` → `4 / 7 / 9 / 10`，MSBuild `Rebuild` **exit=0、0 warning** | `static` 局部变量只初始化一次、跨调用保留状态；块作用域不变、静态存储期 |
 | 2026-10-18 | 小练 16 | `六章总结练习/section_six_practise.cpp` | 站内 **6.7 第 6 章总结题**：`getQuantityPhrase`（negative / no / a single / a couple of / a few / many）＋ `getApplesPluralized`（1 → `apple`，其余 `apples`）；验收 `3` → `Mary has a few apples.` / `You have a few apples.`，`1` → `a single apple`，`0` → `no apples`，`4/10` → `many apples`，`-1` → `negative apples`；MSBuild `Rebuild` **exit=0、0 warning** | `std::string_view` 返回字符串字面量、`if` 链分派、条件运算符 `num == 1 ? "apple" : "apples"`；显式包含 `<string_view>`，不依赖其他头文件的间接包含 |
 | 2026-10-18 | 小练 17 | `7.2练习/7.2_practise.cpp` | 站内 **7.2 局部变量**：读两个整数 `smaller` / `larger`，若 `smaller > larger` 用临时变量交换；验收 `5/3` → `3/5`、`3/5` → `3/5`、`4/4` → `4/4`、`-5/3` → `-5/3`，MSBuild `Rebuild` **exit=0、0 warning** | 局部变量 = 块作用域 ＋ 自动存储期；`int temp{ smaller };` 只在 `if` 块内存活；外层多包一层 `{}` 不影响结果（可用来演示块作用域） |
 | 2026-10-17 | 小练 15 | `5.8习题/源.cpp` ＋ `5.11练习/5.11_practise.cpp` | 站内 **5.8 / 5.11 两道习题**（各自**单开新工程**）：5.8 姓名长度 + 年龄求和；5.11 输入两人姓名/年龄 → 打印更年长者；验收 `John Doe/32` → 40、`John Bacon/37 + David Jenkins/44` → `David Jenkins (age 44) is older than John Bacon (age 37).`，两个工程 MSBuild `Rebuild` **exit=0、0 warning** | `std::string` **可变**、`std::getline(std::cin >> std::ws, name)` 读整行、`std::ssize` 返回 `std::ptrdiff_t`（x64 = `__int64`）；`int len{ std::ssize(name) }` → **C2397**（列表初始化禁止隐式窄化，改用 `auto`）；`string_view` 只是指针 + 长度、不拥有内存 |
@@ -111,12 +113,12 @@ cl /nologo /EHsc /std:c++20 FileName.cpp
 
 ## 目录结构
 
-### 最近新增（10/18）
+### 最近新增（10/20）
 
 | 目录 | 内容 | 验收 |
 | --- | --- | --- |
-| `六章总结练习/` | 6.7 第 6 章总结题：数量短语 ＋ 苹果复数 | exit=0、0 warning；3 / 1 / 0 / 4 / 10 / -1 六组输出核对 |
-| `7.2练习/` | 7.2 局部变量：两整数排序 / 交换 | exit=0、0 warning；5/3、3/5、4/4、-5/3 四组核对 |
+| `7.13第七章总结练习/` | 7.13 Q2：`constants.h` ＋ 班级人数比较 | exit=0、0 warning；36 / 35 / 20 三组输出核对 |
+| `7.13问题3/` | 7.13 Q3：静态局部变量 `accumulate` | exit=0、0 warning；4 / 7 / 9 / 10 连续调用核对 |
 
 <details>
 <summary>展开完整目录树</summary>
@@ -180,9 +182,16 @@ cpp_practise/
 ├── 六章总结练习/                             站内 **6.7 第 6 章总结题**（10/18）：数量短语 ＋ 苹果复数
 │   ├── 六章总结练习.slnx / .vcxproj          **单开新工程**（Debug / x64）
 │   └── section_six_practise.cpp            `getQuantityPhrase` / `getApplesPluralized`
-└── 7.2练习/                                  站内 **7.2 局部变量**（10/18）：两整数排序 / 交换
-    ├── 7.2练习.slnx / .vcxproj               **单开新工程**（Debug / x64）
-    └── 7.2_practise.cpp                      `smaller` / `larger` ＋ 临时变量交换
+├── 7.2练习/                                  站内 **7.2 局部变量**（10/18）：两整数排序 / 交换
+│   ├── 7.2练习.slnx / .vcxproj               **单开新工程**（Debug / x64）
+│   └── 7.2_practise.cpp                      `smaller` / `larger` ＋ 临时变量交换
+├── 7.13第七章总结练习/                        站内 **7.13 Q2**（10/20）：`constants.h` ＋ 班级人数比较
+│   ├── 7.13第七章总结练习.slnx / .vcxproj    **单开新工程**（Debug / x64）
+│   ├── 7.13_practise.cpp                     `main`：读取人数并与 `Constants::maxClassSize` 比较
+│   └── constants.h                           `#pragma once` ＋ `inline constexpr int maxClassSize{ 35 };`
+└── 7.13问题3/                                站内 **7.13 Q3**（10/20）：静态局部变量累加器
+    ├── 7.13问题3.slnx / .vcxproj             **单开新工程**（Debug / x64）
+    └── 7.13_practise.cpp                     `accumulate(int)` 用 `static int` 保存累计和
 ```
 
 </details>
@@ -289,7 +298,7 @@ cpp_practise/
 | 第 4 章 | 基本类型与 `sizeof`、有无符号、溢出与环绕、浮点精度、`static_cast`、`if / else` 分支、布尔逻辑 | `4.2sizeof表/`、`无符号整数及溢出测试/`、`4.7~4.12练习/`、`4.12练习2/` |
 | 第 5 章 | `const` / `constexpr`、字面值与进制、条件运算符、`inline` 变量、`std::string`、`std::string_view`、`std::getline`、`std::ssize` | `5.0~5.1练习/`、`5.2~5.7练习/`、`5.8习题/`、`5.11练习/` |
 | 第 6 章 | 运算符优先级与结合性、算术 / 取模 / `std::pow`、自增自减与副作用、逗号运算符、关系运算与浮点比较、逻辑运算与短路 | `六章总结练习/` |
-| 第 7 章（7.0~7.2） | 代码块与块作用域、命名空间与 `::`、局部变量、全局变量、名称遮挡 | `7.2练习/` |
+| 第 7 章（7.0~7.13） | 代码块与块作用域、命名空间与 `::`、局部变量、全局变量、名称遮挡、内部/外部链接、`static` 局部变量、`inline constexpr` | `7.2练习/`、`7.13第七章总结练习/`、`7.13问题3/` |
 | 工程实践 | 多工程组织、`.vcxproj` / `.filters` 同步、MSBuild `Rebuild`、`Directory.Build.props` 统一编译选项、UTF-8 源码字符集 | 全仓库 |
 
 ---
