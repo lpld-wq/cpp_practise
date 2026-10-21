@@ -5,7 +5,7 @@ C++ 练习仓库 —— 记录从零开始学 C++ 的每一次课后小练。
 - 教材：[C++学习网 studycpp.cn](https://www.studycpp.cn/)（[learncpp.com](https://www.learncpp.com/) 中文译站，28 章，每节带练习）
 - 用法：**每节示例都必须手敲并改动一处**，只看不敲不算学完
 - 长期目标：为 2027 年游戏客户端实习（C++ / UE5）打底；规划文档在 `D:\career_plan\docs\实习规划\`
-- 最近更新：**2026-10-20**（7.13 Q2 `constants.h` ＋ Q3 静态局部变量累加器）
+- 最近更新：**2026-10-21**（8.5 `switch` 计算器 ＋ 8.7 循环练习 Q2~Q4）
 
 ---
 
@@ -15,10 +15,10 @@ C++ 练习仓库 —— 记录从零开始学 C++ 的每一次课后小练。
 
 | 项 | 状态 |
 | --- | --- |
-| 教材进度 | **第 7 章 7.13 总结练习**（Q2 `constants.h` ＋ Q3 `accumulate` 已交付） |
-| 最近产出 | `7.13第七章总结练习/`（7.13 Q2）、`7.13问题3/`（7.13 Q3） |
-| 下一步 | **第 8 章 8.0~8.6**：控制流 / `if` / `switch` / `goto` |
-| 算法线 | Python 先行；C++ 重做 **10/21** 起（`while` / `for` 正课解锁） |
+| 教材进度 | **第 8 章 8.7 循环**（8.0~8.7 已学；8.5 `switch` / 8.7 循环练习已交付） |
+| 最近产出 | `8.5练习/`（8.5 `switch` 计算器）、`8.7练习2~4/`（8.7 Q2~Q4） |
+| 下一步 | **第 8 章 8.8 起**：`do-while` / `for` / `break` / `continue` / `goto` |
+| 算法线 | Python 先行；`while` 已学（8.7），C++ 重做 **344 等 8.9 之后**（按 10/21 执行卡） |
 | 验收口径 | MSBuild `Rebuild`（Debug / x64）**exit=0、0 warning**；程序输出逐行比对 |
 | 规划真源 | `D:\career_plan\docs\实习规划\游戏主线_十月逐日计划.md` |
 
@@ -87,6 +87,8 @@ cl /nologo /EHsc /std:c++20 FileName.cpp
 
 | 日期 | 编号 | 文件 | 内容 | 知识点 |
 | --- | --- | --- | --- | --- |
+| 2026-10-21 | 小练 20 | `8.5练习/8.5_practise.cpp` | 站内 **8.5**：`calculate(x, y, sign)` 用 `switch` 分派 `+ - * / %`，`default` 打印 `calculate(): Unhandled case`；验收 6 组（`8 + 3`→11、`8 - 3`→5、`8 * 3`→24、`7 / 2`→3、`7 % 2`→1、`8 ? 3`→提示＋`is 0`），MSBuild `Rebuild` **exit=0、0 warning** | `switch` / `case` / `default`；分支用 `return` 提前退出，**不需要 `break`**；整数除法截断、取模符号跟被除数；题目明示**不考虑除数为 0**，故未做判断（真输入 0 → `0xC0000094`） |
+| 2026-10-21 | 小练 21 | `8.7练习2~4/8.7_practise_2~4.cpp` ＋ `q3.cpp` ＋ `head.h` | 站内 **8.7 问题 2~4**（**单开新工程**）：Q2 `a~z` 打印字符＋码值；Q3 `5 4 3 2 1` 递减三角；Q4 带前导空格的 `1 / 2 1 / … / 5 4 3 2 1`；MSBuild `Rebuild` **exit=0、0 warning** | `while` ＋ `++` / `--` 计数器、`char` 自增按 ASCII 走、**嵌套循环**；⚠️ Q4 初版 `while (inner < 1)` **条件恒假、一行数字都不打印**，改 `inner > 0` 才恢复（编译器不报） |
 | 2026-10-20 | 小练 18 | `7.13第七章总结练习/7.13_practise.cpp` ＋ `constants.h` | 站内 **7.13 问题 2**：新建 `constants.h`，在 `Constants` 命名空间里定义 `inline constexpr int maxClassSize{ 35 };`；主程序读取班级人数并比较；验收 `36` → too many、`35` / `20` → not too large，MSBuild `Rebuild` **exit=0、0 warning** | 命名空间 + 头文件共享常量、`inline constexpr` 变量、`#pragma once`、条件分支比较 |
 | 2026-10-20 | 小练 19 | `7.13问题3/7.13_practise.cpp` | 站内 **7.13 问题 3**：`accumulate(int)` 用静态局部变量累加；验收 `4 / 3 / 2 / 1` → `4 / 7 / 9 / 10`，MSBuild `Rebuild` **exit=0、0 warning** | `static` 局部变量只初始化一次、跨调用保留状态；块作用域不变、静态存储期 |
 | 2026-10-18 | 小练 16 | `六章总结练习/section_six_practise.cpp` | 站内 **6.7 第 6 章总结题**：`getQuantityPhrase`（negative / no / a single / a couple of / a few / many）＋ `getApplesPluralized`（1 → `apple`，其余 `apples`）；验收 `3` → `Mary has a few apples.` / `You have a few apples.`，`1` → `a single apple`，`0` → `no apples`，`4/10` → `many apples`，`-1` → `negative apples`；MSBuild `Rebuild` **exit=0、0 warning** | `std::string_view` 返回字符串字面量、`if` 链分派、条件运算符 `num == 1 ? "apple" : "apples"`；显式包含 `<string_view>`，不依赖其他头文件的间接包含 |
@@ -113,12 +115,12 @@ cl /nologo /EHsc /std:c++20 FileName.cpp
 
 ## 目录结构
 
-### 最近新增（10/20）
+### 最近新增（10/21）
 
 | 目录 | 内容 | 验收 |
 | --- | --- | --- |
-| `7.13第七章总结练习/` | 7.13 Q2：`constants.h` ＋ 班级人数比较 | exit=0、0 warning；36 / 35 / 20 三组输出核对 |
-| `7.13问题3/` | 7.13 Q3：静态局部变量 `accumulate` | exit=0、0 warning；4 / 7 / 9 / 10 连续调用核对 |
+| `8.5练习/` | 8.5：`switch` 版四则计算器（`+ - * / %` ＋ `default`） | exit=0、0 warning；6 组输入逐行核对 |
+| `8.7练习2~4/` | 8.7 Q2~Q4：字母表 ＋ 两个三角形（`head.h` 三文件） | exit=0、0 warning；`a~z` 码值 ＋ 两段三角形核对 |
 
 <details>
 <summary>展开完整目录树</summary>
@@ -189,9 +191,17 @@ cpp_practise/
 │   ├── 7.13第七章总结练习.slnx / .vcxproj    **单开新工程**（Debug / x64）
 │   ├── 7.13_practise.cpp                     `main`：读取人数并与 `Constants::maxClassSize` 比较
 │   └── constants.h                           `#pragma once` ＋ `inline constexpr int maxClassSize{ 35 };`
-└── 7.13问题3/                                站内 **7.13 Q3**（10/20）：静态局部变量累加器
-    ├── 7.13问题3.slnx / .vcxproj             **单开新工程**（Debug / x64）
-    └── 7.13_practise.cpp                     `accumulate(int)` 用 `static int` 保存累计和
+├── 7.13问题3/                                站内 **7.13 Q3**（10/20）：静态局部变量累加器
+│   ├── 7.13问题3.slnx / .vcxproj             **单开新工程**（Debug / x64）
+│   └── 7.13_practise.cpp                     `accumulate(int)` 用 `static int` 保存累计和
+├── 8.5练习/                                  站内 **8.5**（10/21）：`switch` 版四则计算器
+│   ├── 8.5练习.slnx / .vcxproj               **单开新工程**（Debug / x64）
+│   └── 8.5_practise.cpp                      `calculate(x, y, sign)`：`switch` 分派 `+ - * / %`，`default` 兜底
+└── 8.7练习2~4/                                站内 **8.7 Q2~Q4**（10/21）：字母表 ＋ 两个三角形
+    ├── 8.7练习2~4.slnx / .vcxproj            **单开新工程**（Debug / x64）
+    ├── head.h                                `#pragma once` ＋ 两条函数声明
+    ├── 8.7_practise_2~4.cpp                  `main`：`a~z` 字符＋码值，再调用两个三角形函数
+    └── q3.cpp                                `kCout_Five_To_One`（5→1 递减）/ `k_Reverse_One_To_Five`（带前导空格的 1 / 2 1 / … / 5 4 3 2 1）
 ```
 
 </details>
@@ -299,6 +309,7 @@ cpp_practise/
 | 第 5 章 | `const` / `constexpr`、字面值与进制、条件运算符、`inline` 变量、`std::string`、`std::string_view`、`std::getline`、`std::ssize` | `5.0~5.1练习/`、`5.2~5.7练习/`、`5.8习题/`、`5.11练习/` |
 | 第 6 章 | 运算符优先级与结合性、算术 / 取模 / `std::pow`、自增自减与副作用、逗号运算符、关系运算与浮点比较、逻辑运算与短路 | `六章总结练习/` |
 | 第 7 章（7.0~7.13） | 代码块与块作用域、命名空间与 `::`、局部变量、全局变量、名称遮挡、内部/外部链接、`static` 局部变量、`inline constexpr` | `7.2练习/`、`7.13第七章总结练习/`、`7.13问题3/` |
+| 第 8 章（8.0~8.7） | 控制流、`if / else if / else` 链、`switch`（`case` / `default` / 穿透）、`goto`、`while` 循环、`++` / `--` 计数器、嵌套循环 | `8.5练习/`、`8.7练习2~4/` |
 | 工程实践 | 多工程组织、`.vcxproj` / `.filters` 同步、MSBuild `Rebuild`、`Directory.Build.props` 统一编译选项、UTF-8 源码字符集 | 全仓库 |
 
 ---
