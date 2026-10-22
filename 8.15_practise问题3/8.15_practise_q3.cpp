@@ -17,9 +17,17 @@ int main()
 			int x{ 0 };
 			std::cin >> x;
 			if (x > target)
+			{
 				std::cout << "Your guess is too high.\n";
+				if (token == 7)
+					std::cout << "You lose\n";
+			}
 			else if (x < target)
+			{
 				std::cout << "Your guess is too low.\n";
+				if (token == 7)
+					std::cout << "You lose\n";
+			}
 			else
 			{
 				std::cout << "Correct!You win!\n";
