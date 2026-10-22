@@ -5,7 +5,7 @@ C++ 练习仓库 —— 记录从零开始学 C++ 的每一次课后小练。
 - 教材：[C++学习网 studycpp.cn](https://www.studycpp.cn/)（[learncpp.com](https://www.learncpp.com/) 中文译站，28 章，每节带练习）
 - 用法：**每节示例都必须手敲并改动一处**，只看不敲不算学完
 - 长期目标：为 2027 年游戏客户端实习（C++ / UE5）打底；规划文档在 `D:\career_plan\docs\实习规划\`
-- 最近更新：**2026-10-21**（8.5 `switch` 计算器 ＋ 8.7 循环练习 Q2~Q4）
+- 最近更新：**2026-10-22**（8.9 `for` 练习 ＋ 8.15 章末 Q1~Q3）
 
 ---
 
@@ -15,10 +15,10 @@ C++ 练习仓库 —— 记录从零开始学 C++ 的每一次课后小练。
 
 | 项 | 状态 |
 | --- | --- |
-| 教材进度 | **第 8 章 8.7 循环**（8.0~8.7 已学；8.5 `switch` / 8.7 循环练习已交付） |
-| 最近产出 | `8.5练习/`（8.5 `switch` 计算器）、`8.7练习2~4/`（8.7 Q2~Q4） |
-| 下一步 | **第 8 章 8.8 起**：`do-while` / `for` / `break` / `continue` / `goto` |
-| 算法线 | Python 先行；`while` 已学（8.7），C++ 重做 **344 等 8.9 之后**（按 10/21 执行卡） |
+| 教材进度 | **第 8 章 8.0~8.15 收尾**（8.9 `for` 与章末 Q1~Q3 已交付；第 9 章读到哪以你的自述为准） |
+| 最近产出 | `8.9练习/`、`8.15问题2/`、`8.15_practise问题3/`、`4.12练习2/`（8.15 Q1 `while` 版） |
+| 下一步 | **第 9 章 9.4~9.6**（9.0~9.3 若未读，先补）→ 10.0 隐式类型转换 |
+| 算法线 | Python 先行；`while` / `for` 正课已齐（8.7 / 8.9）→ **C++ 重做已解锁**（LC 27 起） |
 | 验收口径 | MSBuild `Rebuild`（Debug / x64）**exit=0、0 warning**；程序输出逐行比对 |
 | 规划真源 | `D:\career_plan\docs\实习规划\游戏主线_十月逐日计划.md` |
 
@@ -87,6 +87,10 @@ cl /nologo /EHsc /std:c++20 FileName.cpp
 
 | 日期 | 编号 | 文件 | 内容 | 知识点 |
 | --- | --- | --- | --- | --- |
+| 2026-10-22 | 小练 22 | `8.9练习/8.9_practise.cpp` | 站内 **8.9 `for`**：① 0~20 偶数；② `sumTo(n)` 累加 1~n；③ `fizzbuzz(n)` 同时处理 3 / 5 / 7 的倍数；验收输入 `10` → 偶数 11 行、`55`、`1 2 fizz 4 buzz fizz pop 8 fizz buzz`，MSBuild `Rebuild` **exit=0、0 warning** | `for` 三段式、`i += 2` 步长、`++i` 与 `i++` 在本处等价；三个**独立 `if` ＋ `printed` 标志**处理「同时是多个数的倍数」，避免 `else if` 漏掉 `15` 这类组合；中文源文件补 UTF-8 BOM（否则 MSVC 按 GBK 读源码 → 输出乱码） |
+| 2026-10-22 | 小练 23 | `4.12练习2/4.12(8.15)_practise_2.cpp` | 站内 **8.15 总结 Q1（塔顶落球改写）**：把原来的 6 次手写调用改成 `while (calculateAndPrintBallHeight(...))`，落到地面（返回 0）自动停；验收 `10` → 0s 10m / 1s 5.1m / 2s 落地，`3.5` → 0s 3.5m / 1s 落地，MSBuild `Rebuild` **exit=0、0 warning** | **返回值当循环条件**（`double` → `bool`，0 为假）、`seconds` 由调用方维护、函数职责不变（算 / 打印 / 组合）；工程同步改了源文件名、`.vcxproj`、`.filters` 与 `ProjectName` |
+| 2026-10-22 | 小练 24 | `8.15问题2/8.15_practise_q2.cpp` | 站内 **8.15 总结 Q2**：`isPrime(x)` 用 `for (test = 3; test * test <= x; test += 2)` 试除，`main` 里 17 条 `assert`（0/1/4/9/15/16/99 非素数，2/3/5/7/11/13/17/19/97/13417 素数）；验收输出 `Success!`，MSBuild `Rebuild` **exit=0、0 warning** | 先排除 `<= 1`、`2`、偶数，再只试奇数；`test * test <= x` 代替 `sqrt`（避免浮点）；`#undef NDEBUG` 放在 `<cassert>` 之前，保证断言在 Release 也生效 |
+| 2026-10-22 | 小练 25 | `8.15_practise问题3/8.15_practise_q3.cpp` ＋ `random.h` | 站内 **8.15 总结 Q3（猜数字）**：`Random::get(1, 100)` 出题，7 次机会，提示 too high / too low，猜中 `break`，结束后问 `y/n` 重开；验收读回首行目标数并输入同名数字 → `Correct!You win!`、输入 `n` → 正常退出，MSBuild `Rebuild` **exit=0、0 warning** | 复用 8.14 的 `random.h`（`inline std::mt19937` 全程序一份）、`while` 嵌套（外层重开 / 内层 7 次）、`break` 只跳出内层、`char` 读 `y/n`；⚠️ 首行 `std::cout << target //for test` 是调试输出，提交前可删 |
 | 2026-10-21 | 小练 20 | `8.5练习/8.5_practise.cpp` | 站内 **8.5**：`calculate(x, y, sign)` 用 `switch` 分派 `+ - * / %`，`default` 打印 `calculate(): Unhandled case`；验收 6 组（`8 + 3`→11、`8 - 3`→5、`8 * 3`→24、`7 / 2`→3、`7 % 2`→1、`8 ? 3`→提示＋`is 0`），MSBuild `Rebuild` **exit=0、0 warning** | `switch` / `case` / `default`；分支用 `return` 提前退出，**不需要 `break`**；整数除法截断、取模符号跟被除数；题目明示**不考虑除数为 0**，故未做判断（真输入 0 → `0xC0000094`） |
 | 2026-10-21 | 小练 21 | `8.7练习2~4/8.7_practise_2~4.cpp` ＋ `q3.cpp` ＋ `head.h` | 站内 **8.7 问题 2~4**（**单开新工程**）：Q2 `a~z` 打印字符＋码值；Q3 `5 4 3 2 1` 递减三角；Q4 带前导空格的 `1 / 2 1 / … / 5 4 3 2 1`；MSBuild `Rebuild` **exit=0、0 warning** | `while` ＋ `++` / `--` 计数器、`char` 自增按 ASCII 走、**嵌套循环**；⚠️ Q4 初版 `while (inner < 1)` **条件恒假、一行数字都不打印**，改 `inner > 0` 才恢复（编译器不报） |
 | 2026-10-20 | 小练 18 | `7.13第七章总结练习/7.13_practise.cpp` ＋ `constants.h` | 站内 **7.13 问题 2**：新建 `constants.h`，在 `Constants` 命名空间里定义 `inline constexpr int maxClassSize{ 35 };`；主程序读取班级人数并比较；验收 `36` → too many、`35` / `20` → not too large，MSBuild `Rebuild` **exit=0、0 warning** | 命名空间 + 头文件共享常量、`inline constexpr` 变量、`#pragma once`、条件分支比较 |
@@ -115,12 +119,14 @@ cl /nologo /EHsc /std:c++20 FileName.cpp
 
 ## 目录结构
 
-### 最近新增（10/21）
+### 最近新增（10/22）
 
 | 目录 | 内容 | 验收 |
 | --- | --- | --- |
-| `8.5练习/` | 8.5：`switch` 版四则计算器（`+ - * / %` ＋ `default`） | exit=0、0 warning；6 组输入逐行核对 |
-| `8.7练习2~4/` | 8.7 Q2~Q4：字母表 ＋ 两个三角形（`head.h` 三文件） | exit=0、0 warning；`a~z` 码值 ＋ 两段三角形核对 |
+| `8.9练习/` | 8.9 `for`：偶数表 ＋ `sumTo` ＋ `fizzbuzz` | exit=0、0 warning；`10` → `55` ＋ 10 行 fizzbuzz |
+| `4.12练习2/`（改） | 8.15 Q1：塔顶落球改成 `while` 版（源文件已改名） | exit=0、0 warning；`10` / `3.5` 两组输出 |
+| `8.15问题2/` | 8.15 Q2：`isPrime` ＋ 17 条 `assert` | exit=0、0 warning；输出 `Success!` |
+| `8.15_practise问题3/` | 8.15 Q3：猜数字（7 次机会 ＋ 重开），`random.h` | exit=0、0 warning；猜中 / 退出两条路径核对 |
 
 <details>
 <summary>展开完整目录树</summary>
@@ -162,9 +168,9 @@ cpp_practise/
 │   ├── 4.7~4.12练习.slnx / .vcxproj         **单开新工程**（源文件都在本文件夹里，不再跨工程引用）
 │   ├── service.h / service.cpp              `double getFirstNumber / getSecondNumber / getResult` —— **声明与定义逐字一致**
 │   └── 4.7~4.12_practise_1.cpp              `main`：三次输入 → `double result{ getResult(x, op, y) };` → 打印
-├── 4.12练习2/                                站内 **4.12 章末练习二**（10/14）：塔顶落球，0~5 秒每秒的高度
-│   ├── 4.12练习2.slnx / .vcxproj             **单开新工程**（只有一个源文件，没有再拆头文件）
-│   └── 4.12_practise_2.cpp                   `getTowerHeight` / `calculateBallHeight` / `printBallHeight` / `calculateAndPrintBallHeight` ＋ `main` 里**手写 6 次调用**（不许用循环）
+├── 4.12练习2/                                站内 **4.12 章末练习二 + 8.15 Q1**（10/14 建，10/22 改）：塔顶落球
+│   ├── 4.12练习2.slnx / .vcxproj             **单开新工程**（10/22 源文件改名，`ProjectName` 改为「4.12练习2(8.15总结修改任务)」）
+│   └── 4.12(8.15)_practise_2.cpp             `getTowerHeight` / `calculateBallHeight` / `printBallHeight` / `calculateAndPrintBallHeight` ＋ `main` 用 **`while` 循环**（0 秒起，落地即停）
 ├── 5.0~5.1练习/                              站内 **5.0~5.1**（10/15）：圆面积 —— 命名常量 ＋ `const`
 │   ├── 5.0~5.1练习.slnx / .vcxproj            **单开新工程**（Debug / x64，没在 4.12 上续写）
 │   ├── service.h                              `#pragma once` + 两条函数声明 + **`const double kPi{ 3.14 };`**
@@ -197,11 +203,21 @@ cpp_practise/
 ├── 8.5练习/                                  站内 **8.5**（10/21）：`switch` 版四则计算器
 │   ├── 8.5练习.slnx / .vcxproj               **单开新工程**（Debug / x64）
 │   └── 8.5_practise.cpp                      `calculate(x, y, sign)`：`switch` 分派 `+ - * / %`，`default` 兜底
-└── 8.7练习2~4/                                站内 **8.7 Q2~Q4**（10/21）：字母表 ＋ 两个三角形
-    ├── 8.7练习2~4.slnx / .vcxproj            **单开新工程**（Debug / x64）
-    ├── head.h                                `#pragma once` ＋ 两条函数声明
-    ├── 8.7_practise_2~4.cpp                  `main`：`a~z` 字符＋码值，再调用两个三角形函数
-    └── q3.cpp                                `kCout_Five_To_One`（5→1 递减）/ `k_Reverse_One_To_Five`（带前导空格的 1 / 2 1 / … / 5 4 3 2 1）
+├── 8.7练习2~4/                                站内 **8.7 Q2~Q4**（10/21）：字母表 ＋ 两个三角形
+│   ├── 8.7练习2~4.slnx / .vcxproj            **单开新工程**（Debug / x64）
+│   ├── head.h                                `#pragma once` ＋ 两条函数声明
+│   ├── 8.7_practise_2~4.cpp                  `main`：`a~z` 字符＋码值，再调用两个三角形函数
+│   └── q3.cpp                                `kCout_Five_To_One`（5→1 递减）/ `k_Reverse_One_To_Five`（带前导空格的 1 / 2 1 / … / 5 4 3 2 1）
+├── 8.9练习/                                  站内 **8.9 `for`**（10/22）：偶数表 ＋ 累加 ＋ fizzbuzz
+│   ├── 8.9练习.slnx / .vcxproj               **单开新工程**（Debug / x64）
+│   └── 8.9_practise.cpp                      `sumTo(n)` / `fizzbuzz(n)` ＋ `main` 里 0~20 偶数
+├── 8.15问题2/                                站内 **8.15 Q2**（10/22）：`isPrime` ＋ `assert`
+│   ├── 8.15问题2.slnx / .vcxproj             **单开新工程**（Debug / x64）
+│   └── 8.15_practise_q2.cpp                  `#undef NDEBUG` ＋ 17 条 `assert`，输出 `Success!`
+└── 8.15_practise问题3/                       站内 **8.15 Q3**（10/22）：猜数字（7 次机会 ＋ 重开）
+    ├── 8.15_practise问题3.slnx / .vcxproj    **单开新工程**（Debug / x64，含 `random.h`）
+    ├── random.h                              8.14 的 `Random` 命名空间（`inline` 全局 `mt19937` ＋ `get`）
+    └── 8.15_practise_q3.cpp                   `while` 外层重开 / 内层 7 次 ＋ too high / too low 提示
 ```
 
 </details>
@@ -309,7 +325,7 @@ cpp_practise/
 | 第 5 章 | `const` / `constexpr`、字面值与进制、条件运算符、`inline` 变量、`std::string`、`std::string_view`、`std::getline`、`std::ssize` | `5.0~5.1练习/`、`5.2~5.7练习/`、`5.8习题/`、`5.11练习/` |
 | 第 6 章 | 运算符优先级与结合性、算术 / 取模 / `std::pow`、自增自减与副作用、逗号运算符、关系运算与浮点比较、逻辑运算与短路 | `六章总结练习/` |
 | 第 7 章（7.0~7.13） | 代码块与块作用域、命名空间与 `::`、局部变量、全局变量、名称遮挡、内部/外部链接、`static` 局部变量、`inline constexpr` | `7.2练习/`、`7.13第七章总结练习/`、`7.13问题3/` |
-| 第 8 章（8.0~8.7） | 控制流、`if / else if / else` 链、`switch`（`case` / `default` / 穿透）、`goto`、`while` 循环、`++` / `--` 计数器、嵌套循环 | `8.5练习/`、`8.7练习2~4/` |
+| 第 8 章（8.0~8.15） | 控制流、`if / else if / else` 链、`switch`（`case` / `default` / 穿透）、`goto`、`while` / `do-while` / `for`、`break` / `continue`、嵌套循环、随机数（`mt19937` / 种子 / 分布）、`assert` | `8.5练习/`、`8.7练习2~4/`、`8.9练习/`、`4.12练习2/`、`8.15问题2/`、`8.15_practise问题3/` |
 | 工程实践 | 多工程组织、`.vcxproj` / `.filters` 同步、MSBuild `Rebuild`、`Directory.Build.props` 统一编译选项、UTF-8 源码字符集 | 全仓库 |
 
 ---

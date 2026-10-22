@@ -29,22 +29,22 @@ void printBallHeight(double ballHeight, int seconds)
 		std::cout << "At " << seconds << " seconds, the ball is on the ground.\n";
 }
 
-void calculateAndPrintBallHeight(double towerHeight, int seconds)
+double calculateAndPrintBallHeight(double towerHeight, int seconds)
 {
 	double ballHeight{ calculateBallHeight(towerHeight, seconds) };
 	printBallHeight(ballHeight, seconds);
+
+	return ballHeight;
 }
 
 int main()
 {
 	double towerHeight{ getTowerHeight() };
-
-	calculateAndPrintBallHeight(towerHeight, 0);
-	calculateAndPrintBallHeight(towerHeight, 1);
-	calculateAndPrintBallHeight(towerHeight, 2);
-	calculateAndPrintBallHeight(towerHeight, 3);
-	calculateAndPrintBallHeight(towerHeight, 4);
-	calculateAndPrintBallHeight(towerHeight, 5);
+	int seconds{ 0 };
+	while (calculateAndPrintBallHeight(towerHeight, seconds))
+	{
+		++seconds;
+	}
 
 	return 0;
 }
