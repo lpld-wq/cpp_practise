@@ -5,7 +5,7 @@ C++ 练习仓库 —— 记录从零开始学 C++ 的每一次课后小练。
 - 教材：[C++学习网 studycpp.cn](https://www.studycpp.cn/)（[learncpp.com](https://www.learncpp.com/) 中文译站，28 章，每节带练习）
 - 用法：**每节示例都必须手敲并改动一处**，只看不敲不算学完
 - 长期目标：为 2027 年游戏客户端实习（C++ / UE5）打底；规划文档在 `D:\career_plan\docs\实习规划\`
-- 最近更新：**2026-10-22**（8.9 `for` 练习 ＋ 8.15 章末 Q1~Q3）
+- 最近更新：**2026-10-25**（10.9 章末总结 ＋ 11.8 非类型模板参数 ＋ 11.9 Q2 多类型模板）
 
 ---
 
@@ -15,10 +15,10 @@ C++ 练习仓库 —— 记录从零开始学 C++ 的每一次课后小练。
 
 | 项 | 状态 |
 | --- | --- |
-| 教材进度 | **第 8 章 8.0~8.15 收尾**（8.9 `for` 与章末 Q1~Q3 已交付；第 9 章读到哪以你的自述为准） |
-| 最近产出 | `8.9练习/`、`8.15问题2/`、`8.15_practise问题3/`、`4.12练习2/`（8.15 Q1 `while` 版） |
-| 下一步 | **第 9 章 9.4~9.6**（9.0~9.3 若未读，先补）→ 10.0 隐式类型转换 |
-| 算法线 | Python 先行；`while` / `for` 正课已齐（8.7 / 8.9）→ **C++ 重做已解锁**（LC 27 起） |
+| 教材进度 | **第 11 章收尾**（11.8 非类型模板参数、11.9 Q2 已交付；第 12 章 12.0 待开始） |
+| 最近产出 | `第十章总结练习/`、`11.8练习/`、`11.9问题二/` |
+| 下一步 | **12.0~12.6**（今天）→ 12.7~13.0（10/26）；13.1 顺延 10/28 |
+| 算法线 | Python 先行，链表专题进行中（10/22~10/29）；C++ 重做按 §7.4 排队（283 / 26） |
 | 验收口径 | MSBuild `Rebuild`（Debug / x64）**exit=0、0 warning**；程序输出逐行比对 |
 | 规划真源 | `D:\career_plan\docs\实习规划\游戏主线_十月逐日计划.md` |
 
@@ -87,6 +87,9 @@ cl /nologo /EHsc /std:c++20 FileName.cpp
 
 | 日期 | 编号 | 文件 | 内容 | 知识点 |
 | --- | --- | --- | --- | --- |
+| 2026-10-25 | 小练 27 | `11.8练习/11.8_practise.cpp` | 站内 **11.8 非类型模板参数**：`template <int N> constexpr int factorial()`，`main` 里 `static_assert(factorial<0>() == 1 / 3 == 6 / 5 == 120)`；故意写 `factorial<-3>()` 触发静态断言，原文留在注释里；MSBuild `Rebuild` **exit=0、0 warning** | 非类型模板参数是**编译期常量**；`constexpr` 函数可在编译期求值；`static_assert` 在**实例化时**检查；`N >= 0` 的断言写在函数体内，`factorial<-3>` 一实例化就失败 |
+| 2026-10-25 | 小练 28 | `11.9问题二/11.9_practise.cpp` | 站内 **11.9 Q2**：`add<T>(T, T)`、`mult<T, U>(T, U)`、`sub<T, U>(T, U)` 三个函数模板；验收输出 `5 / 4.6 / 6 / 3.6 / 1 / 1.5 / 2.5`，MSBuild `Rebuild` **exit=0、0 warning** | 多模板类型参数 `<typename T, typename U>`；`auto` 返回类型由表达式推导（`int * double → double`）；同类型模板只接受两个同类型实参，混合类型要用双参数模板 |
+| 2026-10-24 | 小练 26 | `第十章总结练习/10.9_practise.cpp` | 站内 **10.9 第 10 章总结**：`namespace constants` 里 `constexpr double pi`，两个 `using` 别名 `Degrees` / `Radians`，`convertToRadians` 把角度转弧度；验收输入 `180` → `180 degrees is 3.14159 radians.`，MSBuild `Rebuild` **exit=0、0 warning** | `using` 别名（比 `typedef` 可读）、`constexpr` 编译期常量、`namespace` 限定访问、`double` 乘除与 `std::cin` 读取 |
 | 2026-10-22 | 小练 22 | `8.9练习/8.9_practise.cpp` | 站内 **8.9 `for`**：① 0~20 偶数；② `sumTo(n)` 累加 1~n；③ `fizzbuzz(n)` 同时处理 3 / 5 / 7 的倍数；验收输入 `10` → 偶数 11 行、`55`、`1 2 fizz 4 buzz fizz pop 8 fizz buzz`，MSBuild `Rebuild` **exit=0、0 warning** | `for` 三段式、`i += 2` 步长、`++i` 与 `i++` 在本处等价；三个**独立 `if` ＋ `printed` 标志**处理「同时是多个数的倍数」，避免 `else if` 漏掉 `15` 这类组合；中文源文件补 UTF-8 BOM（否则 MSVC 按 GBK 读源码 → 输出乱码） |
 | 2026-10-22 | 小练 23 | `4.12练习2/4.12(8.15)_practise_2.cpp` | 站内 **8.15 总结 Q1（塔顶落球改写）**：把原来的 6 次手写调用改成 `while (calculateAndPrintBallHeight(...))`，落到地面（返回 0）自动停；验收 `10` → 0s 10m / 1s 5.1m / 2s 落地，`3.5` → 0s 3.5m / 1s 落地，MSBuild `Rebuild` **exit=0、0 warning** | **返回值当循环条件**（`double` → `bool`，0 为假）、`seconds` 由调用方维护、函数职责不变（算 / 打印 / 组合）；工程同步改了源文件名、`.vcxproj`、`.filters` 与 `ProjectName` |
 | 2026-10-22 | 小练 24 | `8.15问题2/8.15_practise_q2.cpp` | 站内 **8.15 总结 Q2**：`isPrime(x)` 用 `for (test = 3; test * test <= x; test += 2)` 试除，`main` 里 17 条 `assert`（0/1/4/9/15/16/99 非素数，2/3/5/7/11/13/17/19/97/13417 素数）；验收输出 `Success!`，MSBuild `Rebuild` **exit=0、0 warning** | 先排除 `<= 1`、`2`、偶数，再只试奇数；`test * test <= x` 代替 `sqrt`（避免浮点）；`#undef NDEBUG` 放在 `<cassert>` 之前，保证断言在 Release 也生效 |
@@ -119,14 +122,13 @@ cl /nologo /EHsc /std:c++20 FileName.cpp
 
 ## 目录结构
 
-### 最近新增（10/22）
+### 最近新增（10/25）
 
 | 目录 | 内容 | 验收 |
 | --- | --- | --- |
-| `8.9练习/` | 8.9 `for`：偶数表 ＋ `sumTo` ＋ `fizzbuzz` | exit=0、0 warning；`10` → `55` ＋ 10 行 fizzbuzz |
-| `4.12练习2/`（改） | 8.15 Q1：塔顶落球改成 `while` 版（源文件已改名） | exit=0、0 warning；`10` / `3.5` 两组输出 |
-| `8.15问题2/` | 8.15 Q2：`isPrime` ＋ 17 条 `assert` | exit=0、0 warning；输出 `Success!` |
-| `8.15_practise问题3/` | 8.15 Q3：猜数字（7 次机会 ＋ 重开），`random.h` | exit=0、0 warning；猜中 / 退出两条路径核对 |
+| `第十章总结练习/` | 10.9 章末总结：角度转弧度（`namespace constants` ＋ `constexpr pi` ＋ `using` 别名） | exit=0、0 warning；`180` → `3.14159` |
+| `11.8练习/` | 11.8 非类型模板参数：`factorial<N>()` ＋ `static_assert` | exit=0、0 warning；`factorial<-3>` 的 E2784 原文留注释 |
+| `11.9问题二/` | 11.9 Q2：`add<T>` / `mult<T,U>` / `sub<T,U>` 三个函数模板 | exit=0、0 warning；输出 `5 / 4.6 / 6 / 3.6 / 1 / 1.5 / 2.5` |
 
 <details>
 <summary>展开完整目录树</summary>
@@ -214,10 +216,19 @@ cpp_practise/
 ├── 8.15问题2/                                站内 **8.15 Q2**（10/22）：`isPrime` ＋ `assert`
 │   ├── 8.15问题2.slnx / .vcxproj             **单开新工程**（Debug / x64）
 │   └── 8.15_practise_q2.cpp                  `#undef NDEBUG` ＋ 17 条 `assert`，输出 `Success!`
-└── 8.15_practise问题3/                       站内 **8.15 Q3**（10/22）：猜数字（7 次机会 ＋ 重开）
-    ├── 8.15_practise问题3.slnx / .vcxproj    **单开新工程**（Debug / x64，含 `random.h`）
-    ├── random.h                              8.14 的 `Random` 命名空间（`inline` 全局 `mt19937` ＋ `get`）
-    └── 8.15_practise_q3.cpp                   `while` 外层重开 / 内层 7 次 ＋ too high / too low 提示
+├── 8.15_practise问题3/                       站内 **8.15 Q3**（10/22）：猜数字（7 次机会 ＋ 重开）
+│   ├── 8.15_practise问题3.slnx / .vcxproj    **单开新工程**（Debug / x64，含 `random.h`）
+│   ├── random.h                              8.14 的 `Random` 命名空间（`inline` 全局 `mt19937` ＋ `get`）
+│   └── 8.15_practise_q3.cpp                   `while` 外层重开 / 内层 7 次 ＋ too high / too low 提示
+├── 第十章总结练习/                           站内 **10.9 章末总结**（10/24）：角度转弧度
+│   ├── 第十章总结练习.slnx / .vcxproj        **单开新工程**（Debug / x64）
+│   └── 10.9_practise.cpp                     `namespace constants` ＋ `constexpr pi` ＋ `using Degrees/Radians`
+├── 11.8练习/                                  站内 **11.8 非类型模板参数**（10/25）：`factorial<N>()`
+│   ├── 11.8练习.slnx / .vcxproj               **单开新工程**（Debug / x64）
+│   └── 11.8_practise.cpp                      `static_assert` 0/3/5；`factorial<-3>` 的 E2784 原文留注释
+└── 11.9问题二/                                站内 **11.9 Q2**（10/25）：多类型函数模板
+    ├── 11.9问题二.slnx / .vcxproj             **单开新工程**（Debug / x64）
+    └── 11.9_practise.cpp                      `add<T>` / `mult<T,U>` / `sub<T,U>`
 ```
 
 </details>
@@ -273,6 +284,8 @@ cpp_practise/
 > 两条结论：① **列表初始化 `{}` 的窄化检查是朋友**，它把「声明/定义不一致」顶到了编译期；② **定义文件必须 `#include` 自己的头文件**（`service.cpp` 第 2 行就是这么做的），这样编译器会在编译期替你把「声明 vs 定义」逐条比一遍。
 > 📌 **`E####` ≠ `C####`**：VS「错误列表」里的 `E0065`（应输入 `";"`）/ `E0020`（未定义标识符）是 **IntelliSense** 的即时提示；对应的**编译器原文**是 `C2143`（缺少 `;`）/ `C2065`（未声明的标识符）。抄进本表的一律是**「输出」窗口里的 `C####` / `LNK####`**。
 
+> 🧪 **2026-10-25（11.8 非类型模板参数）**：故意写 `factorial<-3>()`，VS「错误列表」先给 **`E2784`（IntelliSense 静态断言）**，原文抄在 `11.8练习/11.8_practise.cpp` 的注释里。按上一条「`E####` ≠ `C####`」的规矩，**暂不入本表**；等拿到「输出」窗口的 `C####` 原文再补行。
+
 > 🔍 **2.10 / 2.11 顺带核实的一条（2026-10-10）**：头文件里**只有声明**时，重复包含**其实不报错**（同一个函数声明多次是合法的）—— include guard 不是为「声明」兜底，而是为**将来头里会出现的定义 / 类型 / 常量**兜底。反过来，一旦头里放了**定义**，两个 `.cpp` 各编译一次就得到两份定义 → 链接期 `LNK1169`。所以规矩是：**头文件只放声明，定义放 `.cpp`**。
 
 ---
@@ -326,6 +339,9 @@ cpp_practise/
 | 第 6 章 | 运算符优先级与结合性、算术 / 取模 / `std::pow`、自增自减与副作用、逗号运算符、关系运算与浮点比较、逻辑运算与短路 | `六章总结练习/` |
 | 第 7 章（7.0~7.13） | 代码块与块作用域、命名空间与 `::`、局部变量、全局变量、名称遮挡、内部/外部链接、`static` 局部变量、`inline constexpr` | `7.2练习/`、`7.13第七章总结练习/`、`7.13问题3/` |
 | 第 8 章（8.0~8.15） | 控制流、`if / else if / else` 链、`switch`（`case` / `default` / 穿透）、`goto`、`while` / `do-while` / `for`、`break` / `continue`、嵌套循环、随机数（`mt19937` / 种子 / 分布）、`assert` | `8.5练习/`、`8.7练习2~4/`、`8.9练习/`、`4.12练习2/`、`8.15问题2/`、`8.15_practise问题3/` |
+| 第 9 章（9.0~9.6） | 代码测试、代码覆盖率、常见语义错误、检测与处理错误、`std::cin` 无效输入、`assert` | `8.15问题2/`（`assert`）；其余见 Obsidian `cpp知识库` |
+| 第 10 章（10.0~10.9） | 隐式转换、数值提升 / 数值转换、窄化与列表初始化、算术转换、`static_cast`、`typedef` / `using`、`auto`、函数返回类型推导 | `第十章总结练习/` |
+| 第 11 章（11.0~11.9） | 函数重载、重载决议、`= delete`、默认参数、函数模板、模板实例化、多模板类型、非类型模板参数 | `11.8练习/`、`11.9问题二/` |
 | 工程实践 | 多工程组织、`.vcxproj` / `.filters` 同步、MSBuild `Rebuild`、`Directory.Build.props` 统一编译选项、UTF-8 源码字符集 | 全仓库 |
 
 ---
