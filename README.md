@@ -39,6 +39,7 @@ C++ 练习仓库 —— 记录从零开始学 C++ 的每一次课后小练。
 
 ## 快速导航
 
+- [学习顺序索引](00_学习顺序.md)
 - [当前进度](#当前进度)
 - [环境](#环境)
 - [怎么构建和运行](#怎么构建和运行)
@@ -124,6 +125,8 @@ cl /nologo /EHsc /std:c++20 FileName.cpp
 
 ## 目录结构
 
+> 按 studycpp 章节顺序浏览全部工程 → `00_学习顺序.md`；以下按新增时间与仓库目录展示。
+
 ### 最近新增（10/25~10/26）
 
 | 目录 | 内容 | 验收 |
@@ -140,6 +143,7 @@ cl /nologo /EHsc /std:c++20 FileName.cpp
 ```
 cpp_practise/
 ├── README.md
+├── 00_学习顺序.md                          ← 按章节顺序排列的 31 个练习工程索引
 ├── .gitignore
 ├── Directory.Build.props                  ← 全仓库编译选项：让 MSVC 按 UTF-8 读源码（见「源文件编码」）
 ├── Project1_stdcout_sin_endl/             小练 01：输入输出
