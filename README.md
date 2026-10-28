@@ -5,7 +5,7 @@ C++ 练习仓库 —— 记录从零开始学 C++ 的每一次课后小练。
 - 教材：[C++学习网 studycpp.cn](https://www.studycpp.cn/)（[learncpp.com](https://www.learncpp.com/) 中文译站，28 章，每节带练习）
 - 用法：**每节示例都必须手敲并改动一处**，只看不敲不算学完
 - 长期目标：为 2027 年游戏客户端实习（C++ / UE5）打底；规划文档在 `D:\career_plan\docs\实习规划\`
-- 最近更新：**2026-10-26**（12.7~12.14 指针 / 引用练习 E1~E4 ＋ 12.14 sort2）
+- 最近更新：**2026-10-28**（13.1 / 13.3 枚举 ＋ 13.7 结构体传参两题；13.4~13.6 / 13.8 站内无题，只读）
 
 ---
 
@@ -15,9 +15,9 @@ C++ 练习仓库 —— 记录从零开始学 C++ 的每一次课后小练。
 
 | 项 | 状态 |
 | --- | --- |
-| 教材进度 | **第 12 章收尾**（12.0~12.14 已读；13.0 已开；13.1 顺延 10/28） |
-| 最近产出 | `12章练习/`、`12.14 十二章总结练习/` |
-| 下一步 | **13.1~13.8**（10/28）＋ `struct` / 项目启动；13.9 顺延 10/29 |
+| 教材进度 | **第 13 章 13.1~13.8 已读**（13.4~13.6 / 13.8 站内无题，只读；13.9 顺延 10/29） |
+| 最近产出 | `13.1练习/`、`13.3练习/`、`13.7练习/`、`13.7练习2/` |
+| 下一步 | **13.9~14.2**（10/29）＋ 项目推进；14.3 顺延 10/30 |
 | 算法线 | Python 先行，链表专题进行中（10/22~10/29）；C++ 重做按 §7.4 排队（283 / 26） |
 | 验收口径 | MSBuild `Rebuild`（Debug / x64）**exit=0、0 warning**；程序输出逐行比对 |
 | 规划真源 | `D:\career_plan\docs\实习规划\游戏主线_十月逐日计划.md` |
@@ -88,6 +88,10 @@ cl /nologo /EHsc /std:c++20 FileName.cpp
 
 | 日期 | 编号 | 文件 | 内容 | 知识点 |
 | --- | --- | --- | --- | --- |
+| 2026-10-28 | 小练 31 | `13.1练习/13.1_practise.cpp` | 站内 **13.1 非限定枚举**：`namespace MonsterType` 里定义同名 `enum`，实例化 `troll`，输出底层整数 `2`；MSBuild `Rebuild` **exit=0、0 warning** | 非限定枚举会隐式转 `int`；namespace 可避免枚举名与类型名冲突；输出的是枚举值不是枚举名 |
+| 2026-10-28 | 小练 32 | `13.3练习/13.3_practise.cpp` | 站内 **13.3 限定枚举**：`enum class Animal` ＋ `getAnimalName` ＋ `printNumberOfLegs`；输出 `A cat has 4 legs.` / `A chicken has 2 legs.`；MSBuild `Rebuild` **exit=0、0 warning** | `enum class` 不隐式转 `int`，必须写 `Animal::cat`；`switch` 覆盖枚举值；`std::string_view` 返回字符串字面量 |
+| 2026-10-28 | 小练 33 | `13.7练习/13.7_practise_1.cpp` | 站内 **13.7 结构体传参（Advertising）**：输入展示数 / 点击率 / 每次点击平均收益，按 `const Advertising&` 打印；输入 `100 / 2 / 1` → 总收益 `$2`；MSBuild `Rebuild` **exit=0、0 warning** | `struct` 可按值返回；`const&` 避免拷贝；总收益 = 展示数 × 点击率 / 100 × 每次点击平均收益，别把点击率写成平均收益 |
+| 2026-10-28 | 小练 34 | `13.7练习2/13.7_practise_2.cpp` | 站内 **13.7 结构体传参（Fraction）**：两个分数相乘，输入 `2/3`、`4/5` → `8/15`；MSBuild `Rebuild` **exit=0、0 warning** | 聚合初始化 `Fraction{num, den}`；`const Fraction&` 传参；`constexpr` 函数可在运行期调用 |
 | 2026-10-26 | 小练 29 | `12章练习/12_practise_extral.cpp` | 第 12 章 **E1~E4**：空指针检查 / `const int*` vs `int* const` / 指针传参与 `swap` / 返回引用与返回指针；**E5/E6 砍掉**；E4 的 `bad` 以注释保留 `C4172` 原文；验收输出 `7 / null / 6 / null / 6 10 / exchange / 10 6 / 20 / not found`（`at(arr,1)=20` 后数组为 `{1,20,3}`，再找 `2` 自然找不到），MSBuild `Rebuild` **exit=0、0 warning** | 空指针先判空再解引用；`const` 在 `*` 左边管对象、右边管指针；数组名退化为首元素指针；返回数组元素引用安全、返回局部变量引用悬垂；`find` 的 `return nullptr` 必须在循环外 |
 | 2026-10-26 | 小练 30 | `12.14 十二章总结练习/12.14_practise.cpp` | 站内 **12.14 总结题**：`sort2(int& lesser, int& greater)` 用两个引用参数排序；验收 `7 5 / 5 7 / 5 7`，MSBuild `Rebuild` **exit=0、0 warning** | 引用传参直接改实参；`lesser > greater` 才交换；参数名表示调用后的顺序约束 |
 | 2026-10-25 | 小练 27 | `11.8练习/11.8_practise.cpp` | 站内 **11.8 非类型模板参数**：`template <int N> constexpr int factorial()`，`main` 里 `static_assert(factorial<0>() == 1 / 3 == 6 / 5 == 120)`；故意写 `factorial<-3>()` 触发静态断言，原文留在注释里；MSBuild `Rebuild` **exit=0、0 warning** | 非类型模板参数是**编译期常量**；`constexpr` 函数可在编译期求值；`static_assert` 在**实例化时**检查；`N >= 0` 的断言写在函数体内，`factorial<-3>` 一实例化就失败 |
@@ -127,10 +131,14 @@ cl /nologo /EHsc /std:c++20 FileName.cpp
 
 > 按 studycpp 章节顺序浏览全部工程 → `00_学习顺序.md`；以下按新增时间与仓库目录展示。
 
-### 最近新增（10/25~10/26）
+### 最近新增（10/26~10/28）
 
 | 目录 | 内容 | 验收 |
 | --- | --- | --- |
+| `13.1练习/` | 13.1 非限定枚举：`namespace MonsterType` ＋ 同名 `enum`，输出 `troll` 的底层整数 | exit=0、0 warning；`2` |
+| `13.3练习/` | 13.3 限定枚举：`Animal` 名称与腿数 | exit=0、0 warning；`A cat has 4 legs.` / `A chicken has 2 legs.` |
+| `13.7练习/` | 13.7 结构体传参：`Advertising` 输入 / 返回 / `const&` 打印 | exit=0、0 warning；`100 / 2 / 1` → 总收益 `$2` |
+| `13.7练习2/` | 13.7 结构体传参：`Fraction` 两分数相乘 | exit=0、0 warning；`2/3 × 4/5` → `8/15` |
 | `12章练习/` | 第 12 章 E1~E4：空指针 / `const` 指针 / 指针传参 / 返回引用与指针 | exit=0、0 warning；输出 `7 / null / 6 / null / 6 10 / exchange / 10 6 / 20 / not found` |
 | `12.14 十二章总结练习/` | 12.14 总结题 `sort2`：两个 `int&` 参数排序 | exit=0、0 warning；`7 5 / 5 7 / 5 7` |
 | `第十章总结练习/` | 10.9 章末总结：角度转弧度（`namespace constants` ＋ `constexpr pi` ＋ `using` 别名） | exit=0、0 warning；`180` → `3.14159` |
@@ -143,7 +151,7 @@ cl /nologo /EHsc /std:c++20 FileName.cpp
 ```
 cpp_practise/
 ├── README.md
-├── 00_学习顺序.md                          ← 按章节顺序排列的 31 个练习工程索引
+├── 00_学习顺序.md                          ← 按章节顺序排列的 35 个练习工程索引
 ├── .gitignore
 ├── Directory.Build.props                  ← 全仓库编译选项：让 MSVC 按 UTF-8 读源码（见「源文件编码」）
 ├── Project1_stdcout_sin_endl/             小练 01：输入输出
@@ -240,9 +248,21 @@ cpp_practise/
 ├── 12章练习/                                 第 12 章 E1~E4（10/26）：空指针 / const 指针 / 指针传参 / 返回引用与指针
 │   ├── 12章练习.slnx / .vcxproj              **单开新工程**（Debug / x64）
 │   └── 12_practise_extral.cpp                E1 `printValue` / E3 `addOne`+`swap` / E4 `at`+`find`；`bad` 以注释保留 C4172
-└── 12.14 十二章总结练习/                      站内 12.14 总结题（10/26）：`sort2` 两引用参数排序
-    ├── 12.14 十二章总结练习.slnx / .vcxproj   **单开新工程**（Debug / x64）
-    └── 12.14_practise.cpp                    `sort2(int&, int&)` + `std::swap`
+├── 12.14 十二章总结练习/                      站内 12.14 总结题（10/26）：`sort2` 两引用参数排序
+│   ├── 12.14 十二章总结练习.slnx / .vcxproj   **单开新工程**（Debug / x64）
+│   └── 12.14_practise.cpp                    `sort2(int&, int&)` + `std::swap`
+├── 13.1练习/                                 站内 13.1 非限定枚举（10/28）：`namespace MonsterType` ＋ 同名 `enum`
+│   ├── 13.1练习.slnx / .vcxproj              **单开新工程**（Debug / x64）
+│   └── 13.1_practise.cpp                     实例化 `troll`，输出底层整数 `2`
+├── 13.3练习/                                 站内 13.3 限定枚举（10/28）：`Animal` 名称与腿数
+│   ├── 13.3练习.slnx / .vcxproj              **单开新工程**（Debug / x64）
+│   └── 13.3_practise.cpp                     `getAnimalName` ＋ `printNumberOfLegs`
+├── 13.7练习/                                 站内 13.7 结构体传参（10/28）：`Advertising`
+│   ├── 13.7练习.slnx / .vcxproj              **单开新工程**（Debug / x64）
+│   └── 13.7_practise_1.cpp                   `getAdvertising` 返回结构体；`const&` 打印；总收益公式
+└── 13.7练习2/                                站内 13.7 结构体传参（10/28）：`Fraction`
+    ├── 13.7练习2.slnx / .vcxproj             **单开新工程**（Debug / x64）
+    └── 13.7_practise_2.cpp                   `multiply` 两分数相乘；`2/3 × 4/5` → `8/15`
 ```
 
 </details>
@@ -359,6 +379,7 @@ cpp_practise/
 | 第 10 章（10.0~10.9） | 隐式转换、数值提升 / 数值转换、窄化与列表初始化、算术转换、`static_cast`、`typedef` / `using`、`auto`、函数返回类型推导 | `第十章总结练习/` |
 | 第 11 章（11.0~11.9） | 函数重载、重载决议、`= delete`、默认参数、函数模板、模板实例化、多模板类型、非类型模板参数 | `11.8练习/`、`11.9问题二/` |
 | 第 12 章（12.0~12.14） | 值类别、左值引用、`const` 引用、引用传参、指针、空指针、指针与 `const`、指针传参、返回引用/指针、in/out 参数、`auto` 推导 | `12章练习/`、`12.14 十二章总结练习/` |
+| 第 13 章（13.1~13.8） | 非限定 / 限定枚举、枚举输入输出、`struct` 定义与初始化、成员默认初始化、结构体按值 / 引用 / 指针传参 | `13.1练习/`、`13.3练习/`、`13.7练习/`、`13.7练习2/` |
 | 工程实践 | 多工程组织、`.vcxproj` / `.filters` 同步、MSBuild `Rebuild`、`Directory.Build.props` 统一编译选项、UTF-8 源码字符集 | 全仓库 |
 
 ---
