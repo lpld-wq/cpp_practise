@@ -5,7 +5,7 @@ C++ 练习仓库 —— 记录从零开始学 C++ 的每一次课后小练。
 - 教材：[C++学习网 studycpp.cn](https://www.studycpp.cn/)（[learncpp.com](https://www.learncpp.com/) 中文译站，28 章，每节带练习）
 - 用法：**每节示例都必须手敲并改动一处**，只看不敲不算学完
 - 长期目标：为 2027 年游戏客户端实习（C++ / UE5）打底；规划文档在 `D:\career_plan\docs\实习规划\`
-- 最近更新：**2026-10-28**（13.1 / 13.3 枚举 ＋ 13.7 结构体传参两题；13.4~13.6 / 13.8 站内无题，只读）
+- 最近更新：**2026-10-29**（13.9~14.2 收尾第 13 章 ＋ 开 14 章；新增 6 个工程；含中文源文件补 UTF-8 BOM）
 
 ---
 
@@ -15,9 +15,9 @@ C++ 练习仓库 —— 记录从零开始学 C++ 的每一次课后小练。
 
 | 项 | 状态 |
 | --- | --- |
-| 教材进度 | **第 13 章 13.1~13.8 已读**（13.4~13.6 / 13.8 站内无题，只读；13.9 顺延 10/29） |
-| 最近产出 | `13.1练习/`、`13.3练习/`、`13.7练习/`、`13.7练习2/` |
-| 下一步 | **13.9~14.2**（10/29）＋ 项目推进；14.3 顺延 10/30 |
+| 教材进度 | **第 13 章全章（13.1~13.14）＋ 第 14 章 14.0~14.2 已读**（13.4~13.6 / 13.8 站内无题，只读；14.1 `class` 只读） |
+| 最近产出 | `13.13练习2/`、`13章总结练习/`、`14.0练习/`、`14.0练习2/`、`14.2练习1/`、`14.2练习2/` |
+| 下一步 | **14.3~14.9**（10/30）；14.10 / 14.11 顺延 10/31 |
 | 算法线 | Python 先行，链表专题进行中（10/22~10/29）；C++ 重做按 §7.4 排队（283 / 26） |
 | 验收口径 | MSBuild `Rebuild`（Debug / x64）**exit=0、0 warning**；程序输出逐行比对 |
 | 规划真源 | `D:\career_plan\docs\实习规划\游戏主线_十月逐日计划.md` |
@@ -88,6 +88,12 @@ cl /nologo /EHsc /std:c++20 FileName.cpp
 
 | 日期 | 编号 | 文件 | 内容 | 知识点 |
 | --- | --- | --- | --- | --- |
+| 2026-10-29 | 小练 35 | `13.13练习2/13.13_practise_2.cpp` | 站内 **13.13 类模板 / CTAD**：`template <typename T> struct Triad` ＋ `print(const Triad<T>&)`，`Triad t1{ 1, 2, 3 }` 与 `t2{ 1.2, 3.4, 5.6 }` 由 **CTAD** 分别推成 `T=int` / `T=double`；验收两行 `[1, 2, 3]` / `[1.2, 3.4, 5.6]`，MSBuild `Rebuild` **exit=0、0 warning** | 类模板的 `T` 是类型形参，`print` 的形参必须写全 `Triad<T>`；CTAD 用聚合初始化反推 `T`；`print` 末尾补 `'\n'`，否则两组结果挤成一行 |
+| 2026-10-29 | 小练 36 | `13章总结练习/13_practise.cpp` | 站内 **第 13 章总结**：`Monster` 里嵌 `enum Type`，`kGetMonsterTypeString` 用 `switch` 把枚举转 `std::string_view`，`printMonster(const Monster&)` 打印；验收 `This Ogre is named Torg and has 145 health.` / `This slime is named Blurp and has 23 health.`，MSBuild `Rebuild` **exit=0、0 warning** | 结构体成员可以是嵌套枚举，外部写作 `Monster::ogre`；`constexpr` 函数 ＋ `switch` 做「值 → 名字」映射；拼接输出时**每个字符串字面量自带空格**，否则单词粘连成 `Ogreis namedTorg` |
+| 2026-10-29 | 小练 37 | `14.0练习/14.0_practise.cpp` | 站内 **14.0 OOP 引入（枚举版）**：`enum AnimalType` ＋ `animalName` / `numLegs` 两个 `switch`，`constexpr AnimalType animal{ snake }`；验收 `A snake has 0 legs`，MSBuild `Rebuild` **exit=0、0 warning** | 「数据 + 操作」被拆在枚举与两个自由函数里 —— 这正是 OOP 要合并的东西；`constexpr` 变量要求初始化表达式编译期可求值 |
+| 2026-10-29 | 小练 38 | `14.0练习2/14.0_practise.cpp` | 站内 **14.0 OOP 引入（struct 版）**：`Cat` / `Dog` / `Chicken` / `snake` 四个结构体各自带 `name` / `numLegs` 默认成员初始化；验收 `a snake has 0 legs`，MSBuild `Rebuild` **exit=0、0 warning** | 用「一种类型 = 一个物种」把数据与默认值绑在一起；比枚举版多了类型安全，但**行为仍在类型外面** —— 下一步就是给类型加成员函数 |
+| 2026-10-29 | 小练 39 | `14.2练习1/14.2_practise_1.cpp` | 站内 **14.2 成员函数**：`struct IntPair` 带 `int num_1 / num_2` 与 `void print()`，`main` 里 `p1.print()` / `p2.print()`；验收 `p1: Pair(1, 2)` / `p2: Pair(3, 4)`，MSBuild `Rebuild` **exit=0、0 warning** | 成员函数自带隐藏的 `this`，`print()` 里的 `num_1` 就是 `this->num_1`；`struct` 默认 `public`；逗号后补空格才与题面一致 |
+| 2026-10-29 | 小练 40 | `14.2练习2/14.2_practise_2.cpp` | 站内 **14.2 成员函数（续）**：`IntPair` 再加 `bool isEqual(const IntPair&)`，比较 `p1` vs `p1`、`p1` vs `p2`；验收 `p1: Pair(1, 2)` / `p2: Pair(3, 4)` / `p1 and p1 are equal` / `p1 and p2 are not equal`，MSBuild `Rebuild` **exit=0、0 warning** | 成员函数可以收**同类型**的 `const&` 参数；`isEqual` 只读不改，正式写法是 `const` 成员函数（14.3 讲）；`?:` 可直接拼进 `<<` 链 |
 | 2026-10-28 | 小练 31 | `13.1练习/13.1_practise.cpp` | 站内 **13.1 非限定枚举**：`namespace MonsterType` 里定义同名 `enum`，实例化 `troll`，输出底层整数 `2`；MSBuild `Rebuild` **exit=0、0 warning** | 非限定枚举会隐式转 `int`；namespace 可避免枚举名与类型名冲突；输出的是枚举值不是枚举名 |
 | 2026-10-28 | 小练 32 | `13.3练习/13.3_practise.cpp` | 站内 **13.3 限定枚举**：`enum class Animal` ＋ `getAnimalName` ＋ `printNumberOfLegs`；输出 `A cat has 4 legs.` / `A chicken has 2 legs.`；MSBuild `Rebuild` **exit=0、0 warning** | `enum class` 不隐式转 `int`，必须写 `Animal::cat`；`switch` 覆盖枚举值；`std::string_view` 返回字符串字面量 |
 | 2026-10-28 | 小练 33 | `13.7练习/13.7_practise_1.cpp` | 站内 **13.7 结构体传参（Advertising）**：输入展示数 / 点击率 / 每次点击平均收益，按 `const Advertising&` 打印；输入 `100 / 2 / 1` → 总收益 `$2`；MSBuild `Rebuild` **exit=0、0 warning** | `struct` 可按值返回；`const&` 避免拷贝；总收益 = 展示数 × 点击率 / 100 × 每次点击平均收益，别把点击率写成平均收益 |
@@ -131,10 +137,16 @@ cl /nologo /EHsc /std:c++20 FileName.cpp
 
 > 按 studycpp 章节顺序浏览全部工程 → `00_学习顺序.md`；以下按新增时间与仓库目录展示。
 
-### 最近新增（10/26~10/28）
+### 最近新增（10/26~10/29）
 
 | 目录 | 内容 | 验收 |
 | --- | --- | --- |
+| `13.13练习2/` | 13.13 类模板：`Triad<T>` ＋ `print` ＋ CTAD 推 `int` / `double` | exit=0、0 warning；`[1, 2, 3]` / `[1.2, 3.4, 5.6]` |
+| `13章总结练习/` | 第 13 章总结：`Monster` ＋ 嵌套 `enum` ＋ `switch` 名称映射 | exit=0、0 warning；`This Ogre is named Torg and has 145 health.` |
+| `14.0练习/` | 14.0 OOP 引入（枚举版）：`AnimalType` ＋ 名称 / 腿数 | exit=0、0 warning；`A snake has 0 legs` |
+| `14.0练习2/` | 14.0 OOP 引入（struct 版）：四个物种各自带默认成员 | exit=0、0 warning；`a snake has 0 legs` |
+| `14.2练习1/` | 14.2 成员函数：`IntPair::print` | exit=0、0 warning；`p1: Pair(1, 2)` / `p2: Pair(3, 4)` |
+| `14.2练习2/` | 14.2 成员函数：`IntPair::print` ＋ `isEqual` | exit=0、0 warning；`p1 and p1 are equal` / `p1 and p2 are not equal` |
 | `13.1练习/` | 13.1 非限定枚举：`namespace MonsterType` ＋ 同名 `enum`，输出 `troll` 的底层整数 | exit=0、0 warning；`2` |
 | `13.3练习/` | 13.3 限定枚举：`Animal` 名称与腿数 | exit=0、0 warning；`A cat has 4 legs.` / `A chicken has 2 legs.` |
 | `13.7练习/` | 13.7 结构体传参：`Advertising` 输入 / 返回 / `const&` 打印 | exit=0、0 warning；`100 / 2 / 1` → 总收益 `$2` |
@@ -151,7 +163,7 @@ cl /nologo /EHsc /std:c++20 FileName.cpp
 ```
 cpp_practise/
 ├── README.md
-├── 00_学习顺序.md                          ← 按章节顺序排列的 35 个练习工程索引
+├── 00_学习顺序.md                          ← 按章节顺序排列的 41 个练习工程索引
 ├── .gitignore
 ├── Directory.Build.props                  ← 全仓库编译选项：让 MSVC 按 UTF-8 读源码（见「源文件编码」）
 ├── Project1_stdcout_sin_endl/             小练 01：输入输出
@@ -260,9 +272,27 @@ cpp_practise/
 ├── 13.7练习/                                 站内 13.7 结构体传参（10/28）：`Advertising`
 │   ├── 13.7练习.slnx / .vcxproj              **单开新工程**（Debug / x64）
 │   └── 13.7_practise_1.cpp                   `getAdvertising` 返回结构体；`const&` 打印；总收益公式
-└── 13.7练习2/                                站内 13.7 结构体传参（10/28）：`Fraction`
-    ├── 13.7练习2.slnx / .vcxproj             **单开新工程**（Debug / x64）
-    └── 13.7_practise_2.cpp                   `multiply` 两分数相乘；`2/3 × 4/5` → `8/15`
+├── 13.7练习2/                                站内 13.7 结构体传参（10/28）：`Fraction`
+│   ├── 13.7练习2.slnx / .vcxproj             **单开新工程**（Debug / x64）
+│   └── 13.7_practise_2.cpp                   `multiply` 两分数相乘；`2/3 × 4/5` → `8/15`
+├── 13.13练习2/                               站内 13.13 类模板（10/29）：`Triad<T>`
+│   ├── 13.13练习2.slnx / .vcxproj            **单开新工程**（Debug / x64）
+│   └── 13.13_practise_2.cpp                  `print(const Triad<T>&)`；CTAD 推 `int` / `double`
+├── 13章总结练习/                             站内第 13 章总结（10/29）：`Monster`
+│   ├── 13章总结练习.slnx / .vcxproj          **单开新工程**（Debug / x64）
+│   └── 13_practise.cpp                       嵌套 `enum Type` ＋ `switch` 名称映射
+├── 14.0练习/                                 站内 14.0 OOP 引入（10/29）：枚举版
+│   ├── 14.0练习.slnx / .vcxproj              **单开新工程**（Debug / x64）
+│   └── 14.0_practise.cpp                     `AnimalType` ＋ `animalName` / `numLegs`
+├── 14.0练习2/                                站内 14.0 OOP 引入（10/29）：struct 版
+│   ├── 14.0练习2.slnx / .vcxproj             **单开新工程**（Debug / x64）
+│   └── 14.0_practise.cpp                     四个物种结构体 ＋ 默认成员
+├── 14.2练习1/                                站内 14.2 成员函数（10/29）：`IntPair::print`
+│   ├── 14.2练习1.slnx / .vcxproj             **单开新工程**（Debug / x64）
+│   └── 14.2_practise_1.cpp                   成员函数访问自带成员
+└── 14.2练习2/                                站内 14.2 成员函数（10/29）：`print` ＋ `isEqual`
+    ├── 14.2练习2.slnx / .vcxproj             **单开新工程**（Debug / x64）
+    └── 14.2_practise_2.cpp                   同类型 `const&` 参数；相等判定
 ```
 
 </details>
@@ -379,7 +409,8 @@ cpp_practise/
 | 第 10 章（10.0~10.9） | 隐式转换、数值提升 / 数值转换、窄化与列表初始化、算术转换、`static_cast`、`typedef` / `using`、`auto`、函数返回类型推导 | `第十章总结练习/` |
 | 第 11 章（11.0~11.9） | 函数重载、重载决议、`= delete`、默认参数、函数模板、模板实例化、多模板类型、非类型模板参数 | `11.8练习/`、`11.9问题二/` |
 | 第 12 章（12.0~12.14） | 值类别、左值引用、`const` 引用、引用传参、指针、空指针、指针与 `const`、指针传参、返回引用/指针、in/out 参数、`auto` 推导 | `12章练习/`、`12.14 十二章总结练习/` |
-| 第 13 章（13.1~13.8） | 非限定 / 限定枚举、枚举输入输出、`struct` 定义与初始化、成员默认初始化、结构体按值 / 引用 / 指针传参 | `13.1练习/`、`13.3练习/`、`13.7练习/`、`13.7练习2/` |
+| 第 13 章（13.1~13.14） | 非限定 / 限定枚举、枚举输入输出、`struct` 定义与初始化、成员默认初始化、结构体按值 / 引用 / 指针传参、成员选择、类模板与 CTAD、模板别名 | `13.1练习/`、`13.3练习/`、`13.7练习/`、`13.7练习2/`、`13.13练习2/`、`13章总结练习/` |
+| 第 14 章（14.0~14.2） | OOP 引入（数据 + 行为）、成员函数与隐式 `this`、`struct` 默认 `public`、同类型 `const&` 参数 | `14.0练习/`、`14.0练习2/`、`14.2练习1/`、`14.2练习2/` |
 | 工程实践 | 多工程组织、`.vcxproj` / `.filters` 同步、MSBuild `Rebuild`、`Directory.Build.props` 统一编译选项、UTF-8 源码字符集 | 全仓库 |
 
 ---
