@@ -5,7 +5,7 @@ C++ 练习仓库 —— 记录从零开始学 C++ 的每一次课后小练。
 - 教材：[C++学习网 studycpp.cn](https://www.studycpp.cn/)（[learncpp.com](https://www.learncpp.com/) 中文译站，28 章，每节带练习）
 - 用法：**每节示例都必须手敲并改动一处**，只看不敲不算学完
 - 范围：**本文件只记录本仓的 C++ 练习产出**；课程之外的算法、规划、笔记不进本文件
-- 最近更新：**2026-10-29**（13.9~14.3 收尾第 13 章 ＋ 开 14 章；新增 6 个工程；含中文源文件补 UTF-8 BOM）
+- 最近更新：**2026-11-01**（14.4~14.9 访问说明符 / 访问函数 / 构造函数与初始化列表；新增 2 个工程）
 
 ---
 
@@ -15,9 +15,9 @@ C++ 练习仓库 —— 记录从零开始学 C++ 的每一次课后小练。
 
 | 项 | 状态 |
 | --- | --- |
-| 教材进度 | **第 13 章全章（13.1~13.14）＋ 第 14 章 14.0~14.3 已读**（13.4~13.6 / 13.8 站内无题，只读；14.1 / 14.3 只读无题） |
-| 最近产出 | `13.13练习2/`、`13章总结练习/`、`14.0练习/`、`14.0练习2/`、`14.2练习1/`、`14.2练习2/` |
-| 下一步 | **14.4~14.9**（10/30）；14.10 / 14.11 顺延 10/31 |
+| 教材进度 | **第 13 章全章（13.1~13.14）＋ 第 14 章 14.0~14.9 已读**（14.1 / 14.3 / 14.5~14.8 只读、无练习工程；14.4 / 14.9 有练习） |
+| 最近产出 | `14.4练习/`、`14.9练习/` |
+| 下一步 | **14.10~15.0**（11/2）；15.1 / 15.2 顺延其后 |
 | 验收口径 | MSBuild `Rebuild`（Debug / x64）**exit=0、0 warning**；程序输出逐行比对 |
 
 ---
@@ -86,6 +86,8 @@ cl /nologo /EHsc /std:c++20 FileName.cpp
 
 | 日期 | 编号 | 文件 | 内容 | 知识点 |
 | --- | --- | --- | --- | --- |
+| 2026-11-01 | 小练 41 | `14.4练习/14.4_practise.cpp` | 站内 **14.4 访问说明符**：`class Point3d` 私有 `m_x / m_y / m_z` ＋ `setValues` ＋ `print() const` ＋ `isEqual(const Point3d&) const`；验收 `<1, 2, 3>` / `point 1 and point 2 are equal` / `point 1 and point 3 are not equal`，MSBuild `Rebuild` **exit=0、0 warning** | `class` 默认 `private`，外部要调用必须显式 `public:`；只读成员函数必须带 `const`，否则 `const` 对象调不了；`isEqual` 收同类型 `const&`，不拷贝 |
+| 2026-11-01 | 小练 42 | `14.9练习/14.9_practise.cpp` | 站内 **14.9 成员初始化列表**：`class Ball` 私有 `std::string m_color` / `double m_radius`，构造函数 `:m_color{ color }, m_radius{ radius }`，`getColor()` 返回 `const std::string&`；验收 `Ball(blue, 10)` / `Ball(red, 12)`，MSBuild `Rebuild` **exit=0、0 warning** | 初始化列表在**函数体之前**执行，顺序按**声明顺序**而非列表顺序；`const` 成员与引用成员只能走初始化列表；`std::string_view` 形参 ＋ `std::string` 成员能把字面量安全转成自持有的字符串 |
 | 2026-10-29 | 小练 35 | `13.13练习2/13.13_practise_2.cpp` | 站内 **13.13 类模板 / CTAD**：`template <typename T> struct Triad` ＋ `print(const Triad<T>&)`，`Triad t1{ 1, 2, 3 }` 与 `t2{ 1.2, 3.4, 5.6 }` 由 **CTAD** 分别推成 `T=int` / `T=double`；验收两行 `[1, 2, 3]` / `[1.2, 3.4, 5.6]`，MSBuild `Rebuild` **exit=0、0 warning** | 类模板的 `T` 是类型形参，`print` 的形参必须写全 `Triad<T>`；CTAD 用聚合初始化反推 `T`；`print` 末尾补 `'\n'`，否则两组结果挤成一行 |
 | 2026-10-29 | 小练 36 | `13章总结练习/13_practise.cpp` | 站内 **第 13 章总结**：`Monster` 里嵌 `enum Type`，`kGetMonsterTypeString` 用 `switch` 把枚举转 `std::string_view`，`printMonster(const Monster&)` 打印；验收 `This Ogre is named Torg and has 145 health.` / `This slime is named Blurp and has 23 health.`，MSBuild `Rebuild` **exit=0、0 warning** | 结构体成员可以是嵌套枚举，外部写作 `Monster::ogre`；`constexpr` 函数 ＋ `switch` 做「值 → 名字」映射；拼接输出时**每个字符串字面量自带空格**，否则单词粘连成 `Ogreis namedTorg` |
 | 2026-10-29 | 小练 37 | `14.0练习/14.0_practise.cpp` | 站内 **14.0 OOP 引入（枚举版）**：`enum AnimalType` ＋ `animalName` / `numLegs` 两个 `switch`，`constexpr AnimalType animal{ snake }`；验收 `A snake has 0 legs`，MSBuild `Rebuild` **exit=0、0 warning** | 「数据 + 操作」被拆在枚举与两个自由函数里 —— 这正是 OOP 要合并的东西；`constexpr` 变量要求初始化表达式编译期可求值 |
@@ -135,10 +137,12 @@ cl /nologo /EHsc /std:c++20 FileName.cpp
 
 > 按 studycpp 章节顺序浏览全部工程 → `00_学习顺序.md`；以下按新增时间与仓库目录展示。
 
-### 最近新增（10/26~10/29）
+### 最近新增（10/26~11/01）
 
 | 目录 | 内容 | 验收 |
 | --- | --- | --- |
+| `14.4练习/` | 14.4 访问说明符：`Point3d` 私有成员 ＋ `setValues` / `print` / `isEqual` | exit=0、0 warning；`<1, 2, 3>` / `point 1 and point 3 are not equal` |
+| `14.9练习/` | 14.9 成员初始化列表：`Ball` 构造函数 ＋ `const&` 访问函数 | exit=0、0 warning；`Ball(blue, 10)` / `Ball(red, 12)` |
 | `13.13练习2/` | 13.13 类模板：`Triad<T>` ＋ `print` ＋ CTAD 推 `int` / `double` | exit=0、0 warning；`[1, 2, 3]` / `[1.2, 3.4, 5.6]` |
 | `13章总结练习/` | 第 13 章总结：`Monster` ＋ 嵌套 `enum` ＋ `switch` 名称映射 | exit=0、0 warning；`This Ogre is named Torg and has 145 health.` |
 | `14.0练习/` | 14.0 OOP 引入（枚举版）：`AnimalType` ＋ 名称 / 腿数 | exit=0、0 warning；`A snake has 0 legs` |
@@ -161,7 +165,7 @@ cl /nologo /EHsc /std:c++20 FileName.cpp
 ```
 cpp_practise/
 ├── README.md
-├── 00_学习顺序.md                          ← 按章节顺序排列的 41 个练习工程索引
+├── 00_学习顺序.md                          ← 按章节顺序排列的 43 个练习工程索引
 ├── .gitignore
 ├── Directory.Build.props                  ← 全仓库编译选项：让 MSVC 按 UTF-8 读源码（见「源文件编码」）
 ├── Project1_stdcout_sin_endl/             小练 01：输入输出
@@ -288,9 +292,15 @@ cpp_practise/
 ├── 14.2练习1/                                站内 14.2 成员函数（10/29）：`IntPair::print`
 │   ├── 14.2练习1.slnx / .vcxproj             **单开新工程**（Debug / x64）
 │   └── 14.2_practise_1.cpp                   成员函数访问自带成员
-└── 14.2练习2/                                站内 14.2 成员函数（10/29）：`print` ＋ `isEqual`
-    ├── 14.2练习2.slnx / .vcxproj             **单开新工程**（Debug / x64）
-    └── 14.2_practise_2.cpp                   同类型 `const&` 参数；相等判定
+├── 14.2练习2/                                站内 14.2 成员函数（10/29）：`print` ＋ `isEqual`
+│   ├── 14.2练习2.slnx / .vcxproj             **单开新工程**（Debug / x64）
+│   └── 14.2_practise_2.cpp                   同类型 `const&` 参数；相等判定
+├── 14.4练习/                                站内 14.4 访问说明符（11/01）：`Point3d`
+│   ├── 14.4练习.slnx / .vcxproj             **单开新工程**（Debug / x64）
+│   └── 14.4_practise.cpp                    私有成员 ＋ `setValues` / `print() const` / `isEqual`
+└── 14.9练习/                                站内 14.9 成员初始化列表（11/01）：`Ball`
+    ├── 14.9练习.slnx / .vcxproj             **单开新工程**（Debug / x64）
+    └── 14.9_practise.cpp                    初始化列表 ＋ `getColor()` 返回 `const std::string&`
 ```
 
 </details>
