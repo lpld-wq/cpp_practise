@@ -5,7 +5,7 @@ C++ 练习仓库 —— 记录从零开始学 C++ 的每一次课后小练。
 - 教材：[C++学习网 studycpp.cn](https://www.studycpp.cn/)（[learncpp.com](https://www.learncpp.com/) 中文译站，28 章，每节带练习）
 - 用法：**每节示例都必须手敲并改动一处**，只看不敲不算学完
 - 范围：**本文件只记录本仓的 C++ 练习产出**；课程之外的算法、规划、笔记不进本文件
-- 最近更新：**2026-11-01**（14.4~14.9 访问说明符 / 访问函数 / 构造函数与初始化列表；新增 2 个工程）
+- 最近更新：**2026-11-02**（14.11 委托构造函数 / 第 14 章总结 `Point2d`；新增 2 个工程）
 
 ---
 
@@ -15,9 +15,9 @@ C++ 练习仓库 —— 记录从零开始学 C++ 的每一次课后小练。
 
 | 项 | 状态 |
 | --- | --- |
-| 教材进度 | **第 13 章全章（13.1~13.14）＋ 第 14 章 14.0~14.9 已读**（14.1 / 14.3 / 14.5~14.8 只读、无练习工程；14.4 / 14.9 有练习） |
-| 最近产出 | `14.4练习/`、`14.9练习/` |
-| 下一步 | **14.10~15.0**（11/2）；15.1 / 15.2 顺延其后 |
+| 教材进度 | **第 13 章全章（13.1~13.14）＋ 第 14 章 14.0~14.11 已读**（14.1 / 14.3 / 14.5~14.8 / 14.10 只读、无练习工程；14.4 / 14.9 / 14.11 / 第 14 章总结有练习） |
+| 最近产出 | `14.11练习/`、`14章练习1/` |
+| 下一步 | **14.12~15.0**（11/2 起）；15.1 / 15.2 顺延其后 |
 | 验收口径 | MSBuild `Rebuild`（Debug / x64）**exit=0、0 warning**；程序输出逐行比对 |
 
 ---
@@ -86,6 +86,8 @@ cl /nologo /EHsc /std:c++20 FileName.cpp
 
 | 日期 | 编号 | 文件 | 内容 | 知识点 |
 | --- | --- | --- | --- | --- |
+| 2026-11-02 | 小练 43 | `14.11练习/14.11_practise.cpp` | 站内 **14.11 委托构造函数**：`class Ball` 两套构造 —— `Ball(double)` 委托给 `Ball(std::string_view, double)`，主构造打印；验收 `Ball def{}` / `Ball blue{"blue"}` / `Ball twenty{20.0}` / `Ball blueTwenty{"blue", 20.0}` 四行，MSBuild `Rebuild` **exit=0、0 warning** | 委托构造把「默认颜色 + 半径」的重复初始化收进一个主构造；`Ball{}` 只能匹配两个参数都带默认值的主构造；重载决议按实参类型选，`20.0` 走 `double` 版而不是 `string_view` 版 |
+| 2026-11-02 | 小练 44 | `14章练习1/14conclude_practise_1.cpp` | 站内 **第 14 章总结**：`class Point2d` 私有 `m_x / m_y`，`Point2d() = default` ＋ 两参构造 ＋ `print() const` ＋ `distanceTo(const Point2d&) const`；验收 `Point2d(0, 0)` / `Point2d(3, 4)` / `Distance between two points: 5`，MSBuild `Rebuild` **exit=0、0 warning** | `= default` 显式要回编译器生成的默认构造；两参构造用初始化列表；`distanceTo` 只读且收 `const&`，不拷贝实参；注释掉的 `Point2d third{4.0}` 用来验证「单实参没有匹配构造」 |
 | 2026-11-01 | 小练 41 | `14.4练习/14.4_practise.cpp` | 站内 **14.4 访问说明符**：`class Point3d` 私有 `m_x / m_y / m_z` ＋ `setValues` ＋ `print() const` ＋ `isEqual(const Point3d&) const`；验收 `<1, 2, 3>` / `point 1 and point 2 are equal` / `point 1 and point 3 are not equal`，MSBuild `Rebuild` **exit=0、0 warning** | `class` 默认 `private`，外部要调用必须显式 `public:`；只读成员函数必须带 `const`，否则 `const` 对象调不了；`isEqual` 收同类型 `const&`，不拷贝 |
 | 2026-11-01 | 小练 42 | `14.9练习/14.9_practise.cpp` | 站内 **14.9 成员初始化列表**：`class Ball` 私有 `std::string m_color` / `double m_radius`，构造函数 `:m_color{ color }, m_radius{ radius }`，`getColor()` 返回 `const std::string&`；验收 `Ball(blue, 10)` / `Ball(red, 12)`，MSBuild `Rebuild` **exit=0、0 warning** | 初始化列表在**函数体之前**执行，顺序按**声明顺序**而非列表顺序；`const` 成员与引用成员只能走初始化列表；`std::string_view` 形参 ＋ `std::string` 成员能把字面量安全转成自持有的字符串 |
 | 2026-10-29 | 小练 35 | `13.13练习2/13.13_practise_2.cpp` | 站内 **13.13 类模板 / CTAD**：`template <typename T> struct Triad` ＋ `print(const Triad<T>&)`，`Triad t1{ 1, 2, 3 }` 与 `t2{ 1.2, 3.4, 5.6 }` 由 **CTAD** 分别推成 `T=int` / `T=double`；验收两行 `[1, 2, 3]` / `[1.2, 3.4, 5.6]`，MSBuild `Rebuild` **exit=0、0 warning** | 类模板的 `T` 是类型形参，`print` 的形参必须写全 `Triad<T>`；CTAD 用聚合初始化反推 `T`；`print` 末尾补 `'\n'`，否则两组结果挤成一行 |
@@ -137,10 +139,12 @@ cl /nologo /EHsc /std:c++20 FileName.cpp
 
 > 按 studycpp 章节顺序浏览全部工程 → `00_学习顺序.md`；以下按新增时间与仓库目录展示。
 
-### 最近新增（10/26~11/01）
+### 最近新增（10/26~11/02）
 
 | 目录 | 内容 | 验收 |
 | --- | --- | --- |
+| `14.11练习/` | 14.11 委托构造函数：`Ball(double)` 委托给 `Ball(std::string_view, double)` | exit=0、0 warning；4 行 `Ball(...)` 输出 |
+| `14章练习1/` | 第 14 章总结：`Point2d` 默认构造 ＋ 两参构造 ＋ `distanceTo` | exit=0、0 warning；`Point2d(0, 0)` / `Point2d(3, 4)` / `Distance between two points: 5` |
 | `14.4练习/` | 14.4 访问说明符：`Point3d` 私有成员 ＋ `setValues` / `print` / `isEqual` | exit=0、0 warning；`<1, 2, 3>` / `point 1 and point 3 are not equal` |
 | `14.9练习/` | 14.9 成员初始化列表：`Ball` 构造函数 ＋ `const&` 访问函数 | exit=0、0 warning；`Ball(blue, 10)` / `Ball(red, 12)` |
 | `13.13练习2/` | 13.13 类模板：`Triad<T>` ＋ `print` ＋ CTAD 推 `int` / `double` | exit=0、0 warning；`[1, 2, 3]` / `[1.2, 3.4, 5.6]` |
@@ -298,9 +302,15 @@ cpp_practise/
 ├── 14.4练习/                                站内 14.4 访问说明符（11/01）：`Point3d`
 │   ├── 14.4练习.slnx / .vcxproj             **单开新工程**（Debug / x64）
 │   └── 14.4_practise.cpp                    私有成员 ＋ `setValues` / `print() const` / `isEqual`
-└── 14.9练习/                                站内 14.9 成员初始化列表（11/01）：`Ball`
-    ├── 14.9练习.slnx / .vcxproj             **单开新工程**（Debug / x64）
-    └── 14.9_practise.cpp                    初始化列表 ＋ `getColor()` 返回 `const std::string&`
+├── 14.9练习/                                站内 14.9 成员初始化列表（11/01）：`Ball`
+│   ├── 14.9练习.slnx / .vcxproj             **单开新工程**（Debug / x64）
+│   └── 14.9_practise.cpp                    初始化列表 ＋ `getColor()` 返回 `const std::string&`
+├── 14.11练习/                               站内 14.11 委托构造函数（11/02）：`Ball`
+│   ├── 14.11练习.slnx / .vcxproj            **单开新工程**（Debug / x64）
+│   └── 14.11_practise.cpp                   委托构造 `Ball(double)` → `Ball(string_view, double)`
+└── 14章练习1/                               第 14 章总结（11/02）：`Point2d`
+    ├── 14章练习1.slnx / .vcxproj            **单开新工程**（Debug / x64）
+    └── 14conclude_practise_1.cpp            `= default` ＋ 两参构造 ＋ `distanceTo(const&) const`
 ```
 
 </details>
@@ -418,7 +428,7 @@ cpp_practise/
 | 第 11 章（11.0~11.9） | 函数重载、重载决议、`= delete`、默认参数、函数模板、模板实例化、多模板类型、非类型模板参数 | `11.8练习/`、`11.9问题二/` |
 | 第 12 章（12.0~12.14） | 值类别、左值引用、`const` 引用、引用传参、指针、空指针、指针与 `const`、指针传参、返回引用/指针、in/out 参数、`auto` 推导 | `12章练习/`、`12.14 十二章总结练习/` |
 | 第 13 章（13.1~13.14） | 非限定 / 限定枚举、枚举输入输出、`struct` 定义与初始化、成员默认初始化、结构体按值 / 引用 / 指针传参、成员选择、类模板与 CTAD、模板别名 | `13.1练习/`、`13.3练习/`、`13.7练习/`、`13.7练习2/`、`13.13练习2/`、`13章总结练习/` |
-| 第 14 章（14.0~14.2） | OOP 引入（数据 + 行为）、成员函数与隐式 `this`、`struct` 默认 `public`、同类型 `const&` 参数 | `14.0练习/`、`14.0练习2/`、`14.2练习1/`、`14.2练习2/` |
+| 第 14 章（14.0~14.11） | OOP 引入（数据 + 行为）、成员函数与隐式 `this`、`struct` 默认 `public`、同类型 `const&` 参数、访问说明符、`const` 成员函数、构造函数与成员初始化列表、委托构造、拷贝构造的概念 | `14.0练习/`、`14.0练习2/`、`14.2练习1/`、`14.2练习2/`、`14.4练习/`、`14.9练习/`、`14.11练习/`、`14章练习1/` |
 | 工程实践 | 多工程组织、`.vcxproj` / `.filters` 同步、MSBuild `Rebuild`、`Directory.Build.props` 统一编译选项、UTF-8 源码字符集 | 全仓库 |
 
 ---
