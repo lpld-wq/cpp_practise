@@ -5,7 +5,7 @@ C++ 练习仓库 —— 记录从零开始学 C++ 的每一次课后小练。
 - 教材：[C++学习网 studycpp.cn](https://www.studycpp.cn/)（[learncpp.com](https://www.learncpp.com/) 中文译站，28 章，每节带练习）
 - 用法：**每节示例都必须手敲并改动一处**，只看不敲不算学完
 - 范围：**本文件只记录本仓的 C++ 练习产出**；课程之外的算法、规划、笔记不进本文件
-- 最近更新：**2026-11-06**（15.0~15.8 已读；15.6 静态成员函数 `Random`、15.8 友元成员函数 `Point3d/Vector3d`；新增 2 个工程；15 章总结待补）
+- 最近更新：**2026-11-06**（15.0~15.8、15.10 已读；15.6 静态成员函数 `Random`、15.8 友元成员函数 `Point3d/Vector3d`；新增 3 个工程；15 章总结 `Monster` 已验收）
 
 ---
 
@@ -15,9 +15,9 @@ C++ 练习仓库 —— 记录从零开始学 C++ 的每一次课后小练。
 
 | 项 | 状态 |
 | --- | --- |
-| 教材进度 | **第 13 章全章（13.1~13.14）＋ 第 14 章 14.0~14.16 ＋ 15.0~15.8 已读**（14.1 / 14.3 / 14.5~14.8 / 14.10 / 14.12~14.15 / 15.0~15.3 / 15.5 只读、无练习工程；14.4 / 14.9 / 14.11 / 第 14 章总结 / 15.4 / 15.6 / 15.8 有练习；15.7 未单独取证；15.9~15.10 未完成） |
-| 最近产出 | `15.8练习/` |
-| 下一步 | **15.9 引用限定符 → 15.10 第 15 章总结**（15 章总结工程待补） |
+| 教材进度 | **第 13 章全章（13.1~13.14）＋ 第 14 章 14.0~14.16 ＋ 15.0~15.8、15.10 已读**（14.1 / 14.3 / 14.5~14.8 / 14.10 / 14.12~14.15 / 15.0~15.3 / 15.5 只读、无练习工程；14.4 / 14.9 / 14.11 / 第 14 章总结 / 15.4 / 15.6 / 15.8 / 第 15 章总结 有练习；15.7 / 15.9 未单独取证） |
+| 最近产出 | `15章总结练习/` |
+| 下一步 | **第 16 章 `std::vector`**（第 15 章已收口） |
 | 验收口径 | MSBuild `Rebuild`（Debug / x64）**exit=0、0 warning**；程序输出逐行比对 |
 
 ---
@@ -88,6 +88,7 @@ cl /nologo /EHsc /std:c++20 FileName.cpp
 | --- | --- | --- | --- | --- |
 | 2026-11-06 | 小练 46 | `15.6练习/15.6_practise.cpp` | 站内 **15.6 静态成员函数**：`class Random` 的 `static generate()` 用 `std::random_device` ＋ `std::chrono::steady_clock` 造 `std::seed_seq`，`static inline std::mt19937 mt` 只初始化一次，`static int get(int min, int max)` 用 `std::uniform_int_distribution` 返回闭区间随机数；`main` 打印 10 个 1~6；验收 10 个数、全部落在 1~6，MSBuild `Rebuild` **exit=0、0 warning** | 静态成员函数没有 `this`；`static inline` 成员在类内定义一次；`seed_seq` 播种 `mt19937`；`uniform_int_distribution` 含两端；随机输出不逐行比对，改为范围与数量校验 |
 | 2026-11-06 | 小练 47 | `15.8练习/15.8_practise.cpp` ＋ `Point3d.h/.cpp` ＋ `Vector3d.h/.cpp` | 站内 **15.8 友元成员函数**：`Point3d` / `Vector3d` 分文件；`Vector3d.h` 里 `friend void Point3d::moveByVector(const Vector3d& v);` 授权 `Point3d::moveByVector` 读 `Vector3d` 私有成员；验收 `Point(1, 2, 3)` / `Point(3, 4, 0)`，MSBuild `Rebuild` **exit=0、0 warning** | 前向声明 `class Vector3d;` 打破头文件循环；友元成员函数声明要写全 `Point3d::`；`Point3d.cpp` 同时包含两个头文件才能看到完整 `Vector3d` 定义；`moveByVector` 只改自己的 `m_x/m_y/m_z` |
+| 2026-11-06 | 小练 48 | `15章总结练习/main.cpp` ＋ `Random.h` | 站内 **15.10 第 15 章总结**：`Monster`（嵌套 `enum Type`、`constexpr std::string_view getTypeString() const`、`print() const`）＋ `namespace MonsterGenerator`（`getName` / `getRoar` / `generate`）；`Random.h` 用 `inline` 变量/函数做 header-only PRNG；验收 `Rebuild` **exit=0、0 warning**，10 次随机输出全部合法（HP 1~100、无 `???`、10 次不重复） | `enum` 嵌在类内要写 `Monster::Type`；`static_cast` 把随机整数转成枚举；`generate` 一次 `return Monster{...}`；`inline` 让头文件里的 `mt` 在整程序只有一份；随机输出按格式与取值范围校验，不逐行比对 |
 | 2026-11-04 | 小练 45 | `15.4练习/15.4_practise.cpp` | 站内 **15.4 带成员函数的类模板**：`template <typename T, typename U, typename I> class Triad` 三个成员变量，构造函数用初始化列表，`first/second/third() const` 返回 `const&`，`print() const` 在类外定义（仍放同一 `.cpp`）；`main` 里 `Triad<int, int, int>{1, 2, 3}` 与 CTAD 推出的 `Triad<int, double, std::string>{1, 2.3, "Hello"s}`；验收 `[1, 2, 3]` / `1` / `[1, 2.3, Hello]`，MSBuild `Rebuild` **exit=0、0 warning** | 类模板成员函数在类外定义时，`Triad<T, U, I>::` 前要重写完整模板参数列表；模板定义必须对使用点可见，所以模板的成员函数通常留在头文件；`const` 成员函数返回 `const&` 避免拷贝；CTAD 由实参推出三个类型，`"Hello"s` 推成 `std::string` |
 | 2026-11-02 | 小练 43 | `14.11练习/14.11_practise.cpp` | 站内 **14.11 委托构造函数**：`class Ball` 两套构造 —— `Ball(double)` 委托给 `Ball(std::string_view, double)`，主构造打印；验收 `Ball def{}` / `Ball blue{"blue"}` / `Ball twenty{20.0}` / `Ball blueTwenty{"blue", 20.0}` 四行，MSBuild `Rebuild` **exit=0、0 warning** | 委托构造把「默认颜色 + 半径」的重复初始化收进一个主构造；`Ball{}` 只能匹配两个参数都带默认值的主构造；重载决议按实参类型选，`20.0` 走 `double` 版而不是 `string_view` 版 |
 | 2026-11-02 | 小练 44 | `14章练习1/14conclude_practise_1.cpp` | 站内 **第 14 章总结**：`class Point2d` 私有 `m_x / m_y`，`Point2d() = default` ＋ 两参构造 ＋ `print() const` ＋ `distanceTo(const Point2d&) const`；验收 `Point2d(0, 0)` / `Point2d(3, 4)` / `Distance between two points: 5`，MSBuild `Rebuild` **exit=0、0 warning** | `= default` 显式要回编译器生成的默认构造；两参构造用初始化列表；`distanceTo` 只读且收 `const&`，不拷贝实参；注释掉的 `Point2d third{4.0}` 用来验证「单实参没有匹配构造」 |
@@ -146,6 +147,7 @@ cl /nologo /EHsc /std:c++20 FileName.cpp
 
 | 目录 | 内容 | 验收 |
 | --- | --- | --- |
+| `15章总结练习/` | 15.10 第 15 章总结：`Monster` ＋ `MonsterGenerator` ＋ header-only `Random.h` | exit=0、0 warning；10 次随机输出合法（HP 1~100、无 `???`、不重复） |
 | `15.8练习/` | 15.8 友元成员函数：`Point3d` / `Vector3d` 分文件，`friend void Point3d::moveByVector(...)` | exit=0、0 warning；`Point(1, 2, 3)` / `Point(3, 4, 0)` |
 | `15.6练习/` | 15.6 静态成员函数：`Random::generate` ＋ `static inline mt19937` ＋ `Random::get(1, 6)` | exit=0、0 warning；10 个 1~6 的随机数 |
 | `15.4练习/` | 15.4 带成员函数的类模板：`Triad<T, U, I>` ＋ 类外定义 `print` ＋ CTAD | exit=0、0 warning；`[1, 2, 3]` / `1` / `[1, 2.3, Hello]` |
@@ -323,11 +325,15 @@ cpp_practise/
 ├── 15.6练习/                                站内 15.6 静态成员函数（11/05）：`Random`
 │   ├── 15.6练习.slnx / .vcxproj             **单开新工程**（Debug / x64）
 │   └── 15.6_practise.cpp                    `generate()` ＋ `static inline mt19937` ＋ `get(1, 6)`
-└── 15.8练习/                                站内 15.8 友元成员函数（11/05）：`Point3d` / `Vector3d`
-    ├── 15.8练习.slnx / .vcxproj             **单开新工程**（Debug / x64）
-    ├── Point3d.h / Point3d.cpp
-    ├── Vector3d.h / Vector3d.cpp
-    └── 15.8_practise.cpp
+├── 15.8练习/                                站内 15.8 友元成员函数（11/05）：`Point3d` / `Vector3d`
+│   ├── 15.8练习.slnx / .vcxproj             **单开新工程**（Debug / x64）
+│   ├── Point3d.h / Point3d.cpp
+│   ├── Vector3d.h / Vector3d.cpp
+│   └── 15.8_practise.cpp
+└── 15章总结练习/                             站内 15.10 第 15 章总结（11/06）：`Monster`
+    ├── 15章总结练习.slnx / .vcxproj         **单开新工程**（Debug / x64）
+    ├── main.cpp                             `Monster` ＋ `MonsterGenerator::generate`
+    └── Random.h                             header-only PRNG（`inline` 变量/函数）
 ```
 
 </details>
@@ -446,7 +452,7 @@ cpp_practise/
 | 第 12 章（12.0~12.14） | 值类别、左值引用、`const` 引用、引用传参、指针、空指针、指针与 `const`、指针传参、返回引用/指针、in/out 参数、`auto` 推导 | `12章练习/`、`12.14 十二章总结练习/` |
 | 第 13 章（13.1~13.14） | 非限定 / 限定枚举、枚举输入输出、`struct` 定义与初始化、成员默认初始化、结构体按值 / 引用 / 指针传参、成员选择、类模板与 CTAD、模板别名 | `13.1练习/`、`13.3练习/`、`13.7练习/`、`13.7练习2/`、`13.13练习2/`、`13章总结练习/` |
 | 第 14 章（14.0~14.16） | OOP 引入（数据 + 行为）、成员函数与隐式 `this`、`struct` 默认 `public`、同类型 `const&` 参数、访问说明符、`const` 成员函数、构造函数与成员初始化列表、委托构造、临时对象、拷贝构造、拷贝省略、转换构造与 `explicit` | `14.0练习/`、`14.0练习2/`、`14.2练习1/`、`14.2练习2/`、`14.4练习/`、`14.9练习/`、`14.11练习/`、`14章练习1/` |
-| 第 15 章（15.0~15.8） | 隐藏的 `this` 指针、类与头文件、嵌套类型、析构函数简介、类模板成员函数、静态成员变量、静态成员函数、友元成员函数 | `15.4练习/`、`15.6练习/`、`15.8练习/`（15.7 未单独取证；15.9~15.10 未完成） |
+| 第 15 章（15.0~15.8、15.10） | 隐藏的 `this` 指针、类与头文件、嵌套类型、析构函数简介、类模板成员函数、静态成员变量、静态成员函数、友元成员函数、第 15 章总结 | `15.4练习/`、`15.6练习/`、`15.8练习/`、`15章总结练习/`（15.7 / 15.9 未单独取证） |
 | 工程实践 | 多工程组织、`.vcxproj` / `.filters` 同步、MSBuild `Rebuild`、`Directory.Build.props` 统一编译选项、UTF-8 源码字符集 | 全仓库 |
 
 ---
