@@ -5,7 +5,7 @@ C++ 练习仓库 —— 记录从零开始学 C++ 的每一次课后小练。
 - 教材：[C++学习网 studycpp.cn](https://www.studycpp.cn/)（[learncpp.com](https://www.learncpp.com/) 中文译站，28 章，每节带练习）
 - 用法：**每节示例都必须手敲并改动一处**，只看不敲不算学完
 - 范围：**本文件只记录本仓的 C++ 练习产出**；课程之外的算法、规划、笔记不进本文件
-- 最近更新：**2026-11-06**（15.0~15.8、15.10 已读；15.6 静态成员函数 `Random`、15.8 友元成员函数 `Point3d/Vector3d`；新增 3 个工程；15 章总结 `Monster` 已验收）
+- 最近更新：**2026-11-09**（16.1~16.3、16.5、16.7、16.8 已读；`16.8lianxi/` 更名 `16.8练习/`；新增第 16 章章总结 `16章总练习`，含 `toUZ` / `findMinMaxIndices` / `printArray`；2 个工程 Rebuild exit=0、0 warning）
 
 ---
 
@@ -15,8 +15,8 @@ C++ 练习仓库 —— 记录从零开始学 C++ 的每一次课后小练。
 
 | 项 | 状态 |
 | --- | --- |
-| 教材进度 | **第 13 章全章（13.1~13.14）＋ 第 14 章 14.0~14.16 ＋ 15.0~15.8、15.10 ＋ 第 16 章 16.1~16.3、16.5、16.7、16.8 已读**（14.1 / 14.3 / 14.5~14.8 / 14.10 / 14.12~14.15 / 15.0~15.3 / 15.5 只读、无练习工程；14.4 / 14.9 / 14.11 / 第 14 章总结 / 15.4 / 15.6 / 15.8 / 第 15 章总结 / 16.1 / 16.2 / 16.3 / 16.5 / 16.7 / 16.8 有练习；15.7 / 15.9 / 16.4 未单独取证） |
-| 最近产出 | `16.8lianxi/`（`enum` 作下标 ＋ `assert`） |
+| 教材进度 | **第 13 章全章（13.1~13.14）＋ 第 14 章 14.0~14.16 ＋ 15.0~15.8、15.10 ＋ 第 16 章 16.1~16.3、16.5、16.7、16.8 ＋ 第 16 章总结已读**（14.1 / 14.3 / 14.5~14.8 / 14.10 / 14.12~14.15 / 15.0~15.3 / 15.5 只读、无练习工程；14.4 / 14.9 / 14.11 / 第 14 章总结 / 15.4 / 15.6 / 15.8 / 第 15 章总结 / 16.1 / 16.2 / 16.3 / 16.5 / 16.7 / 16.8 / 第 16 章总结 有练习；15.7 / 15.9 / 16.4 未单独取证） |
+| 最近产出 | `16章总练习/`（`Items` 库存枚举下标 ＋ `findMinMaxIndices` ＋ `printArray`） |
 | 下一步 | **第 16 章 16.9~16.13**（容量 `size` / `capacity` / `reserve` / `resize`、二维 `vector` 等） |
 | 验收口径 | MSBuild `Rebuild`（Debug / x64）**exit=0、0 warning**；程序输出逐行比对 |
 
@@ -86,12 +86,13 @@ cl /nologo /EHsc /std:c++20 FileName.cpp
 
 | 日期 | 编号 | 文件 | 内容 | 知识点 |
 | --- | --- | --- | --- | --- |
+| 2026-11-09 | 小练 55 | `16章总练习/main.cpp` | 第 16 章 **章总结练习**（章末三题合一）：`Items::Type` 枚举 ＋ `std::vector inventory{ 1, 5, 10 }` ＋ `printInventoryItem`（单复数名）；`toUZ<T>` 用 `static_assert(std::is_integral<T>() || std::is_enum<T>())` 卡住类型再 `static_cast<std::size_t>`；`findMinMaxIndices<T>` 返回 `std::pair<std::size_t, std::size_t>`；`printArray<T>` 用 `comma` 标志控制分隔符；验收 `4 5 6 -1` → 三行 `You have ...` ＋ 两组数组/最值 ＋ 输入组 `( 4 , 5 , 6 )`，空输入 `-1` → `The array has no elements`，非法输入 `abc` 后能恢复；Rebuild **exit=0、0 warning** | 枚举当容器下标要让 `max_items` 哨兵与 `std::size` 对齐（`assert`）；模板返回多个值用 `std::pair` ＋ `first/second`；分隔符用「已打印过」布尔标志，避免首尾多逗号；`std::cin` 失败后先 `clear()` 再 `ignore(max, '\n')`——同一行后续数字会被一起吞掉，若此时已到 EOF 会死循环 |
 | 2026-11-08 | 小练 49 | `16.1练习/main.cpp` | 第 16 章 **16.1 `std::vector` 入门**：`std::vector square{ 1, 4, 9, 16, 25 }`（CTAD 推 `int`）＋ `std::vector<double> temperature{ 365 }` ＋ `std::vector<int> arr(3)`（圆括号＝3 个 0）后逐个 `std::cin >>` 读入；验收输入 `2 3 4` → `The sum is: 9` / `The product is: 24`，Rebuild **exit=0、0 warning** | 花括号走 `std::initializer_list`（元素须同类型），圆括号是「元素个数 + 初值」；`std::vector<int> arr(3)` 定长 3、元素值初始化 0，下标必须在 `size()` 之内；换行用 `'\n'` 而不是 `std::endl` |
 | 2026-11-08 | 小练 50 | `16.2练习/main.cpp` | 第 16 章 **16.2 长度与下标**：`std::vector arr{ 'h', 'e', 'l', 'l', 'o' }`；`std::size(arr)` 打印元素个数，`arr[1]` 与 `arr.at(1)` 取同一元素；验收 `The array has 5 elements.` / `ee`，Rebuild **exit=0、0 warning** | `std::size` 返回 `std::size_t`（无符号），`std::ssize` 才返回有符号整型；`operator[]` 不做越界检查、`at()` 越界抛 `std::out_of_range`；`std::vector<char>` 不是字符串，末尾没有 `'\0'` |
 | 2026-11-08 | 小练 51 | `16.3练习/16.3_practise.cpp` | 第 16 章 **16.3 越界检查**：函数模板 `printElement(const std::vector<T>& arr, int index)` 先用 `static_cast<int>(std::ssize(arr))` 取有符号长度，再 `index > length - 1 || index < 0` 判越界；验收 `2` / `Invalid index` / `1.1` / `Invalid index`，Rebuild **exit=0、0 warning** | 无符号长度与有符号下标直接比较会把 `-1` 提升成巨大正数 → 先 `ssize` 转有符号；`const std::vector<T>&` 传参不拷贝；一个模板同时覆盖 `int` / `double`；「先判边界再取元素」是可复用的防御写法 |
 | 2026-11-08 | 小练 52 | `16.5练习/main.cpp` | 第 16 章 **16.5 练习**：`getValidNumber(T low, T high)` 用 `do-while` 反复读，`!std::cin` 时 `clear()` ＋ `ignore(max, '\n')`；`findIndex` 找不到返回 `-1`；`findMax(std::vector<T>)` 对空 `vector` 返回 `T{}`；验收输入 `7.7` → `4.4 6.6 7.7 3.3 8.8 2.2 1.1 9.9` / `The number 7.7 has index 2` / `92` / `-13` / `0`，Rebuild **exit=0、0 warning** | `cin >>` 失败后状态位一直置位，必须 `clear()` 清标志 ＋ `ignore()` 丢掉坏字符，否则死循环；空 `vector` 不能取 `arr[0]`，先判 `size() == 0`；模板函数对不同元素类型复用同一套逻辑 |
 | 2026-11-08 | 小练 53 | `16.7练习/main.cpp` | 第 16 章 **16.7 范围 for ＋ 查找**：`isValueInArray(const std::vector<T>&, const T&)` 用范围 `for` 找值；`std::vector<std::string_view> names` 存字面量；调用写 `isValueInArray<std::string_view>(names, getName)`；验收输入 `Holly` → `Holly was found.`、输入 `Bob` → `Bob was not found.`，Rebuild **exit=0、0 warning** | 范围 `for (const auto& x : v)` 只读不拷贝；`std::string` 能隐式转 `std::string_view`，但**模板实参推导不做**这种转换 → 必须显式写 `<std::string_view>`；`vector<string_view>` 指向的字面量生命周期贯穿整个程序 |
-| 2026-11-08 | 小练 54 | `16.8lianxi/main.cpp` | 第 16 章 **16.8 枚举作下标**：`namespace Animals` 里 `enum Animals { chicken, dog, cat, elephant, duck, snake, max_animals }` ＋ `const std::vector legs{ 2, 4, 4, 4, 2, 0 }`；`assert(std::size(legs) == Animals::max_animals)` 对齐长度；`legs[Animals::elephant]` 取值；验收 `An elephant has 4 legs`，Rebuild **exit=0、0 warning** | 枚举值默认从 0 起递增，可直接当数组下标；`max_animals` 作「数量哨兵」，用 `assert` 卡住「枚举数量 ≠ 数据长度」；`std::size` 对 `vector` 和 C 风格数组都适用；`assert` 只在 Debug 生效，Release 下是空操作 |
+| 2026-11-08 | 小练 54 | `16.8练习/main.cpp` | 第 16 章 **16.8 枚举作下标**：`namespace Animals` 里 `enum Animals { chicken, dog, cat, elephant, duck, snake, max_animals }` ＋ `const std::vector legs{ 2, 4, 4, 4, 2, 0 }`；`assert(std::size(legs) == Animals::max_animals)` 对齐长度；`legs[Animals::elephant]` 取值；验收 `An elephant has 4 legs`，Rebuild **exit=0、0 warning** | 枚举值默认从 0 起递增，可直接当数组下标；`max_animals` 作「数量哨兵」，用 `assert` 卡住「枚举数量 ≠ 数据长度」；`std::size` 对 `vector` 和 C 风格数组都适用；`assert` 只在 Debug 生效，Release 下是空操作 |
 | 2026-11-06 | 小练 46 | `15.6练习/15.6_practise.cpp` | 站内 **15.6 静态成员函数**：`class Random` 的 `static generate()` 用 `std::random_device` ＋ `std::chrono::steady_clock` 造 `std::seed_seq`，`static inline std::mt19937 mt` 只初始化一次，`static int get(int min, int max)` 用 `std::uniform_int_distribution` 返回闭区间随机数；`main` 打印 10 个 1~6；验收 10 个数、全部落在 1~6，MSBuild `Rebuild` **exit=0、0 warning** | 静态成员函数没有 `this`；`static inline` 成员在类内定义一次；`seed_seq` 播种 `mt19937`；`uniform_int_distribution` 含两端；随机输出不逐行比对，改为范围与数量校验 |
 | 2026-11-06 | 小练 47 | `15.8练习/15.8_practise.cpp` ＋ `Point3d.h/.cpp` ＋ `Vector3d.h/.cpp` | 站内 **15.8 友元成员函数**：`Point3d` / `Vector3d` 分文件；`Vector3d.h` 里 `friend void Point3d::moveByVector(const Vector3d& v);` 授权 `Point3d::moveByVector` 读 `Vector3d` 私有成员；验收 `Point(1, 2, 3)` / `Point(3, 4, 0)`，MSBuild `Rebuild` **exit=0、0 warning** | 前向声明 `class Vector3d;` 打破头文件循环；友元成员函数声明要写全 `Point3d::`；`Point3d.cpp` 同时包含两个头文件才能看到完整 `Vector3d` 定义；`moveByVector` 只改自己的 `m_x/m_y/m_z` |
 | 2026-11-06 | 小练 48 | `15章总结练习/main.cpp` ＋ `Random.h` | 站内 **15.10 第 15 章总结**：`Monster`（嵌套 `enum Type`、`constexpr std::string_view getTypeString() const`、`print() const`）＋ `namespace MonsterGenerator`（`getName` / `getRoar` / `generate`）；`Random.h` 用 `inline` 变量/函数做 header-only PRNG；验收 `Rebuild` **exit=0、0 warning**，10 次随机输出全部合法（HP 1~100、无 `???`、10 次不重复） | `enum` 嵌在类内要写 `Monster::Type`；`static_cast` 把随机整数转成枚举；`generate` 一次 `return Monster{...}`；`inline` 让头文件里的 `mt` 在整程序只有一份；随机输出按格式与取值范围校验，不逐行比对 |
@@ -149,11 +150,12 @@ cl /nologo /EHsc /std:c++20 FileName.cpp
 
 > 按 studycpp 章节顺序浏览全部工程 → `00_学习顺序.md`；以下按新增时间与仓库目录展示。
 
-### 最近新增（10/26~11/08）
+### 最近新增（10/26~11/09）
 
 | 目录 | 内容 | 验收 |
 | --- | --- | --- |
-| `16.8lianxi/` | 16.8 枚举作下标：`enum Animals` ＋ `legs` ＋ `assert(std::size(...) == max_animals)` | exit=0、0 warning；`An elephant has 4 legs` |
+| `16章总练习/` | 第 16 章章总结：`Items` 库存枚举下标 ＋ `toUZ` 限型转换 ＋ `findMinMaxIndices` ＋ `printArray` | exit=0、0 warning；`4 5 6 -1` 全流程 ＋ 空输入 / 非法输入分支 |
+| `16.8练习/` | 16.8 枚举作下标：`enum Animals` ＋ `legs` ＋ `assert(std::size(...) == max_animals)` | exit=0、0 warning；`An elephant has 4 legs` |
 | `16.7练习/` | 16.7 范围 for：`isValueInArray` 模板 ＋ `std::vector<std::string_view>` | exit=0、0 warning；`Holly was found.` / `Bob was not found.` |
 | `16.5练习/` | 16.5 练习：`getValidNumber` 输入校验 ＋ `findIndex` ＋ `findMax` | exit=0、0 warning；`The number 7.7 has index 2` / `92` / `-13` / `0` |
 | `16.3练习/` | 16.3 越界检查：`printElement` 用 `std::ssize` 判边界 | exit=0、0 warning；2 行元素值 ＋ 2 行 `Invalid index` |
@@ -189,7 +191,7 @@ cl /nologo /EHsc /std:c++20 FileName.cpp
 ```
 cpp_practise/
 ├── README.md
-├── 00_学习顺序.md                          ← 按章节顺序排列的 43 个练习工程索引
+├── 00_学习顺序.md                          ← 按章节顺序排列的 56 个练习工程索引
 ├── .gitignore
 ├── Directory.Build.props                  ← 全仓库编译选项：让 MSVC 按 UTF-8 读源码（见「源文件编码」）
 ├── Project1_stdcout_sin_endl/             小练 01：输入输出
@@ -361,9 +363,12 @@ cpp_practise/
 ├── 16.7练习/                                第 16 章 16.7 范围 for（11/08）
 │   ├── 16.7练习.slnx / .vcxproj             **单开新工程**（Debug / x64）
 │   └── main.cpp                             `isValueInArray` 模板 ＋ `vector<string_view>`
-└── 16.8lianxi/                              第 16 章 16.8 枚举作下标（11/08）
-    ├── 16.8lianxi.slnx / .vcxproj           **单开新工程**（Debug / x64）
-    └── main.cpp                             `enum Animals` ＋ `legs` ＋ `assert`
+├── 16.8练习/                                第 16 章 16.8 枚举作下标（11/08）
+│   ├── 16.8lianxi.slnx / .vcxproj           **单开新工程**（Debug / x64；工程名沿用旧名）
+│   └── main.cpp                             `enum Animals` ＋ `legs` ＋ `assert`
+└── 16章总练习/                              第 16 章章总结（11/09）
+    ├── 16章总练习.slnx / .vcxproj           **单开新工程**（Debug / x64）
+    └── main.cpp                             `Items` 库存 / `toUZ` / `findMinMaxIndices` / `printArray`
 ```
 
 </details>
@@ -483,7 +488,7 @@ cpp_practise/
 | 第 13 章（13.1~13.14） | 非限定 / 限定枚举、枚举输入输出、`struct` 定义与初始化、成员默认初始化、结构体按值 / 引用 / 指针传参、成员选择、类模板与 CTAD、模板别名 | `13.1练习/`、`13.3练习/`、`13.7练习/`、`13.7练习2/`、`13.13练习2/`、`13章总结练习/` |
 | 第 14 章（14.0~14.16） | OOP 引入（数据 + 行为）、成员函数与隐式 `this`、`struct` 默认 `public`、同类型 `const&` 参数、访问说明符、`const` 成员函数、构造函数与成员初始化列表、委托构造、临时对象、拷贝构造、拷贝省略、转换构造与 `explicit` | `14.0练习/`、`14.0练习2/`、`14.2练习1/`、`14.2练习2/`、`14.4练习/`、`14.9练习/`、`14.11练习/`、`14章练习1/` |
 | 第 15 章（15.0~15.8、15.10） | 隐藏的 `this` 指针、类与头文件、嵌套类型、析构函数简介、类模板成员函数、静态成员变量、静态成员函数、友元成员函数、第 15 章总结 | `15.4练习/`、`15.6练习/`、`15.8练习/`、`15章总结练习/`（15.7 / 15.9 未单独取证） |
-| 第 16 章（16.1~16.3、16.5、16.7、16.8） | `std::vector` 初始化与定长构造、`std::size` / `std::ssize`、`operator[]` 与 `at()`、越界检查、范围 `for`、枚举作下标、`assert` 校验长度 | `16.1练习/`、`16.2练习/`、`16.3练习/`、`16.5练习/`、`16.7练习/`、`16.8lianxi/`（16.4 / 16.9~16.13 未取证） |
+| 第 16 章（16.1~16.3、16.5、16.7、16.8 ＋ 章总结） | `std::vector` 初始化与定长构造、`std::size` / `std::ssize`、`operator[]` 与 `at()`、越界检查、范围 `for`、枚举作下标、`assert` 校验长度、`std::pair` 返回多值、`static_assert` 限型转换 `toUZ`、分隔符标志 | `16.1练习/`、`16.2练习/`、`16.3练习/`、`16.5练习/`、`16.7练习/`、`16.8练习/`、`16章总练习/`（16.4 / 16.9~16.13 未取证） |
 | 工程实践 | 多工程组织、`.vcxproj` / `.filters` 同步、MSBuild `Rebuild`、`Directory.Build.props` 统一编译选项、UTF-8 源码字符集 | 全仓库 |
 
 ---
