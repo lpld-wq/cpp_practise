@@ -5,7 +5,7 @@ C++ 练习仓库 —— 记录从零开始学 C++ 的每一次课后小练。
 - 教材：[C++学习网 studycpp.cn](https://www.studycpp.cn/)（[learncpp.com](https://www.learncpp.com/) 中文译站，28 章，每节带练习）
 - 用法：**每节示例都必须手敲并改动一处**，只看不敲不算学完
 - 范围：**本文件只记录本仓的 C++ 练习产出**；课程之外的算法、规划、笔记不进本文件
-- 最近更新：**2026-11-09**（16.1~16.3、16.5、16.7、16.8 已读；`16.8lianxi/` 更名 `16.8练习/`；新增第 16 章章总结 `16章总练习`，含 `toUZ` / `findMinMaxIndices` / `printArray`；2 个工程 Rebuild exit=0、0 warning）
+- 最近更新：**2026-11-11**（第 17 章开章：`std::array` 基础 / 长度与下标 / 传参 / 结构体数组，交付 `17.1练习` / `17.2练习` / `17.3练习` 三个工程；Rebuild 全部 exit=0、0 warning）
 
 ---
 
@@ -15,9 +15,9 @@ C++ 练习仓库 —— 记录从零开始学 C++ 的每一次课后小练。
 
 | 项 | 状态 |
 | --- | --- |
-| 教材进度 | **第 13 章全章（13.1~13.14）＋ 第 14 章 14.0~14.16 ＋ 15.0~15.8、15.10 ＋ 第 16 章 16.1~16.3、16.5、16.7、16.8 ＋ 第 16 章总结已读**（14.1 / 14.3 / 14.5~14.8 / 14.10 / 14.12~14.15 / 15.0~15.3 / 15.5 只读、无练习工程；14.4 / 14.9 / 14.11 / 第 14 章总结 / 15.4 / 15.6 / 15.8 / 第 15 章总结 / 16.1 / 16.2 / 16.3 / 16.5 / 16.7 / 16.8 / 第 16 章总结 有练习；15.7 / 15.9 / 16.4 未单独取证） |
-| 最近产出 | `16章总练习/`（`Items` 库存枚举下标 ＋ `findMinMaxIndices` ＋ `printArray`） |
-| 下一步 | **第 16 章 16.9~16.13**（容量 `size` / `capacity` / `reserve` / `resize`、二维 `vector` 等） |
+| 教材进度 | **第 13 章全章（13.1~13.14）＋ 第 14 章 14.0~14.16 ＋ 15.0~15.8、15.10 ＋ 第 16 章全章（16.1~16.13，含章总结）**（14.1 / 14.3 / 14.5~14.8 / 14.10 / 14.12~14.15 / 15.0~15.3 / 15.5 只读、无练习工程；14.4 / 14.9 / 14.11 / 第 14 章总结 / 15.4 / 15.6 / 15.8 / 第 15 章总结 / 16.1 / 16.2 / 16.3 / 16.5 / 16.7 / 16.8 / 第 16 章总结 有练习；15.7 / 15.9 / 16.4 未单独取证；16.9~16.13 为纯阅读节、无配套练习）＋ 第 17 章 17.1~17.4（`std::array` 基础 / 长度与下标 / 传参 / 结构体数组） |
+| 最近产出 | `17.1练习/` / `17.2练习/` / `17.3练习/`（`std::array` ＋ `std::size` / `[]` / `at()` / `std::get` ＋ 模板传参 ＋ 结构体数组） |
+| 下一步 | **第 17 章 17.5~17.8**（C 风格数组 → 数组退化 → `sizeof` 求长度 → 指针运算） |
 | 验收口径 | MSBuild `Rebuild`（Debug / x64）**exit=0、0 warning**；程序输出逐行比对 |
 
 ---
@@ -86,6 +86,9 @@ cl /nologo /EHsc /std:c++20 FileName.cpp
 
 | 日期 | 编号 | 文件 | 内容 | 知识点 |
 | --- | --- | --- | --- | --- |
+| 2026-11-11 | 小练 56 | `17.1练习/main.cpp` | 第 17 章 **`std::array` 基础**：`constexpr std::array hello{ "h", "e", "l", "l", "o" }`（CTAD ＋ 聚合初始化）＋ `std::size(hello)` ＋ `hello[1]` / `hello.at(1)` / `std::get<1>(hello)` 取同一元素；验收 `The length is 5` / `eee`，Rebuild **exit=0、0 warning** | `std::array<T, N>` 大小编译期固定；CTAD 由元素推出 `const char*`；`std::get<N>` 的下标必须是编译期常量；合法下标下 `[]` 与 `at()` 结果相同，`at()` 多了越界检查 |
+| 2026-11-11 | 小练 57 | `17.2练习/main.cpp` | 第 17 章 **`std::array` 传参**：函数模板 `printArray<T, N>(const std::array<T, N>&)` 打印 `(1,4,9,16)` / `(h,e,l,l,o)` ＋ 长度；用 `bool nomma` 控制逗号，避免首元素前多一个分隔符；验收两行 `The array (...) has length N`，Rebuild **exit=0、0 warning** | `const&` 传参不拷贝；模板同时推 `T` 与 `N`，一个函数覆盖 `int` / `char`；循环上界可直接用 `N`；分隔符用「是否已打印」标志是通用写法 |
+| 2026-11-11 | 小练 58 | `17.3练习/main.cpp` | 第 17 章 **结构体数组**：`struct Item { std::string_view name{}; int gold{}; }` ＋ `constexpr std::array items{ Item{"sword", 5}, ... }` ＋ `printItem` 用 `for (const auto& Item : arr)` 逐项打印；验收 4 行 `A ... costs ... gold.`，Rebuild **exit=0、0 warning** | `std::array` 可以直接装结构体并聚合初始化；范围 `for` 用 `const auto&` 避免拷贝；`std::string_view` 作只读名字；变量名与类型名同名（`Item`）能编译但容易混，建议换名 |
 | 2026-11-09 | 小练 55 | `16章总练习/main.cpp` | 第 16 章 **章总结练习**（章末三题合一）：`Items::Type` 枚举 ＋ `std::vector inventory{ 1, 5, 10 }` ＋ `printInventoryItem`（单复数名）；`toUZ<T>` 用 `static_assert(std::is_integral<T>() || std::is_enum<T>())` 卡住类型再 `static_cast<std::size_t>`；`findMinMaxIndices<T>` 返回 `std::pair<std::size_t, std::size_t>`；`printArray<T>` 用 `comma` 标志控制分隔符；验收 `4 5 6 -1` → 三行 `You have ...` ＋ 两组数组/最值 ＋ 输入组 `( 4 , 5 , 6 )`，空输入 `-1` → `The array has no elements`，非法输入 `abc` 后能恢复；Rebuild **exit=0、0 warning** | 枚举当容器下标要让 `max_items` 哨兵与 `std::size` 对齐（`assert`）；模板返回多个值用 `std::pair` ＋ `first/second`；分隔符用「已打印过」布尔标志，避免首尾多逗号；`std::cin` 失败后先 `clear()` 再 `ignore(max, '\n')`——同一行后续数字会被一起吞掉，若此时已到 EOF 会死循环 |
 | 2026-11-08 | 小练 49 | `16.1练习/main.cpp` | 第 16 章 **16.1 `std::vector` 入门**：`std::vector square{ 1, 4, 9, 16, 25 }`（CTAD 推 `int`）＋ `std::vector<double> temperature{ 365 }` ＋ `std::vector<int> arr(3)`（圆括号＝3 个 0）后逐个 `std::cin >>` 读入；验收输入 `2 3 4` → `The sum is: 9` / `The product is: 24`，Rebuild **exit=0、0 warning** | 花括号走 `std::initializer_list`（元素须同类型），圆括号是「元素个数 + 初值」；`std::vector<int> arr(3)` 定长 3、元素值初始化 0，下标必须在 `size()` 之内；换行用 `'\n'` 而不是 `std::endl` |
 | 2026-11-08 | 小练 50 | `16.2练习/main.cpp` | 第 16 章 **16.2 长度与下标**：`std::vector arr{ 'h', 'e', 'l', 'l', 'o' }`；`std::size(arr)` 打印元素个数，`arr[1]` 与 `arr.at(1)` 取同一元素；验收 `The array has 5 elements.` / `ee`，Rebuild **exit=0、0 warning** | `std::size` 返回 `std::size_t`（无符号），`std::ssize` 才返回有符号整型；`operator[]` 不做越界检查、`at()` 越界抛 `std::out_of_range`；`std::vector<char>` 不是字符串，末尾没有 `'\0'` |
@@ -150,10 +153,13 @@ cl /nologo /EHsc /std:c++20 FileName.cpp
 
 > 按 studycpp 章节顺序浏览全部工程 → `00_学习顺序.md`；以下按新增时间与仓库目录展示。
 
-### 最近新增（10/26~11/09）
+### 最近新增（10/26~11/11）
 
 | 目录 | 内容 | 验收 |
 | --- | --- | --- |
+| `17.1练习/` | 17.1 `std::array` 基础：`std::size` ＋ `[]` / `at()` / `std::get` | exit=0、0 warning；`The length is 5` / `eee` |
+| `17.2练习/` | 17.2 传参：`printArray<T, N>(const std::array<T, N>&)` ＋ 逗号标志 | exit=0、0 warning；`(1,4,9,16)` / `(h,e,l,l,o)` |
+| `17.3练习/` | 17.3 结构体数组：`Item{name, gold}` ＋ 范围 `for` | exit=0、0 warning；4 行 `A ... costs ... gold.` |
 | `16章总练习/` | 第 16 章章总结：`Items` 库存枚举下标 ＋ `toUZ` 限型转换 ＋ `findMinMaxIndices` ＋ `printArray` | exit=0、0 warning；`4 5 6 -1` 全流程 ＋ 空输入 / 非法输入分支 |
 | `16.8练习/` | 16.8 枚举作下标：`enum Animals` ＋ `legs` ＋ `assert(std::size(...) == max_animals)` | exit=0、0 warning；`An elephant has 4 legs` |
 | `16.7练习/` | 16.7 范围 for：`isValueInArray` 模板 ＋ `std::vector<std::string_view>` | exit=0、0 warning；`Holly was found.` / `Bob was not found.` |
@@ -366,9 +372,18 @@ cpp_practise/
 ├── 16.8练习/                                第 16 章 16.8 枚举作下标（11/08）
 │   ├── 16.8lianxi.slnx / .vcxproj           **单开新工程**（Debug / x64；工程名沿用旧名）
 │   └── main.cpp                             `enum Animals` ＋ `legs` ＋ `assert`
-└── 16章总练习/                              第 16 章章总结（11/09）
+├── 16章总练习/                              第 16 章章总结（11/09）
     ├── 16章总练习.slnx / .vcxproj           **单开新工程**（Debug / x64）
     └── main.cpp                             `Items` 库存 / `toUZ` / `findMinMaxIndices` / `printArray`
+├── 17.1练习/                                第 17 章 17.1 `std::array` 基础（11/11）
+│   ├── 17.1练习.slnx / .vcxproj             **单开新工程**（Debug / x64）
+│   └── main.cpp                             `std::size` ＋ `[]` / `at()` / `std::get`
+├── 17.2练习/                                第 17 章 17.2 传参（11/11）
+│   ├── 17.2练习.slnx / .vcxproj             **单开新工程**（Debug / x64）
+│   └── main.cpp                             `printArray<T, N>(const std::array<T, N>&)`
+└── 17.3练习/                                第 17 章 17.3 结构体数组（11/11）
+    ├── 17.3练习.slnx / .vcxproj             **单开新工程**（Debug / x64）
+    └── main.cpp                             `struct Item` ＋ `std::array<Item, 4>`
 ```
 
 </details>
@@ -488,7 +503,8 @@ cpp_practise/
 | 第 13 章（13.1~13.14） | 非限定 / 限定枚举、枚举输入输出、`struct` 定义与初始化、成员默认初始化、结构体按值 / 引用 / 指针传参、成员选择、类模板与 CTAD、模板别名 | `13.1练习/`、`13.3练习/`、`13.7练习/`、`13.7练习2/`、`13.13练习2/`、`13章总结练习/` |
 | 第 14 章（14.0~14.16） | OOP 引入（数据 + 行为）、成员函数与隐式 `this`、`struct` 默认 `public`、同类型 `const&` 参数、访问说明符、`const` 成员函数、构造函数与成员初始化列表、委托构造、临时对象、拷贝构造、拷贝省略、转换构造与 `explicit` | `14.0练习/`、`14.0练习2/`、`14.2练习1/`、`14.2练习2/`、`14.4练习/`、`14.9练习/`、`14.11练习/`、`14章练习1/` |
 | 第 15 章（15.0~15.8、15.10） | 隐藏的 `this` 指针、类与头文件、嵌套类型、析构函数简介、类模板成员函数、静态成员变量、静态成员函数、友元成员函数、第 15 章总结 | `15.4练习/`、`15.6练习/`、`15.8练习/`、`15章总结练习/`（15.7 / 15.9 未单独取证） |
-| 第 16 章（16.1~16.3、16.5、16.7、16.8 ＋ 章总结） | `std::vector` 初始化与定长构造、`std::size` / `std::ssize`、`operator[]` 与 `at()`、越界检查、范围 `for`、枚举作下标、`assert` 校验长度、`std::pair` 返回多值、`static_assert` 限型转换 `toUZ`、分隔符标志 | `16.1练习/`、`16.2练习/`、`16.3练习/`、`16.5练习/`、`16.7练习/`、`16.8练习/`、`16章总练习/`（16.4 / 16.9~16.13 未取证） |
+| 第 16 章（16.1~16.13） | `std::vector` 初始化与定长构造、`std::size` / `std::ssize`、`operator[]` 与 `at()`、越界检查、范围 `for`、枚举作下标、`assert` 校验长度、`std::pair` 返回多值、`static_assert` 限型转换 `toUZ`、分隔符标志 | `16.1练习/`、`16.2练习/`、`16.3练习/`、`16.5练习/`、`16.7练习/`、`16.8练习/`、`16章总练习/`（16.9~16.13 为纯阅读节、无配套工程） |
+| 第 17 章（17.1~17.4） | `std::array` 定长数组、CTAD、`std::size`、`operator[]` 与 `at()`、`std::get<N>` 编译期下标、`const std::array<T, N>&` 传参、函数模板 `T` / `N` 推导、结构体数组与范围 `for` | `17.1练习/`、`17.2练习/`、`17.3练习/` |
 | 工程实践 | 多工程组织、`.vcxproj` / `.filters` 同步、MSBuild `Rebuild`、`Directory.Build.props` 统一编译选项、UTF-8 源码字符集 | 全仓库 |
 
 ---
