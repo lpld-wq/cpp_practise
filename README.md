@@ -5,7 +5,7 @@ C++ 练习仓库 —— 记录从零开始学 C++ 的每一次课后小练。
 - 教材：[C++学习网 studycpp.cn](https://www.studycpp.cn/)（[learncpp.com](https://www.learncpp.com/) 中文译站，28 章，每节带练习）
 - 用法：**每节示例都必须手敲并改动一处**，只看不敲不算学完
 - 范围：**本文件只记录本仓的 C++ 练习产出**；课程之外的算法、规划、笔记不进本文件
-- 最近更新：**2026-11-11**（第 17 章开章：`std::array` 基础 / 长度与下标 / 传参 / 结构体数组，交付 `17.1练习` / `17.2练习` / `17.3练习` 三个工程；Rebuild 全部 exit=0、0 warning）
+- 最近更新：**2026-11-12**（第 17 章续做：动物表 `std::array<Data, 6>` ＋ `operator>>` 查表、完全平方数判定，交付 `17.5练习` / `17.6练习` 两个工程；Rebuild 全部 exit=0、0 warning）
 
 ---
 
@@ -15,9 +15,9 @@ C++ 练习仓库 —— 记录从零开始学 C++ 的每一次课后小练。
 
 | 项 | 状态 |
 | --- | --- |
-| 教材进度 | **第 13 章全章（13.1~13.14）＋ 第 14 章 14.0~14.16 ＋ 15.0~15.8、15.10 ＋ 第 16 章全章（16.1~16.13，含章总结）**（14.1 / 14.3 / 14.5~14.8 / 14.10 / 14.12~14.15 / 15.0~15.3 / 15.5 只读、无练习工程；14.4 / 14.9 / 14.11 / 第 14 章总结 / 15.4 / 15.6 / 15.8 / 第 15 章总结 / 16.1 / 16.2 / 16.3 / 16.5 / 16.7 / 16.8 / 第 16 章总结 有练习；15.7 / 15.9 / 16.4 未单独取证；16.9~16.13 为纯阅读节、无配套练习）＋ 第 17 章 17.1~17.4（`std::array` 基础 / 长度与下标 / 传参 / 结构体数组） |
-| 最近产出 | `17.1练习/` / `17.2练习/` / `17.3练习/`（`std::array` ＋ `std::size` / `[]` / `at()` / `std::get` ＋ 模板传参 ＋ 结构体数组） |
-| 下一步 | **第 17 章 17.5~17.8**（C 风格数组 → 数组退化 → `sizeof` 求长度 → 指针运算） |
+| 教材进度 | **第 13 章全章（13.1~13.14）＋ 第 14 章 14.0~14.16 ＋ 15.0~15.8、15.10 ＋ 第 16 章全章（16.1~16.13，含章总结）**（14.1 / 14.3 / 14.5~14.8 / 14.10 / 14.12~14.15 / 15.0~15.3 / 15.5 只读、无练习工程；14.4 / 14.9 / 14.11 / 第 14 章总结 / 15.4 / 15.6 / 15.8 / 第 15 章总结 / 16.1 / 16.2 / 16.3 / 16.5 / 16.7 / 16.8 / 第 16 章总结 有练习；15.7 / 15.9 / 16.4 未单独取证；16.9~16.13 为纯阅读节、无配套练习）＋ 第 17 章 17.1~17.4（`std::array` 基础 / 长度与下标 / 传参 / 结构体数组）＋ `17.5练习/`（动物表：枚举下标 ＋ `std::array<Data, 6>` ＋ `operator>>`）＋ `17.6练习/`（完全平方数：`constexpr` C 风格数组 ＋ 范围 `for`）；**17.7~17.8 未开始** |
+| 最近产出 | `17.1练习/` / `17.2练习/` / `17.3练习/` / `17.5练习/` / `17.6练习/`（`std::array` ＋ `std::size` / `[]` / `at()` / `std::get` ＋ 模板传参 ＋ 结构体数组查表 ＋ `operator>>` ＋ `constexpr` C 风格数组） |
+| 下一步 | **第 17 章 17.5~17.8 剩余部分**（C 风格数组 → 数组退化 → `sizeof` 求长度 → 指针运算）；`17.5~17.8练习` 尚未建立 |
 | 验收口径 | MSBuild `Rebuild`（Debug / x64）**exit=0、0 warning**；程序输出逐行比对 |
 
 ---
@@ -86,6 +86,8 @@ cl /nologo /EHsc /std:c++20 FileName.cpp
 
 | 日期 | 编号 | 文件 | 内容 | 知识点 |
 | --- | --- | --- | --- | --- |
+| 2026-11-12 | 小练 59 | `17.5练习/main.cpp` | 第 17 章 **动物表（结构体数组）**：`namespace Animals` 里 `enum Type` ＋ `struct Data { name, legs, sound }` ＋ `constexpr std::array data{ ... }` ＋ `static_assert(std::size(data) == max_animals)`；`operator>>` 逐项查表，查不到时 `setstate(failbit)`，再用范围 `for` 打印其余动物；验收输入 `dog` → 6 行 `A ... has ... legs and says ...`，Rebuild **exit=0、0 warning** | 枚举值当数组下标；`std::array<Data, N>` ＋ `static_assert` 对齐数量；`operator>>` 里 `getline(in >> std::ws, input)` 读整行；查表失败置 `failbit`；范围 `for` 遍历 `std::array`；**当前输出每行开头多一个空格（`" A "`），题面要求顶格时需改成 `"A "`** |
+| 2026-11-12 | 小练 60 | `17.6练习/main.cpp` | 第 17 章 **完全平方数判定**：`constexpr int a[4]{ 0, 1, 4, 9 }` ＋ `matchSquare(int)` 用范围 `for` 查表；`while(true)` 反复读入，`-1` 退出；验收 `9 / 5 / -1` → `9 is a perfect square` / `5 is not a perfect square` / `Bye`，Rebuild **exit=0、0 warning** | `constexpr` C 风格数组可放命名空间作用域；范围 `for` 可直接遍历 C 数组（此处不退化）；`const auto& e` 只读；`while(true)` ＋ `break` 的退出条件 |
 | 2026-11-11 | 小练 56 | `17.1练习/main.cpp` | 第 17 章 **`std::array` 基础**：`constexpr std::array hello{ "h", "e", "l", "l", "o" }`（CTAD ＋ 聚合初始化）＋ `std::size(hello)` ＋ `hello[1]` / `hello.at(1)` / `std::get<1>(hello)` 取同一元素；验收 `The length is 5` / `eee`，Rebuild **exit=0、0 warning** | `std::array<T, N>` 大小编译期固定；CTAD 由元素推出 `const char*`；`std::get<N>` 的下标必须是编译期常量；合法下标下 `[]` 与 `at()` 结果相同，`at()` 多了越界检查 |
 | 2026-11-11 | 小练 57 | `17.2练习/main.cpp` | 第 17 章 **`std::array` 传参**：函数模板 `printArray<T, N>(const std::array<T, N>&)` 打印 `(1,4,9,16)` / `(h,e,l,l,o)` ＋ 长度；用 `bool nomma` 控制逗号，避免首元素前多一个分隔符；验收两行 `The array (...) has length N`，Rebuild **exit=0、0 warning** | `const&` 传参不拷贝；模板同时推 `T` 与 `N`，一个函数覆盖 `int` / `char`；循环上界可直接用 `N`；分隔符用「是否已打印」标志是通用写法 |
 | 2026-11-11 | 小练 58 | `17.3练习/main.cpp` | 第 17 章 **结构体数组**：`struct Item { std::string_view name{}; int gold{}; }` ＋ `constexpr std::array items{ Item{"sword", 5}, ... }` ＋ `printItem` 用 `for (const auto& Item : arr)` 逐项打印；验收 4 行 `A ... costs ... gold.`，Rebuild **exit=0、0 warning** | `std::array` 可以直接装结构体并聚合初始化；范围 `for` 用 `const auto&` 避免拷贝；`std::string_view` 作只读名字；变量名与类型名同名（`Item`）能编译但容易混，建议换名 |
@@ -153,10 +155,12 @@ cl /nologo /EHsc /std:c++20 FileName.cpp
 
 > 按 studycpp 章节顺序浏览全部工程 → `00_学习顺序.md`；以下按新增时间与仓库目录展示。
 
-### 最近新增（10/26~11/11）
+### 最近新增（10/26~11/12）
 
 | 目录 | 内容 | 验收 |
 | --- | --- | --- |
+| `17.5练习/` | 动物表：`enum Type` ＋ `std::array<Data, 6>` ＋ `operator>>` 查表 | exit=0、0 warning；输入 `dog` → 6 行动物数据 |
+| `17.6练习/` | 完全平方数：`constexpr int a[4]` ＋ 范围 `for` 查表 | exit=0、0 warning；`9` → perfect、`5` → not、`-1` → Bye |
 | `17.1练习/` | 17.1 `std::array` 基础：`std::size` ＋ `[]` / `at()` / `std::get` | exit=0、0 warning；`The length is 5` / `eee` |
 | `17.2练习/` | 17.2 传参：`printArray<T, N>(const std::array<T, N>&)` ＋ 逗号标志 | exit=0、0 warning；`(1,4,9,16)` / `(h,e,l,l,o)` |
 | `17.3练习/` | 17.3 结构体数组：`Item{name, gold}` ＋ 范围 `for` | exit=0、0 warning；4 行 `A ... costs ... gold.` |
@@ -381,9 +385,15 @@ cpp_practise/
 ├── 17.2练习/                                第 17 章 17.2 传参（11/11）
 │   ├── 17.2练习.slnx / .vcxproj             **单开新工程**（Debug / x64）
 │   └── main.cpp                             `printArray<T, N>(const std::array<T, N>&)`
-└── 17.3练习/                                第 17 章 17.3 结构体数组（11/11）
-    ├── 17.3练习.slnx / .vcxproj             **单开新工程**（Debug / x64）
-    └── main.cpp                             `struct Item` ＋ `std::array<Item, 4>`
+├── 17.3练习/                                第 17 章 17.3 结构体数组（11/11）
+│   ├── 17.3练习.slnx / .vcxproj             **单开新工程**（Debug / x64）
+│   └── main.cpp                             `struct Item` ＋ `std::array<Item, 4>`
+├── 17.5练习/                                第 17 章 动物表（11/12）
+│   ├── 17.5练习.slnx / .vcxproj             **单开新工程**（Debug / x64）
+│   └── main.cpp                             `std::array<Animals::Data, 6>` ＋ `operator>>`
+└── 17.6练习/                                第 17 章 完全平方数（11/12）
+    ├── 17.6练习.slnx / .vcxproj             **单开新工程**（Debug / x64）
+    └── main.cpp                             `constexpr int a[4]` ＋ 范围 `for`
 ```
 
 </details>
@@ -504,7 +514,7 @@ cpp_practise/
 | 第 14 章（14.0~14.16） | OOP 引入（数据 + 行为）、成员函数与隐式 `this`、`struct` 默认 `public`、同类型 `const&` 参数、访问说明符、`const` 成员函数、构造函数与成员初始化列表、委托构造、临时对象、拷贝构造、拷贝省略、转换构造与 `explicit` | `14.0练习/`、`14.0练习2/`、`14.2练习1/`、`14.2练习2/`、`14.4练习/`、`14.9练习/`、`14.11练习/`、`14章练习1/` |
 | 第 15 章（15.0~15.8、15.10） | 隐藏的 `this` 指针、类与头文件、嵌套类型、析构函数简介、类模板成员函数、静态成员变量、静态成员函数、友元成员函数、第 15 章总结 | `15.4练习/`、`15.6练习/`、`15.8练习/`、`15章总结练习/`（15.7 / 15.9 未单独取证） |
 | 第 16 章（16.1~16.13） | `std::vector` 初始化与定长构造、`std::size` / `std::ssize`、`operator[]` 与 `at()`、越界检查、范围 `for`、枚举作下标、`assert` 校验长度、`std::pair` 返回多值、`static_assert` 限型转换 `toUZ`、分隔符标志 | `16.1练习/`、`16.2练习/`、`16.3练习/`、`16.5练习/`、`16.7练习/`、`16.8练习/`、`16章总练习/`（16.9~16.13 为纯阅读节、无配套工程） |
-| 第 17 章（17.1~17.4） | `std::array` 定长数组、CTAD、`std::size`、`operator[]` 与 `at()`、`std::get<N>` 编译期下标、`const std::array<T, N>&` 传参、函数模板 `T` / `N` 推导、结构体数组与范围 `for` | `17.1练习/`、`17.2练习/`、`17.3练习/` |
+| 第 17 章（17.1~17.6） | `std::array` 定长数组、CTAD、`std::size`、`operator[]` 与 `at()`、`std::get<N>` 编译期下标、`const std::array<T, N>&` 传参、函数模板 `T` / `N` 推导、结构体数组与范围 `for`、枚举下标查表、`operator>>` 失败置位、`constexpr` C 风格数组 | `17.1练习/`、`17.2练习/`、`17.3练习/`、`17.5练习/`、`17.6练习/` |
 | 工程实践 | 多工程组织、`.vcxproj` / `.filters` 同步、MSBuild `Rebuild`、`Directory.Build.props` 统一编译选项、UTF-8 源码字符集 | 全仓库 |
 
 ---
