@@ -5,7 +5,7 @@ C++ 练习仓库 —— 记录从零开始学 C++ 的每一次课后小练。
 - 教材：[C++学习网 studycpp.cn](https://www.studycpp.cn/)（[learncpp.com](https://www.learncpp.com/) 中文译站，28 章，每节带练习）
 - 用法：**每节示例都必须手敲并改动一处**，只看不敲不算学完
 - 范围：**本文件只记录本仓的 C++ 练习产出**；课程之外的算法、规划、笔记不进本文件
-- 最近更新：**2026-11-16**（`19.1练习` 修正为 `delete[]`，Rebuild exit=0、0 warning、运行 exit=0；`20.0练习` 已写但**暂停、未计入进度**；游标仍 L36 = 第 21 章 21.0 起）
+- 最近更新：**2026-11-18**（第 21 章 **21.0~21.1 运算符重载**；`21.1练习` 完成 Fraction 友元 `operator*` 三个重载 ＋ `std::gcd` 约分；Rebuild **exit=0、0 warning**、运行 **exit=0**；下一步 21.2）
 
 ---
 
@@ -17,7 +17,9 @@ C++ 练习仓库 —— 记录从零开始学 C++ 的每一次课后小练。
 | --- | --- |
 | 教材进度 | **第 13 章全章（13.1~13.14）＋ 第 14 章 14.0~14.16 ＋ 15.0~15.8、15.10 ＋ 第 16 章全章（16.1~16.13，含章总结）＋ 第 17 章全章（17.1~17.13，含章总结）**（14.1 / 14.3 / 14.5~14.8 / 14.10 / 14.12~14.15 / 15.0~15.3 / 15.5 / 17.7~17.8、17.10~17.13 只读、无练习工程；14.4 / 14.9 / 14.11 / 第 14 章总结 / 15.4 / 15.6 / 15.8 / 第 15 章总结 / 16.1 / 16.2 / 16.3 / 16.5 / 16.7 / 16.8 / 第 16 章总结 / 17.1 / 17.2 / 17.3 / 17.5 / 17.6 / 17.9 / 第 17 章总结 有练习；15.7 / 15.9 / 16.4 未单独取证；16.9~16.13、17.10~17.13 为纯阅读节；第 18 章全章 18.0~18.3 已读（18.0 有习题、18.1~18.3 无习题），`18.0练习`（冒泡排序）已交；第 19 章全章 19.0~19.4 已读（19.1 习题已修正并验收、19.4 习题未交付）；20.0 练习已写但暂停、未计入进度） |
 | 最近产出 | `19.1练习/`（19.1 习题：`new std::string[length]{}` + `delete[]`，名字排序）＋ `20.0练习/`（20.0：函数指针 / `std::function`；**暂停，未计入进度**）＋ `18.0练习/`（第 18 章开章：冒泡排序 ＋ `swapped` 提前终止）＋ `17.1练习/` / `17.2练习/` / `17.3练习/` / `17.5练习/` / `17.6练习/` / `17.9练习/` / `17章总练习/`（`std::array` ＋ `std::size` / `[]` / `at()` / `std::get` ＋ 模板传参 ＋ 结构体数组查表 ＋ `operator>>` ＋ `constexpr` C 风格数组 ＋ C 字符串指针反向遍历 ＋ 枚举下标商店） |
-| 下一步 | **第 21 章 21.0 起**（运算符重载，节名以站点目录为准） |
+| 下一步 | **第 21 章 21.2 起**（普通函数 / 成员函数版，节名以站点目录为准） |
+| 第 21 章进度 | **21.0~21.1 运算符重载已读；`21.1练习`（Fraction 友元 `operator*`）已交；21.2 未开始** |
+| 最新产出（11/18） | `21.1练习/`（Fraction 私有分子分母 ＋ `explicit` 构造 ＋ `reduce()` 用 `std::gcd` 约分；三个友元 `operator*`：Fraction×Fraction / Fraction×int / int×Fraction；输出 `2/5` / `3/8` / `3/20` / `4/5` / `3/4` / `1/4`） |
 | 验收口径 | MSBuild `Rebuild`（Debug / x64）**exit=0、0 warning**；程序输出逐行比对 |
 
 ---
@@ -86,6 +88,7 @@ cl /nologo /EHsc /std:c++20 FileName.cpp
 
 | 日期 | 编号 | 文件 | 内容 | 知识点 |
 | --- | --- | --- | --- | --- |
+| 2026-11-18 | 小练 66 | `21.1练习/main.cpp` | 第 21 章 **21.1 运算符重载 / 友元函数重载 `operator*`**：`Fraction` 私有分子分母 ＋ `explicit` 构造 ＋ `reduce()` 用 `std::gcd` 约分；三个友元重载 `Fraction×Fraction` / `Fraction×int` / `int×Fraction`；验收输出 `2/5` / `3/8` / `3/20` / `4/5` / `3/4` / `1/4`，Rebuild **exit=0、0 warning**、运行 **exit=0** | 运算符重载只是函数；友元版两个操作数都是显式参数；`operator*` 按值返回新对象；`std::gcd` 约分；`explicit` 阻止隐式转换 |
 | 2026-11-16 | 小练 64 | `19.1练习/main.cpp` | 第 19 章 **19.1 习题 动态数组 / 名字排序**：`getNames` 用 `std::getline(std::cin >> std::ws, names[i])`，`std::sort(names, names + length)`，`new std::string[length]{}` 配 `delete[] names`；验收输入 `3` + `Cara/Alice/Bob` → `Name #1: Alice` / `Name #2: Bob` / `Name #3: Cara`，Rebuild **exit=0、0 warning**、运行 **exit=0** | `new T[n]` 必须配 `delete[]`；单对象 `delete` 是 UB（Debug CRT 会 abort，实测 exit=3）；`std::cin >> std::ws` 吃掉残留换行，`getline` 才读得到整行 |
 | 2026-11-16 | 小练 65 | `20.0练习/main.cpp` | 第 20 章 **20.0 函数指针 / `std::function`**：`add` / `subtract` / `multiply` / `divide` 四个函数，`getArithmeticFunction(char)` 用 `switch` 返回 `std::function<int(int, int)>`；验收 `10 + 5 = 15`，Rebuild **exit=0、0 warning** | `using ArithmeticFunction = std::function<int(int, int)>`；`&add` 转函数对象；`if (fcn)` 判空；⚠️ 第 20 章按原计划暂停，本练习**不计入进度** |
 | 2026-11-15 | 小练 63 | `18.0练习/main.cpp` | 第 18 章开章 **冒泡排序**：9 个整数，相邻比较交换、每轮末尾固定最大值、`swapped` 为 false 时提前终止；验收 `3 2 6 ... 9` 共 5 轮后输出 `Early termination on iteration: 6`，Rebuild **exit=0、0 warning** | 冒泡排序的外层轮数与内层边界；`std::swap`；`swapped` 提前终止；`std::size(array)`；本工程不是 18.1 的选择排序，L34 不计完成 |
@@ -160,10 +163,11 @@ cl /nologo /EHsc /std:c++20 FileName.cpp
 
 > 按 studycpp 章节顺序浏览全部工程 → `00_学习顺序.md`；以下按新增时间与仓库目录展示。
 
-### 最近新增（10/26~11/15）
+### 最近新增（10/26~11/18）
 
 | 目录 | 内容 | 验收 |
 | --- | --- | --- |
+| `21.1练习/` | 第 21 章 21.1 友元函数重载 `operator*`：`Fraction` 三个重载 ＋ `std::gcd` 约分 | exit=0、0 warning；输出 `2/5` / `3/8` / `3/20` / `4/5` / `3/4` / `1/4` |
 | `18.0练习/` | 第 18 章开章：冒泡排序 ＋ `swapped` 提前终止 | exit=0、0 warning；9 个整数排序，提前终止于第 6 轮 |
 | `17.5练习/` | 动物表：`enum Type` ＋ `std::array<Data, 6>` ＋ `operator>>` 查表 | exit=0、0 warning；输入 `dog` → 6 行动物数据 |
 | `17.6练习/` | 完全平方数：`constexpr int a[4]` ＋ 范围 `for` 查表 | exit=0、0 warning；`9` → perfect、`5` → not、`-1` → Bye |
@@ -207,7 +211,7 @@ cl /nologo /EHsc /std:c++20 FileName.cpp
 ```
 cpp_practise/
 ├── README.md
-├── 00_学习顺序.md                          ← 按章节顺序排列的 56 个练习工程索引
+├── 00_学习顺序.md                          ← 按章节顺序排列的 67 个练习工程索引
 ├── .gitignore
 ├── Directory.Build.props                  ← 全仓库编译选项：让 MSVC 按 UTF-8 读源码（见「源文件编码」）
 ├── Project1_stdcout_sin_endl/             小练 01：输入输出
@@ -531,6 +535,7 @@ cpp_practise/
 | 第 18 章（18.0~18.3） | 排序（冒泡 / 选择）、迭代器与半开区间、标准库算法、计时 | `18.0练习/`（冒泡排序；18.1~18.3 为阅读节，无习题） |
 | 第 19 章（19.0~19.4） | 堆与栈、`new`/`delete` 配对、动态数组、悬空指针、内存泄漏、动态多维数组、`void` 指针 | `19.1练习/`（19.1 习题；`new[]`/`delete[]` 已配对；19.4 习题未交付） |
 | 第 20 章（20.0，暂停） | 函数指针 / `std::function` | `20.0练习/`（**暂停，未计入进度**；20.1~20.7 未开始） |
+| 第 21 章（21.0~21.1） | 运算符重载、友元函数、`operator*` 三个重载、按值返回、`std::gcd` 约分、`explicit` | `21.1练习/`（21.1 习题；21.2 未开始） |
 | 工程实践 | 多工程组织、`.vcxproj` / `.filters` 同步、MSBuild `Rebuild`、`Directory.Build.props` 统一编译选项、UTF-8 源码字符集 | 全仓库 |
 
 ---
